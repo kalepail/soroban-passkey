@@ -43,8 +43,6 @@
 		"@darkedges/capacitor-native-webauthn": "link:ext/capacitor-native-webauthn",
 		"@stellar/stellar-sdk": "^11.3.0",
 		"base64url": "^3.0.1",
-		"cbor-x": "^1.5.9",
-		"parse-cosekey": "^1.0.2",
-		"sha.js": "^2.4.11"
+		"cbor-x": "^1.5.9"
 	}
 }

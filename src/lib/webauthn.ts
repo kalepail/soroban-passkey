@@ -1,6 +1,5 @@
 import * as CBOR from 'cbor-x'
 import base64url from 'base64url';
-// import cosekey from 'parse-cosekey';
 
 // const registration = {
 //   "rawId": "bxzER7O8tCzvipe6Et_obIjrLM4",
