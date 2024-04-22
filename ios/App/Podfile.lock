@@ -1,0 +1,35 @@
+PODS:
+  - base64url (1.1.0)
+  - Capacitor (5.7.5):
+    - CapacitorCordova
+  - CapacitorCordova (5.7.5)
+  - DarkedgesCapacitorNativeWebauthn (0.0.2):
+    - base64url (~> 1.0)
+    - Capacitor
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios`)"
+  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios`)"
+  - DarkedgesCapacitorNativeWebauthn (from `../../ext/capacitor-native-webauthn`)
+
+SPEC REPOS:
+  trunk:
+    - base64url
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios"
+  CapacitorCordova:
+    :path: "../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios"
+  DarkedgesCapacitorNativeWebauthn:
+    :path: "../../ext/capacitor-native-webauthn"
+
+SPEC CHECKSUMS:
+  base64url: 92e81bb256f2070359a34fc93a7a7d4b9a9d689f
+  Capacitor: 7d42085cb786b2d3ea9ac8a17ebd7e3305be7b72
+  CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
+  DarkedgesCapacitorNativeWebauthn: 5431c460859af16b19d97a54b54cf690f63d1afd
+
+PODFILE CHECKSUM: f0937ec924b6b6d79c68d032c1d55f5e1a3b46a8
+
+COCOAPODS: 1.15.2
