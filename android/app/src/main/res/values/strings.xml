@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SoroPass</string>
+    <string name="title_activity_main">SoroPass</string>
+    <string name="package_name">org.sorobanbyexample.passkey</string>
+    <string name="custom_url_scheme">org.sorobanbyexample.passkey</string>
+</resources>
