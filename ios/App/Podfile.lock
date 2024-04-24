@@ -3,7 +3,7 @@ PODS:
   - Capacitor (5.7.5):
     - CapacitorCordova
   - CapacitorCordova (5.7.5)
-  - CapacitorShare (6.0.0):
+  - CapacitorShare (5.0.7):
     - Capacitor
   - DarkedgesCapacitorNativeWebauthn (0.0.2):
     - base64url (~> 1.0)
@@ -12,7 +12,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios`)"
-  - "CapacitorShare (from `../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@5.7.5/node_modules/@capacitor/share`)"
+  - "CapacitorShare (from `../../node_modules/.pnpm/@capacitor+share@5.0.7_@capacitor+core@5.7.5/node_modules/@capacitor/share`)"
   - DarkedgesCapacitorNativeWebauthn (from `../../ext/capacitor-native-webauthn`)
 
 SPEC REPOS:
@@ -25,7 +25,7 @@ EXTERNAL SOURCES:
   CapacitorCordova:
     :path: "../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios"
   CapacitorShare:
-    :path: "../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@5.7.5/node_modules/@capacitor/share"
+    :path: "../../node_modules/.pnpm/@capacitor+share@5.0.7_@capacitor+core@5.7.5/node_modules/@capacitor/share"
   DarkedgesCapacitorNativeWebauthn:
     :path: "../../ext/capacitor-native-webauthn"
 
@@ -33,9 +33,9 @@ SPEC CHECKSUMS:
   base64url: 92e81bb256f2070359a34fc93a7a7d4b9a9d689f
   Capacitor: 7d42085cb786b2d3ea9ac8a17ebd7e3305be7b72
   CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
-  CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
+  CapacitorShare: c6a1ebbf0114ff9e863b966cd6052678fa25d480
   DarkedgesCapacitorNativeWebauthn: 5431c460859af16b19d97a54b54cf690f63d1afd
 
-PODFILE CHECKSUM: cba17390b93a0cf0fd8ac327dda0ac8681ec7371
+PODFILE CHECKSUM: 5341ac693d4f94d6e759950c8becfdd543f21805
 
 COCOAPODS: 1.15.2

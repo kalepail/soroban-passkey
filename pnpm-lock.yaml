@@ -24,8 +24,11 @@ importers:
         specifier: ^5.0.0
         version: 5.0.7(@capacitor/core@5.7.5)
       '@darkedges/capacitor-native-webauthn':
-        specifier: file:./ext/capacitor-native-webauthn
-        version: file:ext/capacitor-native-webauthn(@capacitor/core@5.7.5)
+        specifier: link:ext/capacitor-native-webauthn
+        version: link:ext/capacitor-native-webauthn
+      '@simplewebauthn/browser':
+        specifier: ^9.0.0
+        version: 9.0.1
       '@stellar/stellar-sdk':
         specifier: ^11.3.0
         version: 11.3.0
@@ -175,11 +178,6 @@ packages:
     resolution: {integrity: sha512-l2M+Z8DO2vbvADOBNLbbh9y5ST1RY5sqkWOg/58GkUPBYou/cuNZ68SGQ644f1CvZ8kcOxyZtw06+dxWHIoN/w==}
     cpu: [x64]
     os: [win32]
-
-  '@darkedges/capacitor-native-webauthn@file:ext/capacitor-native-webauthn':
-    resolution: {directory: ext/capacitor-native-webauthn, type: directory}
-    peerDependencies:
-      '@capacitor/core': ^5.0.0
 
   '@esbuild/aix-ppc64@0.20.2':
     resolution: {integrity: sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==}
@@ -2369,11 +2367,6 @@ snapshots:
 
   '@cbor-extract/cbor-extract-win32-x64@2.2.0':
     optional: true
-
-  '@darkedges/capacitor-native-webauthn@file:ext/capacitor-native-webauthn(@capacitor/core@5.7.5)':
-    dependencies:
-      '@capacitor/core': 5.7.5
-      '@simplewebauthn/browser': 9.0.1
 
   '@esbuild/aix-ppc64@0.20.2':
     optional: true
