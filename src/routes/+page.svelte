@@ -670,11 +670,11 @@
 				</p>
 				<br />
 				<button
-					class="relative flex items-center justify-center border-2 border-yellow-500 rounded-full px-6 py-4 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
+					class="relative flex items-center justify-center border-2 border-yellow-500 rounded-full px-6 py-3 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
 					in:fade={{ delay: 400, duration: 250 }} out:fade={{ duration: 250 }}
 					on:click={share}
 				>
-					<span class="font-mono uppercase text-lg" transition:blur={{ amount: 10 }}
+					<span class="font-mono uppercase text-base" transition:blur={{ amount: 10 }}
 						>Share with your friends</span
 					>
 				</button>
