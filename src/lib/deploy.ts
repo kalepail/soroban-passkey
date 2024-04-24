@@ -1,89 +1,62 @@
-import { PUBLIC_accountSecp256r1ContractWasm, PUBLIC_factoryContractId, PUBLIC_factoryContractWasm, PUBLIC_horizonUrl, PUBLIC_networkPassphrase } from "$env/static/public";
-import { Keypair, StrKey, xdr, hash, Address, Contract, Account, TransactionBuilder, SorobanDataBuilder } from "@stellar/stellar-sdk"
-
-// TODO clean up this code
+import { PUBLIC_accountSecp256r1ContractWasm, PUBLIC_factoryContractId, PUBLIC_horizonUrl, PUBLIC_networkPassphrase } from "$env/static/public";
+import { Keypair, StrKey, xdr, hash, Address, Account, TransactionBuilder, Operation, SorobanRpc } from "@stellar/stellar-sdk"
 
 export async function handleDeploy(bundlerKey: Keypair, argPk: Buffer) {
-    const argWasmHash = PUBLIC_accountSecp256r1ContractWasm;
+    const rpc = new SorobanRpc.Server(`${PUBLIC_horizonUrl}/soroban/rpc`, { allowHttp: true });
+    const bundlerKeyAccount = await rpc.getAccount(bundlerKey.publicKey()).then((res) => new Account(res.accountId(), res.sequenceNumber()))
 
-    const salt = hash(argPk)
     const deployee = StrKey.encodeContract(hash(xdr.HashIdPreimage.envelopeTypeContractId(
         new xdr.HashIdPreimageContractId({
             networkId: hash(Buffer.from(PUBLIC_networkPassphrase, 'utf-8')),
             contractIdPreimage: xdr.ContractIdPreimage.contractIdPreimageFromAddress(
                 new xdr.ContractIdPreimageFromAddress({
                     address: Address.fromString(PUBLIC_factoryContractId).toScAddress(),
-                    salt,
+                    salt: hash(argPk),
                 })
             )
         })
     ).toXDR()));
 
-    const key = bundlerKey;
-    const accResp = await (await fetch(`${PUBLIC_horizonUrl}/accounts/${key.publicKey()}`)).json();
-
-    const contract = new Contract(PUBLIC_factoryContractId);
-
-    const transaction = new TransactionBuilder(
-        new Account(key.publicKey(), accResp.sequence),
-        { fee: '21055000', networkPassphrase: PUBLIC_networkPassphrase },
-    ).addOperation(contract.call(
-        "deploy",
-        xdr.ScVal.scvBytes(argPk),
-        xdr.ScVal.scvBytes(Buffer.from(argWasmHash, 'hex')),
-    )).setTimeout(30)
-        .setSorobanData(new SorobanDataBuilder()
-            .setFootprint(
-                [
-                    // Contract code for contract being called.
-                    xdr.LedgerKey.contractCode(
-                        new xdr.LedgerKeyContractCode({ hash: Buffer.from(PUBLIC_factoryContractWasm, 'hex') })
-                    ),
-                    // Contract instance for contract being called.
-                    xdr.LedgerKey.contractData(
-                        new xdr.LedgerKeyContractData({
-                            contract: Address.contract(StrKey.decodeContract(PUBLIC_factoryContractId)).toScAddress(),
-                            key: xdr.ScVal.scvLedgerKeyContractInstance(),
-                            durability: xdr.ContractDataDurability.persistent()
-                        })
-                    ),
-                    // Contract code for contract being deployed.
-                    xdr.LedgerKey.contractCode(
-                        new xdr.LedgerKeyContractCode({ hash: Buffer.from(argWasmHash, 'hex') })
-                    ),
-                ],
-                [
-                    // Contract instance for contract being deployed.
-                    xdr.LedgerKey.contractData(
-                        new xdr.LedgerKeyContractData({
-                            contract: Address.contract(StrKey.decodeContract(deployee)).toScAddress(),
-                            key: xdr.ScVal.scvLedgerKeyContractInstance(),
-                            durability: xdr.ContractDataDurability.persistent()
-                        })
-                    ),
-                ],
-            )
-            .setResources(
-                16535694, // Instructions
-                50472, // Read Bytes
-                1060, // Write Bytes
-            )
-            .setResourceFee(500058)
-            .build())
+    const simTxn = new TransactionBuilder(bundlerKeyAccount, {
+        fee: '100',
+        networkPassphrase: PUBLIC_networkPassphrase
+    })
+        .addOperation(
+            Operation.invokeContractFunction({
+                contract: PUBLIC_factoryContractId,
+                function: 'deploy',
+                args: [
+                    xdr.ScVal.scvBytes(argPk),
+                    xdr.ScVal.scvBytes(Buffer.from(PUBLIC_accountSecp256r1ContractWasm, 'hex')),
+                ]
+            })
+        )
+        .setTimeout(0)
         .build();
 
-    transaction.sign(key);
-    
-    const signed = transaction.toXDR();
+    const sim = await rpc.simulateTransaction(simTxn)
+
+    if (
+        SorobanRpc.Api.isSimulationError(sim)
+        || SorobanRpc.Api.isSimulationRestore(sim)
+    ) throw sim
+
+    const transaction = SorobanRpc.assembleTransaction(simTxn, sim).setTimeout(0).build()
+
+    transaction.sign(bundlerKey);
+
+    // TODO failure here is resulting in sp:deployee undefined
+    // TODO handle archived entries
+
     const txResp = await (await fetch(`${PUBLIC_horizonUrl}/transactions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ 'tx': signed }),
+        body: new URLSearchParams({ 'tx': transaction.toXDR() }),
     })).json();
 
     if (txResp.successful) {
         return deployee
     } else {
-        console.error(txResp);
+        throw txResp
     }
 }

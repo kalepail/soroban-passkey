@@ -88,6 +88,6 @@ export async function handleFund(bundlerKey: Keypair, accountContractId: string)
     if (txResp.successful) {
         console.log(txResp);
     } else {
-        console.error(txResp);
+        throw txResp;
     }
 }  

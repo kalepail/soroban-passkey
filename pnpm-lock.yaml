@@ -20,6 +20,9 @@ importers:
       '@capacitor/ios':
         specifier: ^5.0.0
         version: 5.7.5(@capacitor/core@5.7.5)
+      '@capacitor/share':
+        specifier: ^6.0.0
+        version: 6.0.0(@capacitor/core@5.7.5)
       '@darkedges/capacitor-native-webauthn':
         specifier: link:ext/capacitor-native-webauthn
         version: link:ext/capacitor-native-webauthn
@@ -32,6 +35,9 @@ importers:
       cbor-x:
         specifier: ^1.5.9
         version: 1.5.9
+      svelte-gestures:
+        specifier: ^4.0.0
+        version: 4.0.0
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
@@ -134,6 +140,11 @@ packages:
     resolution: {integrity: sha512-mREcvv4XC9USSAbYmf/2Lmbr52eZjMDpKYwxwi2CKLJXGXNjYfJaHm6jnPordAl6kZdm3Bm/tnx+rYpb9KptGA==}
     peerDependencies:
       '@capacitor/core': ^5.7.0
+
+  '@capacitor/share@6.0.0':
+    resolution: {integrity: sha512-Doqvtxe9tejkjq+P9hZzDslR6VetM02R6N61GBavVBWkQj4N+xWNDA8zISG3PzuGBffGtTfHC6L0W+XySFY5nw==}
+    peerDependencies:
+      '@capacitor/core': ^6.0.0
 
   '@cbor-extract/cbor-extract-darwin-arm64@2.2.0':
     resolution: {integrity: sha512-P7swiOAdF7aSi0H+tHtHtr6zrpF3aAq/W9FXx5HektRvLTM2O89xCyXF3pk7pLc7QpaY7AoaE8UowVf9QBdh3w==}
@@ -2019,6 +2030,9 @@ packages:
       svelte:
         optional: true
 
+  svelte-gestures@4.0.0:
+    resolution: {integrity: sha512-YrryRlKGY2CJm3AtEjFt9+RdQ7/pqNio4O7Apb9ed6oMBEkd6BFoOuv9mBApAEBIx08+iBDXQujbYCvakGePPw==}
+
   svelte-hmr@0.16.0:
     resolution: {integrity: sha512-Gyc7cOS3VJzLlfj7wKS0ZnzDVdv3Pn2IuVeJPk9m2skfhcu5bq3wtIZyQGggr7/Iim5rH5cncyQft/kRLupcnA==}
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
@@ -2320,6 +2334,10 @@ snapshots:
       tslib: 2.6.2
 
   '@capacitor/ios@5.7.5(@capacitor/core@5.7.5)':
+    dependencies:
+      '@capacitor/core': 5.7.5
+
+  '@capacitor/share@6.0.0(@capacitor/core@5.7.5)':
     dependencies:
       '@capacitor/core': 5.7.5
 
@@ -4348,6 +4366,8 @@ snapshots:
       postcss-scss: 4.0.9(postcss@8.4.38)
     optionalDependencies:
       svelte: 4.2.15
+
+  svelte-gestures@4.0.0: {}
 
   svelte-hmr@0.16.0(svelte@4.2.15):
     dependencies:

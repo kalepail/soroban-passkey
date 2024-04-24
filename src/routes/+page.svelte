@@ -11,40 +11,54 @@
 	import { handleVoteBuild } from '$lib/vote_build';
 	import { handleVoteSend } from '$lib/vote_send';
 	import { getVotes } from '$lib/get_votes';
-	import { fade, blur, slide, crossfade, fly, scale } from 'svelte/transition';
+	import { fade, blur, slide, scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { swipe } from 'svelte-gestures';
+	import { Share } from '@capacitor/share';
 
 	let deployee: any;
 	let registerRes: any;
 	let signRes: any;
 	let bundlerKey: Keypair;
 	let bundlerPubkey: string;
-	let votes: any[];
+	let votes = {
+		all_votes: {
+			chicken: 0,
+			egg: 0,
+			chicken_percent: 0,
+			egg_percent: 0,
+			chicken_percent_no_source: 0,
+			egg_percent_no_source: 0
+		},
+		source_votes: {
+			chicken: 0,
+			egg: 0,
+			chicken_percent: 0,
+			egg_percent: 0
+		},
+		total_source_votes: 0,
+		total_all_votes: 0
+	};
 	let loadingRegister = false;
 	let loadingSign = false;
 
-	let step = 11;
+	let step = 0;
 	let interval: NodeJS.Timeout;
 	let dots = '';
-	let choice: string | null = 'chicken';
+	let choice: string | null;
 
-	// TODO Add swipe left/right to change step
 	// TODO add the end include option to reset the whole thing
 
-	onDestroy(() => {
-		clearInterval(interval);
-	});
+	onDestroy(() => clearInterval(interval));
 
 	onMount(async () => {
+		setTimeout(() => (step = 14), 500);
+
 		interval = setInterval(() => {
 			if (deployee) clearInterval(interval);
 			else if (dots.length === 3) dots = '';
 			else dots += '.';
 		}, 500);
-
-		// setTimeout(() => {
-		// 	step = 1;
-		// }, 500);
 
 		if (localStorage.hasOwnProperty('sp:bundler')) {
 			bundlerKey = Keypair.fromSecret(localStorage.getItem('sp:bundler')!);
@@ -96,8 +110,7 @@
 
 			console.log(deployee);
 
-			await handleFund(bundlerKey, deployee);
-			await onVotes();
+			await onFund();
 		} catch (error) {
 			console.error(error);
 			alert(JSON.stringify(error));
@@ -107,19 +120,21 @@
 	};
 
 	const onSign = async () => {
-		// TODO this should be a transaction to a new chicken/egg contract
-
 		try {
 			loadingSign = true;
 
-			let { lastLedger, nonce, authHash } = await handleVoteBuild(deployee, choice === 'chicken');
+			let { authTxn, authHash, lastLedger } = await handleVoteBuild(
+				bundlerKey,
+				deployee,
+				choice === 'chicken'
+			);
 
 			signRes = await WebAuthn.startAuthentication({
 				challenge: base64url(authHash),
 				rpId: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
 			});
 
-			await handleVoteSend(bundlerKey, deployee, lastLedger, nonce, choice === 'chicken', signRes);
+			await handleVoteSend(bundlerKey, authTxn, lastLedger, signRes);
 			step++;
 			await onVotes();
 		} catch (error) {
@@ -143,10 +158,35 @@
 	function truncateAccount(account: string) {
 		return `${account.slice(0, 5)}...${account.slice(-5)}`;
 	}
+
+	function swipeHandler(event: CustomEvent) {
+		if (event.detail.direction === 'right' && !(step <= 1)) step--;
+		else if (
+			event.detail.direction === 'left' &&
+			!(
+				step >= 14 ||
+				(step === 5 && !deployee) ||
+				(step === 10 && !choice) ||
+				(step === 11 && !votes?.total_source_votes)
+			)
+		)
+			step++;
+	}
+
+	async function share() {
+		await Share.share({
+			title: 'Share SoroPass',
+			text: 'Check out this blockchain experience powered by your face or fingers!',
+			url: 'https://sorobanbyexample.org/',
+			dialogTitle: `${choice === 'chicken'} ? 'Chicken 🐔' : 'Egg 🥚'} people unite!`
+		});
+	}
 </script>
 
 <div
 	class="flex flex-col items-center justify-center min-h-dvh py-safe px-2 select-none overflow-hidden"
+	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
+	on:swipe={swipeHandler}
 >
 	<div class="flex w-full items-center">
 		<div class="rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}">
@@ -322,7 +362,7 @@
 
 				<br />
 
-				<p class="text-xl" in:fade={{ delay: 500, duration: 250 }} out:fade={{ duration: 250 }}>
+				<p class="text-xl" in:fade={{ delay: 250, duration: 250 }} out:fade={{ duration: 250 }}>
 					A singular action granting you access to a global financial ecosystem of hundreds of
 					currencies, financial instruments, and services now all just a glance or tap away.
 				</p>
@@ -344,17 +384,28 @@
 				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
-					This is your new passkey powered Stellar account.
+					This is your new passkey powered blockchain account.
 				</h1>
 				<br />
 				<pre
-					class="flex flex-col bg-yellow-500/10 p-2 select-text"
-					in:fade={{ delay: 250, duration: 250 }}
+					class="relative flex items-center justify-between border-b-2 border-yellow-500 bg-yellow-500/10 py-2 px-4 select-text"
+					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}>
 					<code class="font-mono text-base">{deployee?.substring(0, 28)}<br />{deployee?.substring(28)}</code>
+
+					<a class="flex absolute inset-0" href="https://stellar.expert/explorer/testnet/account/{deployee}">
+						<svg
+							class="absolute right-4 top-1/2 -translate-y-1/2 -rotate-45 origin-center"
+							viewBox="0 0 15 15"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+							width="25"
+							height="25"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1" stroke="currentColor"></path></svg
+						>
+					</a>
 				</pre>
 				<br />
-				<p class="text-xl" in:fade={{ delay: 500, duration: 250 }} out:fade={{ duration: 250 }}>
+				<p class="text-xl" in:fade={{ delay: 300, duration: 250 }} out:fade={{ duration: 250 }}>
 					You can sign whatever you want with it. And only you can.
 				</p>
 			</div>
@@ -371,7 +422,7 @@
 				</p>
 				<br />
 				<h1 class="" in:fade={{ delay: 1000, duration: 250 }} out:fade={{ duration: 250 }}>
-					Which came first <br /> the chicken 🐔 or the egg 🥚?
+					Which came first <br /> the chicken 🐔 <br /> or the egg 🥚?
 				</h1>
 			</div>
 		{/if}
@@ -386,8 +437,8 @@
 				</h1>
 				<br />
 				<p class="text-xl" in:fade={{ delay: 250, duration: 250 }} out:fade={{ duration: 250 }}>
-					Then cryptographically sign it with your passkey powered Stellar account to securely
-					record your vote for eternal, immutable, assurance, alongside all other participants.
+					Then cryptographically sign it with your passkey powered blockchain account to securely
+					record your vote for eternal, immutable assurance alongside all other participants.
 				</p>
 				<br />
 				<div
@@ -422,10 +473,9 @@
 				</h1>
 				<br />
 				<p class="text-xl" in:fade={{ delay: 250, duration: 250 }} out:fade={{ duration: 250 }}>
-					Now press one final time to cryptographically sign your precious opinion for all time for
-					all people everywhere to settle this debate. No middle men, no trust, no 3rd party
-					services. Just your biometrics put to work by the power of math to solve humanity's most
-					difficult challenges.
+					Now press once more to secure your precious opinion for all time for all people everywhere
+					to settle this debate. No middle men, no trust, no 3rd party services. Just your
+					biometrics put to work by the power of math to solve humanity's most difficult challenges.
 				</p>
 				<br />
 				<button
@@ -504,23 +554,64 @@
 				</h1>
 				<br />
 				<!-- TODO: Show percentage of vote was your contribution to the total with a little [you] marker -->
-				<div class="flex items-center justify-between text-lg mb-2">
+				<div
+					class="flex items-center justify-between text-lg mb-2"
+					in:fade={{ delay: 100, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
 					<p>Chicken</p>
 					<p>Egg</p>
 				</div>
-				<div class="w-full flex items-center justify-stetch h-10">
+				<div
+					class="w-full flex items-center justify-stetch h-10"
+					transition:slide={{
+						duration: 250,
+						delay: 200,
+						axis: 'x',
+						easing: quintOut
+					}}
+				>
 					<div class="w-full flex justify-end bg-yellow-500/10 h-10">
-						<div class="w-[50px] bg-yellow-500 h-10"></div>
+						<div
+							class="bg-yellow-500 h-10"
+							style="width: {votes?.all_votes.chicken_percent_no_source}%"
+						></div>
+						<div
+							class="bg-teal-500 h-10"
+							style="width: {votes?.source_votes.chicken_percent}%"
+						></div>
 					</div>
-					<hr class="h-10 border border-violet-800">
-					<hr class="h-16 border border-yellow-500">
+					<hr class="h-10 border border-violet-800" />
+					<hr class="h-16 border border-yellow-500" />
 					<div class="w-full flex justify-start bg-yellow-500/10 h-10">
-						<div class="w-[100px] bg-yellow-500"></div>
+						<div class="bg-teal-500 h-10" style="width: {votes?.source_votes.egg_percent}%"></div>
+						<div
+							class="bg-yellow-500"
+							style="width: {votes?.all_votes.egg_percent_no_source}%"
+						></div>
 					</div>
 				</div>
-				<div class="flex items-center justify-between text-lg mt-2">
-					<span class="text-xs font-mono">[20%]</span>
-					<span class="text-xs font-mono">[50%]</span>
+				<div
+					class="flex items-center justify-between text-lg mt-2"
+					in:fade={{ delay: 300, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					<span class="text-xs font-mono"
+						>[{Number(votes?.all_votes.chicken_percent.toFixed(2))}%]</span
+					>
+					<span class="text-xs font-mono">[{Number(votes?.all_votes.egg_percent.toFixed(2))}%]</span
+					>
+				</div>
+				<br />
+				<div
+					class="flex items-center mt-auto"
+					in:fade={{ delay: 400, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					<span class="w-2 h-2 bg-teal-500 mr-2"></span>
+					<p class="font-mono text-xs text-teal-500">
+						Your vote{votes.total_source_votes > 1 ? 's' : ''}
+					</p>
 				</div>
 			</div>
 		{/if}
@@ -533,16 +624,16 @@
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					The future is secure.
 				</h1>
-				<h1 class="" in:fade={{ delay: 1000, duration: 250 }} out:fade={{ duration: 250 }}>
+				<h1 class="" in:fade={{ delay: 750, duration: 250 }} out:fade={{ duration: 250 }}>
 					But it is also simple.
 				</h1>
-				<h1 class="" in:fade={{ delay: 2000, duration: 250 }} out:fade={{ duration: 250 }}>
+				<h1 class="" in:fade={{ delay: 2250, duration: 250 }} out:fade={{ duration: 250 }}>
 					Yay people and their brains.
 				</h1>
 				<h1 class="" in:fade={{ delay: 3500, duration: 250 }} out:fade={{ duration: 250 }}>
 					Yay God in heaven,
 				</h1>
-				<h1 class="" in:fade={{ delay: 5000, duration: 250 }} out:fade={{ duration: 250 }}>
+				<h1 class="" in:fade={{ delay: 4500, duration: 250 }} out:fade={{ duration: 250 }}>
 					who made us this way.
 				</h1>
 			</div>
@@ -557,14 +648,14 @@
 					SoroPass
 				</h1>
 				<br />
-				<p class="text-xl" in:fade={{ delay: 250, duration: 250 }} out:fade={{ duration: 250 }}>
+				<p class="text-xl" in:fade={{ delay: 100, duration: 250 }} out:fade={{ duration: 250 }}>
 					Learn more about the Stellar blockchain which powers this experience: <a
 						class="underline"
 						href="https://stellar.org/soroban">stellar.org/soroban</a
 					>
 				</p>
 				<br />
-				<p class="text-xl" in:fade={{ delay: 500, duration: 250 }} out:fade={{ duration: 250 }}>
+				<p class="text-xl" in:fade={{ delay: 200, duration: 250 }} out:fade={{ duration: 250 }}>
 					Read the code here: <a
 						class="underline"
 						href="https://github.com/kalepail/soroban-passkey"
@@ -572,38 +663,62 @@
 					>
 				</p>
 				<br />
-				<p class="text-xl" in:fade={{ delay: 750, duration: 250 }} out:fade={{ duration: 250 }}>
+				<p class="text-xl" in:fade={{ delay: 300, duration: 250 }} out:fade={{ duration: 250 }}>
 					Join our Discord: <a class="underline" href="https://discord.com/invite/stellardev"
 						>discord.com/stellardev</a
 					>
+				</p>
+				<br />
+				<button
+					class="relative flex items-center justify-center border-2 border-yellow-500 rounded-full px-6 py-4 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
+					in:fade={{ delay: 400, duration: 250 }} out:fade={{ duration: 250 }}
+					on:click={share}
+				>
+					<span class="font-mono uppercase text-lg" transition:blur={{ amount: 10 }}
+						>Share with your friends</span
+					>
+				</button>
+				<br />
+				<p class="text-xl" in:fade={{ delay: 500, duration: 250 }} out:fade={{ duration: 250 }}>
+					{choice === 'chicken' ? 'Chicken 🐔' : 'Egg 🥚'} people unite!
 				</p>
 			</div>
 		{/if}
 	</div>
 
-	<div class="grid grid-rows-1 grid-cols-2">
-		<button class={step <= 1 ? 'invisible pointer-events-none' : null} on:click={() => step--}>
-			<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-				><path d="M1.5 7.5l4-4m-4 4l4 4m-4-4H14" stroke="currentColor"></path></svg
-			>
-		</button>
-
-		<!-- TODO don't allow a move forward on the "Sign for <choice>" if you've never made _any_ choice -->
+	<div class="w-full grid grid-rows-1 grid-cols-2 gap-4">
 		<button
-			class="bg-yellow-500 rounded-full p-2 {(step === 5 && !deployee) ||
-			(step === 10 && !choice) ||
-			step >= 14
+			class="flex items-center justify-end relative {step <= 1
 				? 'invisible pointer-events-none'
-				: null}"
-			on:click={() => step++}
+				: null} active:right-[2px]"
+			on:click={() => step--}
 		>
 			<svg
-				class="stroke-violet-800"
+				class="p-2"
 				viewBox="0 0 15 15"
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
-				width="30"
-				height="30"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
+				width="45"
+				height="45"><path d="M1.5 7.5l4-4m-4 4l4 4m-4-4H14" stroke="currentColor"></path></svg
+			>
+		</button>
+
+		<button
+			class="flex items-center justify-start relative {step >= 14 ||
+			(step === 5 && !deployee) ||
+			(step === 10 && !choice) ||
+			(step === 11 && !votes?.total_source_votes)
+				? 'invisible pointer-events-none'
+				: null} active:left-[2px]"
+			on:click={() => step++}
+		>
+			<svg
+				class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+				viewBox="0 0 15 15"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				width="45"
+				height="45"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
 			>
 		</button>
 	</div>

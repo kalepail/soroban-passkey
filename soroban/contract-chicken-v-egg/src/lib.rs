@@ -26,7 +26,7 @@ impl Contract {
 
         let source_votes = env
             .storage()
-            .instance()
+            .persistent()
             .get(&(VOTES, &source))
             .unwrap_or(Votes { chicken: 0, egg: 0 });
 
@@ -56,7 +56,7 @@ impl Contract {
 
         env.storage().instance().set(&VOTES, &all_votes);
         env.storage()
-            .instance()
+        .persistent()
             .set(&(VOTES, &source), &source_votes);
 
         (all_votes, source_votes)
@@ -68,7 +68,7 @@ impl Contract {
                 .get(&VOTES)
                 .unwrap_or(Votes { chicken: 0, egg: 0 }),
             env.storage()
-                .instance()
+                .persistent()
                 .get(&(VOTES, &source))
                 .unwrap_or(Votes { chicken: 0, egg: 0 }),
         )

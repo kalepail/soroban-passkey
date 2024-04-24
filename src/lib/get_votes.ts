@@ -26,8 +26,26 @@ export async function getVotes(bundlerKey: Keypair, accountContractId: string) {
     const simResp = await rpc.simulateTransaction(transaction)
 
     if (!SorobanRpc.Api.isSimulationSuccess(simResp)) {
-        console.error(simResp);
+        throw simResp;
     } else {
-        return scValToNative(simResp.result?.retval!);
+        const [all_votes, source_votes]: [{chicken: number, egg: number}, {chicken: number, egg: number}] = scValToNative(simResp.result?.retval!)
+        const total_all_votes = all_votes.chicken + all_votes.egg
+
+        return {
+            all_votes: {
+                ...all_votes,
+                chicken_percent: all_votes.chicken / total_all_votes * 100,
+                egg_percent: all_votes.egg / total_all_votes * 100,
+                chicken_percent_no_source: (all_votes.chicken - source_votes.chicken) / total_all_votes * 100,
+                egg_percent_no_source: (all_votes.egg - source_votes.egg) / total_all_votes * 100
+            },
+            source_votes: {
+                ...source_votes,
+                chicken_percent: source_votes.chicken / total_all_votes * 100,
+                egg_percent: source_votes.egg / total_all_votes * 100
+            },
+            total_source_votes: source_votes.chicken + source_votes.egg,
+            total_all_votes
+        };
     }
 }
