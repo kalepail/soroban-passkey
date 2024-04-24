@@ -8,9 +8,9 @@
 	import { getPublicKey } from '$lib/webauthn';
 	import { handleDeploy } from '$lib/deploy';
 	import { handleFund } from '$lib/fund';
-	import { handleRefundBuild } from '$lib/refund_build';
-	import { handleRefundSend } from '$lib/refund_send';
-	import { getBalance } from '$lib/get_balance';
+	import { handleVoteBuild } from '$lib/vote_build';
+	import { handleVoteSend } from '$lib/vote_send';
+	import { getVotes } from '$lib/get_votes';
 	import { fade, blur, slide, crossfade, fly, scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
@@ -19,14 +19,17 @@
 	let signRes: any;
 	let bundlerKey: Keypair;
 	let bundlerPubkey: string;
-	let balance: number;
+	let votes: any[];
 	let loadingRegister = false;
 	let loadingSign = false;
 
-	let step = 5;
+	let step = 11;
 	let interval: NodeJS.Timeout;
 	let dots = '';
 	let choice: string | null = 'chicken';
+
+	// TODO Add swipe left/right to change step
+	// TODO add the end include option to reset the whole thing
 
 	onDestroy(() => {
 		clearInterval(interval);
@@ -40,7 +43,7 @@
 		}, 500);
 
 		// setTimeout(() => {
-		// 	step = 8;
+		// 	step = 1;
 		// }, 500);
 
 		if (localStorage.hasOwnProperty('sp:bundler')) {
@@ -57,7 +60,7 @@
 
 		if (localStorage.hasOwnProperty('sp:deployee')) {
 			deployee = localStorage.getItem('sp:deployee');
-			await onBalance();
+			await onVotes();
 		}
 	});
 
@@ -94,7 +97,7 @@
 			console.log(deployee);
 
 			await handleFund(bundlerKey, deployee);
-			await onBalance();
+			await onVotes();
 		} catch (error) {
 			console.error(error);
 			alert(JSON.stringify(error));
@@ -109,16 +112,16 @@
 		try {
 			loadingSign = true;
 
-			let { lastLedger, nonce, authHash } = await handleRefundBuild(bundlerKey, deployee);
+			let { lastLedger, nonce, authHash } = await handleVoteBuild(deployee, choice === 'chicken');
 
 			signRes = await WebAuthn.startAuthentication({
 				challenge: base64url(authHash),
 				rpId: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
 			});
 
-			await handleRefundSend(bundlerKey, deployee, lastLedger, nonce, signRes);
+			await handleVoteSend(bundlerKey, deployee, lastLedger, nonce, choice === 'chicken', signRes);
 			step++;
-			await onBalance();
+			await onVotes();
 		} catch (error) {
 			console.error(error);
 			alert(JSON.stringify(error));
@@ -129,12 +132,12 @@
 
 	const onFund = async () => {
 		await handleFund(bundlerKey, deployee);
-		await onBalance();
+		await onVotes();
 	};
 
-	const onBalance = async () => {
-		balance = (await getBalance(bundlerKey, deployee))! / 10_000_000;
-		console.log(balance);
+	const onVotes = async () => {
+		votes = await getVotes(bundlerKey, deployee);
+		console.log(votes);
 	};
 
 	function truncateAccount(account: string) {
@@ -146,14 +149,14 @@
 	class="flex flex-col items-center justify-center min-h-dvh py-safe px-2 select-none overflow-hidden"
 >
 	<div class="flex w-full items-center">
-		<div class="rounded-full border-2 border-yellow-500 p-1 {deployee ? 'bg-yellow-500' : null}">
+		<div class="rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}">
 			<svg
 				class="stroke-violet-800 {deployee ? null : 'invisible'}"
 				viewBox="0 0 15 15"
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
-				width="20"
-				height="20"><path d="M4 7.5L7 10l4-5"></path></svg
+				width="25"
+				height="25"><path d="M4 7.5L7 10l4-5"></path></svg
 			>
 		</div>
 
@@ -368,7 +371,7 @@
 				</p>
 				<br />
 				<h1 class="" in:fade={{ delay: 1000, duration: 250 }} out:fade={{ duration: 250 }}>
-					Which came first the chicken or the egg?
+					Which came first <br /> the chicken 🐔 or the egg 🥚?
 				</h1>
 			</div>
 		{/if}
@@ -500,8 +503,25 @@
 					Incredible!
 				</h1>
 				<br />
-				<!-- TODO: Show the chicken and egg results -->
-				<div></div>
+				<!-- TODO: Show percentage of vote was your contribution to the total with a little [you] marker -->
+				<div class="flex items-center justify-between text-lg mb-2">
+					<p>Chicken</p>
+					<p>Egg</p>
+				</div>
+				<div class="w-full flex items-center justify-stetch h-10">
+					<div class="w-full flex justify-end bg-yellow-500/10 h-10">
+						<div class="w-[50px] bg-yellow-500 h-10"></div>
+					</div>
+					<hr class="h-10 border border-violet-800">
+					<hr class="h-16 border border-yellow-500">
+					<div class="w-full flex justify-start bg-yellow-500/10 h-10">
+						<div class="w-[100px] bg-yellow-500"></div>
+					</div>
+				</div>
+				<div class="flex items-center justify-between text-lg mt-2">
+					<span class="text-xs font-mono">[20%]</span>
+					<span class="text-xs font-mono">[50%]</span>
+				</div>
 			</div>
 		{/if}
 
@@ -568,6 +588,7 @@
 			>
 		</button>
 
+		<!-- TODO don't allow a move forward on the "Sign for <choice>" if you've never made _any_ choice -->
 		<button
 			class="bg-yellow-500 rounded-full p-2 {(step === 5 && !deployee) ||
 			(step === 10 && !choice) ||
@@ -587,32 +608,6 @@
 		</button>
 	</div>
 </div>
-
-<!-- <div class="flex flex-col items-center justify-start min-h-dvh min-w-dvw w-dvw p-safe">
-	<h1 class="text-3xl font-bold mb-1">SoroPass</h1>
-
-	{#if bundlerPubkey}
-		<h2 class="mb-1">Bundler: {truncateAccount(bundlerPubkey)}</h2>
-	{/if}
-
-	{#if deployee}
-		<p class="mb-1">Account: {truncateAccount(deployee)}</p>
-	{:else}
-		<button class="bg-slate-500 text-slate-200 px-2 py-1 mb-1 rounded" on:click={onRegister}
-			>Register</button
-		>
-	{/if}
-
-	<button class="bg-slate-500 text-slate-200 px-2 py-1 mb-1 rounded" on:click={onFund}>Fund</button>
-
-	<button class="bg-slate-500 text-slate-200 px-2 py-1 mb-1 rounded" on:click={onRefund}>Refund</button>
-
-	<button class="bg-slate-500 text-slate-200 px-2 py-1 mb-1 rounded" on:click={onBalance}>Balance</button>
-	
-	{#if balance}
-		<p class="mb-1">Balance: {balance} XLM</p>
-	{/if}
-</div> -->
 
 <style lang="postcss">
 	:global(html) {

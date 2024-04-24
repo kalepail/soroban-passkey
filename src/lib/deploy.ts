@@ -1,6 +1,8 @@
 import { PUBLIC_accountSecp256r1ContractWasm, PUBLIC_factoryContractId, PUBLIC_factoryContractWasm, PUBLIC_horizonUrl, PUBLIC_networkPassphrase } from "$env/static/public";
 import { Keypair, StrKey, xdr, hash, Address, Contract, Account, TransactionBuilder, SorobanDataBuilder } from "@stellar/stellar-sdk"
 
+// TODO clean up this code
+
 export async function handleDeploy(bundlerKey: Keypair, argPk: Buffer) {
     const argWasmHash = PUBLIC_accountSecp256r1ContractWasm;
 

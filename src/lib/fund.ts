@@ -1,5 +1,7 @@
 import { PUBLIC_horizonUrl, PUBLIC_nativeContractId, PUBLIC_networkPassphrase } from "$env/static/public";
-import { Keypair, xdr, Address, nativeToScVal, Operation, TransactionBuilder, Account, SorobanDataBuilder, StrKey, Transaction } from "@stellar/stellar-sdk";
+import { Keypair, xdr, Address, nativeToScVal, Operation, TransactionBuilder, Account, SorobanDataBuilder, StrKey } from "@stellar/stellar-sdk";
+
+// TODO clean up this code
 
 export async function handleFund(bundlerKey: Keypair, accountContractId: string) {
     const key = bundlerKey;

@@ -1,13 +1,13 @@
-import { PUBLIC_horizonUrl, PUBLIC_nativeContractId, PUBLIC_networkPassphrase } from "$env/static/public";
+import { PUBLIC_horizonUrl, PUBLIC_chickenVsEggContractId, PUBLIC_networkPassphrase } from "$env/static/public";
 import { SorobanRpc } from "@stellar/stellar-sdk";
 import { Keypair, xdr, Address, Operation, TransactionBuilder, Account, scValToNative } from "@stellar/stellar-sdk";
 
-export async function getBalance(bundlerKey: Keypair, accountContractId: string) {
+export async function getVotes(bundlerKey: Keypair, accountContractId: string) {
     const key = bundlerKey;
 
     const op = Operation.invokeContractFunction({
-        contract: PUBLIC_nativeContractId,
-        function: 'balance',
+        contract: PUBLIC_chickenVsEggContractId,
+        function: 'votes',
         args: [
             xdr.ScVal.scvAddress(Address.fromString(accountContractId).toScAddress())
         ]
@@ -28,6 +28,6 @@ export async function getBalance(bundlerKey: Keypair, accountContractId: string)
     if (!SorobanRpc.Api.isSimulationSuccess(simResp)) {
         console.error(simResp);
     } else {
-        return Number(scValToNative(simResp.result?.retval!));
+        return scValToNative(simResp.result?.retval!);
     }
 }
