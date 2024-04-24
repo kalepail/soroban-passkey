@@ -1,0 +1,833 @@
+{
+  "api": {
+    "name": "WebAuthnPlugin",
+    "slug": "webauthnplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "isWebAuthnAvailable",
+        "signature": "() => Promise<{ value: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ value: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "iswebauthnavailable"
+      },
+      {
+        "name": "isWebAuthnAutoFillAvailable",
+        "signature": "() => Promise<{ value: boolean; }>",
+        "parameters": [],
+        "returns": "Promise<{ value: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "iswebauthnautofillavailable"
+      },
+      {
+        "name": "startRegistration",
+        "signature": "(publicKeyCredentialCreationOptionsJSON: PublicKeyCredentialCreationOptionsJSON) => Promise<RegistrationResponseJSON>",
+        "parameters": [
+          {
+            "name": "publicKeyCredentialCreationOptionsJSON",
+            "docs": "",
+            "type": "PublicKeyCredentialCreationOptionsJSON"
+          }
+        ],
+        "returns": "Promise<RegistrationResponseJSON>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "RegistrationResponseJSON",
+          "PublicKeyCredentialCreationOptionsJSON"
+        ],
+        "slug": "startregistration"
+      },
+      {
+        "name": "startAuthentication",
+        "signature": "(requestOptionsJSON: PublicKeyCredentialRequestOptionsJSON, useBrowserAutofill?: boolean | undefined) => Promise<AuthenticationResponseJSON>",
+        "parameters": [
+          {
+            "name": "requestOptionsJSON",
+            "docs": "",
+            "type": "PublicKeyCredentialRequestOptionsJSON"
+          },
+          {
+            "name": "useBrowserAutofill",
+            "docs": "",
+            "type": "boolean | undefined"
+          }
+        ],
+        "returns": "Promise<AuthenticationResponseJSON>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "AuthenticationResponseJSON",
+          "PublicKeyCredentialRequestOptionsJSON"
+        ],
+        "slug": "startauthentication"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "RegistrationResponseJSON",
+      "slug": "registrationresponsejson",
+      "docs": "A slightly-modified RegistrationCredential to simplify working with ArrayBuffers that\nare Base64URL-encoded in the browser so that they can be sent as JSON to the server.\n\nhttps://w3c.github.io/webauthn/#dictdef-registrationresponsejson",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "id",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "rawId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "response",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorAttestationResponseJSON"
+          ],
+          "type": "AuthenticatorAttestationResponseJSON"
+        },
+        {
+          "name": "authenticatorAttachment",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorAttachment"
+          ],
+          "type": "AuthenticatorAttachment"
+        },
+        {
+          "name": "clientExtensionResults",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticationExtensionsClientOutputs"
+          ],
+          "type": "AuthenticationExtensionsClientOutputs"
+        },
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialType"
+          ],
+          "type": "PublicKeyCredentialType"
+        }
+      ]
+    },
+    {
+      "name": "AuthenticatorAttestationResponseJSON",
+      "slug": "authenticatorattestationresponsejson",
+      "docs": "A slightly-modified AuthenticatorAttestationResponse to simplify working with ArrayBuffers that\nare Base64URL-encoded in the browser so that they can be sent as JSON to the server.\n\nhttps://w3c.github.io/webauthn/#dictdef-authenticatorattestationresponsejson",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "clientDataJSON",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "attestationObject",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "authenticatorData",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "transports",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorTransportFuture"
+          ],
+          "type": "AuthenticatorTransportFuture[] | undefined"
+        },
+        {
+          "name": "publicKeyAlgorithm",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "COSEAlgorithmIdentifier"
+          ],
+          "type": "COSEAlgorithmIdentifier"
+        },
+        {
+          "name": "publicKey",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        }
+      ]
+    },
+    {
+      "name": "AuthenticationExtensionsClientOutputs",
+      "slug": "authenticationextensionsclientoutputs",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "appid",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "credProps",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "CredentialPropertiesOutput"
+          ],
+          "type": "CredentialPropertiesOutput"
+        },
+        {
+          "name": "hmacCreateSecret",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        }
+      ]
+    },
+    {
+      "name": "CredentialPropertiesOutput",
+      "slug": "credentialpropertiesoutput",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "rk",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PublicKeyCredentialCreationOptionsJSON",
+      "slug": "publickeycredentialcreationoptionsjson",
+      "docs": "A variant of PublicKeyCredentialCreationOptions suitable for JSON transmission to the browser to\n(eventually) get passed into navigator.credentials.create(...) in the browser.\n\nThis should eventually get replaced with official TypeScript DOM types when WebAuthn L3 types\neventually make it into the language:\n\nhttps://w3c.github.io/webauthn/#dictdef-publickeycredentialcreationoptionsjson",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "rp",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialRpEntity"
+          ],
+          "type": "PublicKeyCredentialRpEntity"
+        },
+        {
+          "name": "user",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialUserEntityJSON"
+          ],
+          "type": "PublicKeyCredentialUserEntityJSON"
+        },
+        {
+          "name": "challenge",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "pubKeyCredParams",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialParameters"
+          ],
+          "type": "PublicKeyCredentialParameters[]"
+        },
+        {
+          "name": "timeout",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "excludeCredentials",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialDescriptorJSON"
+          ],
+          "type": "PublicKeyCredentialDescriptorJSON[] | undefined"
+        },
+        {
+          "name": "authenticatorSelection",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorSelectionCriteria"
+          ],
+          "type": "AuthenticatorSelectionCriteria"
+        },
+        {
+          "name": "attestation",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AttestationConveyancePreference"
+          ],
+          "type": "AttestationConveyancePreference"
+        },
+        {
+          "name": "extensions",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticationExtensionsClientInputs"
+          ],
+          "type": "AuthenticationExtensionsClientInputs"
+        }
+      ]
+    },
+    {
+      "name": "PublicKeyCredentialRpEntity",
+      "slug": "publickeycredentialrpentity",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "id",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PublicKeyCredentialUserEntityJSON",
+      "slug": "publickeycredentialuserentityjson",
+      "docs": "https://w3c.github.io/webauthn/#dictdef-publickeycredentialuserentityjson",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "id",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "displayName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "PublicKeyCredentialParameters",
+      "slug": "publickeycredentialparameters",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "alg",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "COSEAlgorithmIdentifier"
+          ],
+          "type": "COSEAlgorithmIdentifier"
+        },
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialType"
+          ],
+          "type": "PublicKeyCredentialType"
+        }
+      ]
+    },
+    {
+      "name": "PublicKeyCredentialDescriptorJSON",
+      "slug": "publickeycredentialdescriptorjson",
+      "docs": "https://w3c.github.io/webauthn/#dictdef-publickeycredentialdescriptorjson",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "id",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialType"
+          ],
+          "type": "PublicKeyCredentialType"
+        },
+        {
+          "name": "transports",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorTransportFuture"
+          ],
+          "type": "AuthenticatorTransportFuture[] | undefined"
+        }
+      ]
+    },
+    {
+      "name": "AuthenticatorSelectionCriteria",
+      "slug": "authenticatorselectioncriteria",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "authenticatorAttachment",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorAttachment"
+          ],
+          "type": "AuthenticatorAttachment"
+        },
+        {
+          "name": "requireResidentKey",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "residentKey",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "ResidentKeyRequirement"
+          ],
+          "type": "ResidentKeyRequirement"
+        },
+        {
+          "name": "userVerification",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "UserVerificationRequirement"
+          ],
+          "type": "UserVerificationRequirement"
+        }
+      ]
+    },
+    {
+      "name": "AuthenticationExtensionsClientInputs",
+      "slug": "authenticationextensionsclientinputs",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "appid",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "credProps",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        },
+        {
+          "name": "hmacCreateSecret",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean | undefined"
+        }
+      ]
+    },
+    {
+      "name": "AuthenticationResponseJSON",
+      "slug": "authenticationresponsejson",
+      "docs": "A slightly-modified AuthenticationCredential to simplify working with ArrayBuffers that\nare Base64URL-encoded in the browser so that they can be sent as JSON to the server.\n\nhttps://w3c.github.io/webauthn/#dictdef-authenticationresponsejson",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "id",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "rawId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "response",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorAssertionResponseJSON"
+          ],
+          "type": "AuthenticatorAssertionResponseJSON"
+        },
+        {
+          "name": "authenticatorAttachment",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticatorAttachment"
+          ],
+          "type": "AuthenticatorAttachment"
+        },
+        {
+          "name": "clientExtensionResults",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticationExtensionsClientOutputs"
+          ],
+          "type": "AuthenticationExtensionsClientOutputs"
+        },
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialType"
+          ],
+          "type": "PublicKeyCredentialType"
+        }
+      ]
+    },
+    {
+      "name": "AuthenticatorAssertionResponseJSON",
+      "slug": "authenticatorassertionresponsejson",
+      "docs": "A slightly-modified AuthenticatorAssertionResponse to simplify working with ArrayBuffers that\nare Base64URL-encoded in the browser so that they can be sent as JSON to the server.\n\nhttps://w3c.github.io/webauthn/#dictdef-authenticatorassertionresponsejson",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "clientDataJSON",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "authenticatorData",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "signature",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "userHandle",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        }
+      ]
+    },
+    {
+      "name": "PublicKeyCredentialRequestOptionsJSON",
+      "slug": "publickeycredentialrequestoptionsjson",
+      "docs": "A variant of PublicKeyCredentialRequestOptions suitable for JSON transmission to the browser to\n(eventually) get passed into navigator.credentials.get(...) in the browser.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "challenge",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
+        },
+        {
+          "name": "timeout",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "rpId",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string | undefined"
+        },
+        {
+          "name": "allowCredentials",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PublicKeyCredentialDescriptorJSON"
+          ],
+          "type": "PublicKeyCredentialDescriptorJSON[] | undefined"
+        },
+        {
+          "name": "userVerification",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "UserVerificationRequirement"
+          ],
+          "type": "UserVerificationRequirement"
+        },
+        {
+          "name": "extensions",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "AuthenticationExtensionsClientInputs"
+          ],
+          "type": "AuthenticationExtensionsClientInputs"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [
+    {
+      "name": "Base64URLString",
+      "slug": "base64urlstring",
+      "docs": "An attempt to communicate that this isn't just any string, but a Base64URL-encoded string",
+      "types": [
+        {
+          "text": "string",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "AuthenticatorTransportFuture",
+      "slug": "authenticatortransportfuture",
+      "docs": "A super class of TypeScript's `AuthenticatorTransport` that includes support for the latest\ntransports. Should eventually be replaced by TypeScript's when TypeScript gets updated to\nknow about it (sometime after 4.6.3)",
+      "types": [
+        {
+          "text": "'ble'",
+          "complexTypes": []
+        },
+        {
+          "text": "'cable'",
+          "complexTypes": []
+        },
+        {
+          "text": "'hybrid'",
+          "complexTypes": []
+        },
+        {
+          "text": "'internal'",
+          "complexTypes": []
+        },
+        {
+          "text": "'nfc'",
+          "complexTypes": []
+        },
+        {
+          "text": "'smart-card'",
+          "complexTypes": []
+        },
+        {
+          "text": "'usb'",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "COSEAlgorithmIdentifier",
+      "slug": "cosealgorithmidentifier",
+      "docs": "",
+      "types": [
+        {
+          "text": "number",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "AuthenticatorAttachment",
+      "slug": "authenticatorattachment",
+      "docs": "",
+      "types": [
+        {
+          "text": "\"cross-platform\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"platform\"",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "PublicKeyCredentialType",
+      "slug": "publickeycredentialtype",
+      "docs": "",
+      "types": [
+        {
+          "text": "\"public-key\"",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "ResidentKeyRequirement",
+      "slug": "residentkeyrequirement",
+      "docs": "",
+      "types": [
+        {
+          "text": "\"discouraged\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"preferred\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"required\"",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "UserVerificationRequirement",
+      "slug": "userverificationrequirement",
+      "docs": "",
+      "types": [
+        {
+          "text": "\"discouraged\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"preferred\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"required\"",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "AttestationConveyancePreference",
+      "slug": "attestationconveyancepreference",
+      "docs": "",
+      "types": [
+        {
+          "text": "\"direct\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"enterprise\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"indirect\"",
+          "complexTypes": []
+        },
+        {
+          "text": "\"none\"",
+          "complexTypes": []
+        }
+      ]
+    }
+  ],
+  "pluginConfigs": []
+}

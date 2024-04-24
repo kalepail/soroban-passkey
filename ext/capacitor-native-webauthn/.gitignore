@@ -1,5 +1,5 @@
 # node files
-dist
+# dist
 node_modules
 
 # iOS files
@@ -10,8 +10,6 @@ xcuserdata
 
 # macOS files
 .DS_Store
-
-
 
 # Based on Android gitignore template: https://github.com/github/gitignore/blob/HEAD/Android.gitignore
 
