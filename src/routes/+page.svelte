@@ -16,6 +16,8 @@
 	import { swipe } from 'svelte-gestures';
 	import { Share } from '@capacitor/share';
 
+	// TODO break up this code into components so it's not so monolithic
+
 	let deployee: any;
 	let registerRes: any;
 	let signRes: any;
@@ -47,12 +49,10 @@
 	let dots = '';
 	let choice: string | null;
 
-	// TODO add the end include option to reset the whole thing
-
 	onDestroy(() => clearInterval(interval));
 
 	onMount(async () => {
-		setTimeout(() => (step = 14), 500);
+		setTimeout(() => (step = 1), 500);
 
 		interval = setInterval(() => {
 			if (deployee) clearInterval(interval);
@@ -180,6 +180,12 @@
 			url: 'https://sorobanbyexample.org/',
 			dialogTitle: `${choice === 'chicken'} ? 'Chicken 🐔' : 'Egg 🥚'} people unite!`
 		});
+	}
+
+	function resetAll() {
+		localStorage.removeItem('sp:bundler');
+		localStorage.removeItem('sp:deployee');
+		window.location.reload();
 	}
 </script>
 
@@ -553,7 +559,6 @@
 					Incredible!
 				</h1>
 				<br />
-				<!-- TODO: Show percentage of vote was your contribution to the total with a little [you] marker -->
 				<div
 					class="flex items-center justify-between text-lg mb-2"
 					in:fade={{ delay: 100, duration: 250 }}
@@ -671,7 +676,8 @@
 				<br />
 				<button
 					class="relative flex items-center justify-center border-2 border-yellow-500 rounded-full px-6 py-3 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
-					in:fade={{ delay: 400, duration: 250 }} out:fade={{ duration: 250 }}
+					in:fade={{ delay: 400, duration: 250 }}
+					out:fade={{ duration: 250 }}
 					on:click={share}
 				>
 					<span class="font-mono uppercase text-base" transition:blur={{ amount: 10 }}
@@ -703,24 +709,38 @@
 			>
 		</button>
 
-		<button
-			class="flex items-center justify-start relative {step >= 14 ||
-			(step === 5 && !deployee) ||
-			(step === 10 && !choice) ||
-			(step === 11 && !votes?.total_source_votes)
-				? 'invisible pointer-events-none'
-				: null} active:left-[2px]"
-			on:click={() => step++}
-		>
-			<svg
-				class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
-				viewBox="0 0 15 15"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				width="45"
-				height="45"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
+		{#if step >= 14}
+			<button class="flex items-center justify-start relative active:top-[2px]" on:click={resetAll}>
+				<svg
+					class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+					viewBox="0 0 15 15"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					width="45"
+					height="45"
+					><path d="M7.5 14.5A7 7 0 013.17 2M7.5.5A7 7 0 0111.83 13m-.33-3v3.5H15M0 1.5h3.5V5"
+					></path></svg
+				>
+			</button>
+		{:else}
+			<button
+				class="flex items-center justify-start relative {(step === 5 && !deployee) ||
+				(step === 10 && !choice) ||
+				(step === 11 && !votes?.total_source_votes)
+					? 'invisible pointer-events-none'
+					: null} active:left-[2px]"
+				on:click={() => step++}
 			>
-		</button>
+				<svg
+					class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+					viewBox="0 0 15 15"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					width="45"
+					height="45"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
+				>
+			</button>
+		{/if}
 	</div>
 </div>
 
