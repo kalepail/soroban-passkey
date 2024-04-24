@@ -11,8 +11,8 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios'
-  pod 'CapacitorShare', :path => '../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@5.7.5/node_modules/@capacitor/share'
-  pod 'DarkedgesCapacitorNativeWebauthn', :path => '../../ext/capacitor-native-webauthn'
+  pod 'CapacitorShare', :path => '../../node_modules/.pnpm/@capacitor+share@5.0.7_@capacitor+core@5.7.5/node_modules/@capacitor/share'
+  pod 'DarkedgesCapacitorNativeWebauthn', :path => '../../node_modules/.pnpm/@darkedges+capacitor-native-webauthn@file+ext+capacitor-native-webauthn_@capacitor+core@5.7.5/node_modules/@darkedges/capacitor-native-webauthn'
 end
 
 target 'App' do
