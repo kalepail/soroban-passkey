@@ -180,7 +180,7 @@
 		await Share.share({
 			title: 'Share SoroPass',
 			text: 'Check out this blockchain experience powered by your face or fingers!',
-			url: 'https://sorobanbyexample.org/',
+			url: 'https://passkey.sorobanbyexample.org/',
 			dialogTitle: `${choice === 'chicken'} ? 'Chicken 🐔' : 'Egg 🥚'} people unite!`
 		});
 	}
