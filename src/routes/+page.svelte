@@ -49,7 +49,7 @@
 	onDestroy(() => clearInterval(interval));
 
 	onMount(async () => {
-		setTimeout(() => (step = 5), 500);
+		setTimeout(() => (step = 1), 500);
 
 		interval = setInterval(() => {
 			if (deployee) clearInterval(interval);
