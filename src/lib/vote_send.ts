@@ -1,6 +1,7 @@
 import { PUBLIC_rpcUrl, PUBLIC_horizonUrl } from "$env/static/public";
 import { Memo, Operation, SorobanRpc, Transaction, xdr, type Keypair, type MemoType } from "@stellar/stellar-sdk";
 import base64url from "base64url";
+import { bufToBigint, bigintToBuf } from 'bigint-conversion'
 
 export async function handleVoteSend(bundlerKey: Keypair, authTxn: Transaction<Memo<MemoType>, Operation[]>, lastLedger: number, signRes: any) {
     const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl, { allowHttp: true });
@@ -54,6 +55,10 @@ export async function handleVoteSend(bundlerKey: Keypair, authTxn: Transaction<M
 }
 
 function convertEcdsaSignatureAsnToCompact(sig: Buffer) {
+    // Define the order of the curve secp256k1
+    // https://github.com/RustCrypto/elliptic-curves/blob/master/p256/src/lib.rs#L72
+    const q = Buffer.from('ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551', 'hex')
+
     // ASN Sequence
     let offset = 0;
     if (sig[offset] != 0x30) {
@@ -106,7 +111,16 @@ function convertEcdsaSignatureAsnToCompact(sig: Buffer) {
 
     offset += 32;
 
-    const signature64 = Buffer.from([...r, ...s]);
+    let signature64
+
+    // Force low S range
+    // https://github.com/stellar/stellar-protocol/discussions/1435#discussioncomment-8809175
+    // https://discord.com/channels/897514728459468821/1233048618571927693
+    if ((bufToBigint(q) - BigInt(1)) / BigInt(2)) {
+        signature64 = Buffer.from([...r, ...Buffer.from(bigintToBuf(bufToBigint(q) - bufToBigint(s)))]);
+    } else {
+        signature64 = Buffer.from([...r, ...s]);
+    }
 
     return signature64;
 }

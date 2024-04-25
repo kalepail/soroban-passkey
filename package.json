@@ -10,7 +10,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"deploy": "pnpm run build && npx cap sync ios"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.2.0",
@@ -47,6 +48,7 @@
 		"@simplewebauthn/browser": "^9.0.1",
 		"@stellar/stellar-sdk": "^11.3.0",
 		"base64url": "^3.0.1",
+		"bigint-conversion": "^2.4.3",
 		"cbor-x": "^1.5.9",
 		"svelte-gestures": "^4.0.0"
 	},
