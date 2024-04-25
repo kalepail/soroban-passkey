@@ -4,33 +4,70 @@ import { bufToBigint, bigintToBuf } from 'bigint-conversion'
 import { hash } from '@stellar/stellar-sdk';
 
 // WebAuthn.startRegistration
+// (web)
 // {
-//     "id": "BbWw-56U1Bdh4jpONtSKCEqpxSU",
+//     "id": "H4IsVi6YBjl1OYD7D8grqndtCLc",
+//     "rawId": "H4IsVi6YBjl1OYD7D8grqndtCLc",
 //     "response": {
-//         "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiWTNKbFlYUmxZMmhoYkd4bGJtZGwiLCJvcmlnaW4iOiJodHRwczovL3Bhc3NrZXkuc29yb2JhbmJ5ZXhhbXBsZS5vcmcifQ",
-//         "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YViYK6IVONck2rpXYfkLEGUqpBJhNdZXyHOXyWvGrTtRJpVdAAAAAPv8MAcVTk7MjAtuAgVX170AFAW1sPuelNQXYeI6TjbUighKqcUlpQECAyYgASFYIIEhi2HUX_7Nw4c_Wj3FOmEbTgZ9oljBn6VuvipL3Ph6IlggiyAMPKGboncLSp0VkpMiXzfDtJtGHDwrwyd5kCnxpNE",
+//       "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YViYK6IVONck2rpXYfkLEGUqpBJhNdZXyHOXyWvGrTtRJpVdAAAAAPv8MAcVTk7MjAtuAgVX170AFB-CLFYumAY5dTmA-w_IK6p3bQi3pQECAyYgASFYIGW9SIVw0IkjsGcpWa4Wx2VZdYvEkdjPS-bqxX85M29HIlggc0GQb1oRSzTfx46AM1DNKRJ_p6wKjZRR9g5bz8LsiM8",
+//       "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiWTNKbFlYUmxZMmhoYkd4bGJtZGwiLCJvcmlnaW4iOiJodHRwczovL3Bhc3NrZXkuc29yb2JhbmJ5ZXhhbXBsZS5vcmciLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+//       "transports": [
+//         "hybrid",
+//         "internal"
+//       ],
+//       "publicKeyAlgorithm": -7,
+//       "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEZb1IhXDQiSOwZylZrhbHZVl1i8SR2M9L5urFfzkzb0dzQZBvWhFLNN_HjoAzUM0pEn-nrAqNlFH2DlvPwuyIzw",
+//       "authenticatorData": "K6IVONck2rpXYfkLEGUqpBJhNdZXyHOXyWvGrTtRJpVdAAAAAPv8MAcVTk7MjAtuAgVX170AFB-CLFYumAY5dTmA-w_IK6p3bQi3pQECAyYgASFYIGW9SIVw0IkjsGcpWa4Wx2VZdYvEkdjPS-bqxX85M29HIlggc0GQb1oRSzTfx46AM1DNKRJ_p6wKjZRR9g5bz8LsiM8"
+//     },
+//     "type": "public-key",
+//     "clientExtensionResults": {},
+//     "authenticatorAttachment": "platform"
+//   }
+
+// (ios)
+// {
+//     "id": "FNvVPJP3hmWrGfbGrfHjJYrK72s",
+//     "type": "public-key",
+//     "authenticatorAttachment": "platform",
+//     "rawId": "FNvVPJP3hmWrGfbGrfHjJYrK72s",
+//     "response": {
 //         "transports": [
 //             "internal"
-//         ]
-//     },
-//     "type": "public-key",
-//     "authenticatorAttachment": "platform",
-//     "rawId": "BbWw-56U1Bdh4jpONtSKCEqpxSU"
+//         ],
+//         "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiWTNKbFlYUmxZMmhoYkd4bGJtZGwiLCJvcmlnaW4iOiJodHRwczovL3Bhc3NrZXkuc29yb2JhbmJ5ZXhhbXBsZS5vcmcifQ",
+//         "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YViYK6IVONck2rpXYfkLEGUqpBJhNdZXyHOXyWvGrTtRJpVdAAAAAPv8MAcVTk7MjAtuAgVX170AFBTb1TyT94Zlqxn2xq3x4yWKyu9rpQECAyYgASFYIMQDtLI1TS_oC8p8G1WJyVQhgk6HEEV6oh_fzzffMNrwIlggEcUe0F_AsXcYPK2VnbNqAGOtx6r00KfryoHTL7ZeF-E"
+//     }
 // }
 
-// WebAuthn.startAuthentication
+// WebAuthn.startAuthentication 
+// (web)
+// {
+//     "id": "H4IsVi6YBjl1OYD7D8grqndtCLc",
+//     "rawId": "H4IsVi6YBjl1OYD7D8grqndtCLc",
+//     "response": {
+//       "authenticatorData": "K6IVONck2rpXYfkLEGUqpBJhNdZXyHOXyWvGrTtRJpUdAAAAAA",
+//       "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiWTNKbFlYUmxZMmhoYkd4bGJtZGwiLCJvcmlnaW4iOiJodHRwczovL3Bhc3NrZXkuc29yb2JhbmJ5ZXhhbXBsZS5vcmciLCJjcm9zc09yaWdpbiI6ZmFsc2V9",
+//       "signature": "MEQCIHf6wXsVbm3Nv2AdmdUxHh-mfG60Y3Omu7-gfFBaV4G_AiB2BQPWiyuxEOJssAM0fP4MUwKA_q_1ybReU_mqWY2c9A",
+//       "userHandle": "U29yb2JhbiBUZXN0"
+//     },
+//     "type": "public-key",
+//     "clientExtensionResults": {},
+//     "authenticatorAttachment": "platform"
+//   }
+
+// (ios)
 // {
 //     "authenticatorAttachment": "platform",
-//     "rawId": "BbWw-56U1Bdh4jpONtSKCEqpxSU",
+//     "rawId": "H4IsVi6YBjl1OYD7D8grqndtCLc",
 //     "type": "public-key",
+//     "id": "H4IsVi6YBjl1OYD7D8grqndtCLc",
 //     "response": {
-//         "authenticatorData": "K6IVONck2rpXYfkLEGUqpBJhNdZXyHOXyWvGrTtRJpUdAAAAAA",
-//         "signature": "MEUCIQDpmUyKV55Mf5lj68XAsYLJN9dBFf3dWk-BMeaHUwZIwwIgZsI7xoP0AFMOqrd7lGch05sgo8KlNRuKQ-0LR0IlP1M",
-//         "userHandle": "VTI5eWIySmhiaUJVWlhOMA",
-//         "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiWTNKbFlYUmxZMmhoYkd4bGJtZGwiLCJvcmlnaW4iOiJodHRwczovL3Bhc3NrZXkuc29yb2JhbmJ5ZXhhbXBsZS5vcmcifQ"
-//     },
-//     "id": "BbWw-56U1Bdh4jpONtSKCEqpxSU"
-// }
+//       "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiWTNKbFlYUmxZMmhoYkd4bGJtZGwiLCJvcmlnaW4iOiJodHRwczovL3Bhc3NrZXkuc29yb2JhbmJ5ZXhhbXBsZS5vcmcifQ",
+//       "authenticatorData": "K6IVONck2rpXYfkLEGUqpBJhNdZXyHOXyWvGrTtRJpUdAAAAAA",
+//       "userHandle": "VTI5eWIySmhiaUJVWlhOMA",
+//       "signature": "MEUCIFlHfLFaHULwdwDXVS3rJcxKNIsxbN3D58Lxys9cDK2uAiEA6Un1AQ0HVPyAya_ZXYiVB9Bvv1JesAfgQLATtCPFEI0"
+//     }
+//   }
 
 export async function getPublicKeys(registration: any) {
     const contractSalt = hash(base64url.toBuffer(registration.id))

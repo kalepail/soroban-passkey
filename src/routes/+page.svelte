@@ -364,7 +364,8 @@
 
 				<br />
 
-				<button class="text-sm font-mono uppercase" on:click={() => onRegister('signin')}
+				<button class="text-sm font-mono uppercase" on:click={() => onRegister('signin')} in:fade={{ delay: 500, duration: 250 }}
+					out:fade={{ duration: 250 }}
 					>Sign In</button
 				>
 			</div>
