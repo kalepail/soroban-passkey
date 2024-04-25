@@ -13,7 +13,7 @@
 	import { getVotes } from '$lib/get_votes';
 	import { fade, blur, slide, scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { swipe } from 'svelte-gestures';
+	import { swipe, press } from 'svelte-gestures';
 	import { Share } from '@capacitor/share';
 
 	// TODO break up this code into components so it's not so monolithic
@@ -166,6 +166,10 @@
 			step++;
 	}
 
+	function pressHandler() {
+		resetAll();
+	}
+
 	async function share() {
 		await Share.share({
 			title: 'Share SoroPass',
@@ -187,7 +191,11 @@
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
 	on:swipe={swipeHandler}
 >
-	<div class="flex w-full items-center">
+	<div
+		class="flex w-full items-center"
+		use:press={{ timeframe: 1000, triggerBeforeFinished: true }}
+		on:press={pressHandler}
+	>
 		<div class="rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}">
 			<svg
 				class="stroke-violet-800 {deployee ? null : 'invisible'}"
