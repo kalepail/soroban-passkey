@@ -56,8 +56,10 @@ impl Contract {
 
         env.storage().instance().set(&VOTES, &all_votes);
         env.storage()
-        .persistent()
+            .persistent()
             .set(&(VOTES, &source), &source_votes);
+
+        env.storage().instance().extend_ttl(3110400, 3110400);
 
         (all_votes, source_votes)
     }

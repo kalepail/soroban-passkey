@@ -1,8 +1,9 @@
 #![no_std]
 use soroban_sdk::{
     auth::{Context, CustomAccountInterface},
-    contract, contracterror, contractimpl, contracttype, symbol_short, Bytes, BytesN, Env, Symbol,
-    Vec, crypto::Hash,
+    contract, contracterror, contractimpl, contracttype,
+    crypto::Hash,
+    symbol_short, Bytes, BytesN, Env, Symbol, Vec,
 };
 
 mod base64_url;
@@ -31,6 +32,7 @@ impl Contract {
             return Err(Error::AlreadyInited);
         }
         env.storage().instance().set(&STORAGE_KEY_PK, &pk);
+        env.storage().instance().extend_ttl(3110400, 3110400);
         Ok(())
     }
 }
@@ -69,7 +71,8 @@ impl CustomAccountInterface for Contract {
         payload.extend_from_array(&e.crypto().sha256(&signature.client_data_json).to_array());
         let payload = e.crypto().sha256(&payload);
 
-        e.crypto().secp256r1_verify(&pk, &payload, &signature.signature);
+        e.crypto()
+            .secp256r1_verify(&pk, &payload, &signature.signature);
 
         // Parse the client data JSON, extracting the base64 url encoded
         // challenge.

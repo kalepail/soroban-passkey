@@ -11,6 +11,9 @@ impl Contract {
     pub fn deploy(env: Env, salt: BytesN<32>, pk: BytesN<65>, wasm_hash: BytesN<32>) -> Address {
         let address = env.deployer().with_current_contract(salt).deploy(wasm_hash);
         let () = env.invoke_contract(&address, &symbol_short!("init"), vec![&env, pk.to_val()]);
+
+        env.storage().instance().extend_ttl(3110400, 3110400);
+        
         address
     }
 }
