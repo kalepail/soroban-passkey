@@ -1,4 +1,4 @@
-import { PUBLIC_horizonUrl, PUBLIC_chickenVsEggContractId, PUBLIC_networkPassphrase } from "$env/static/public";
+import { PUBLIC_rpcUrl, PUBLIC_horizonUrl, PUBLIC_chickenVsEggContractId, PUBLIC_networkPassphrase } from "$env/static/public";
 import { SorobanRpc } from "@stellar/stellar-sdk";
 import { Keypair, xdr, Address, Operation, TransactionBuilder, Account, scValToNative } from "@stellar/stellar-sdk";
 
@@ -21,7 +21,7 @@ export async function getVotes(bundlerKey: Keypair, accountContractId: string) {
         .setTimeout(0)
         .build();
 
-    const rpc = new SorobanRpc.Server(`${PUBLIC_horizonUrl}/soroban/rpc`, { allowHttp: true });
+    const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl, { allowHttp: true });
 
     const simResp = await rpc.simulateTransaction(transaction)
 

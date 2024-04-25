@@ -12,20 +12,20 @@ crate-type = ["cdylib"]
 doctest = false
 
 [dependencies]
-soroban-sdk = {version = "20.3.2"}
+soroban-sdk = {version = "21.0.1-preview.1"}
 p256 = { version = "0.13.2", default-features = false, features = ["ecdsa"] }
 serde = { version = "1", default-features = false, features = ["derive"] }
 serde-json-core = { version = "0.5.1", default-features = false }
 
 [dev-dependencies]
-soroban-sdk = {version = "20.3.2", features = ["testutils"]}
-stellar-xdr = {version = "20.1.0", default-features = false, features = ["std", "curr"]}
+soroban-sdk = {version = "21.0.1-preview.1", features = ["testutils"]}
+stellar-xdr = {version = "21.0.1", default-features = false, features = ["std", "curr"]}
 sha256 = "1.4.0"
 
-[patch.crates-io.soroban-sdk]
-version = "20.3.2"
-git = "https://github.com/stellar/rs-soroban-sdk"
-rev = "26a35674edcdc5cb041d0c2c1ecf409eeb6b0d40"
+# [patch.crates-io.soroban-sdk]
+# version = "21.0.1-preview.1"
+# git = "https://github.com/stellar/rs-soroban-sdk"
+# rev = "1aea75d0ab6ab726f2388261283ab2ec93eacc91"
 
 [profile.release]
 opt-level = "z"

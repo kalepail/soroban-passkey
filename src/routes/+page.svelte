@@ -7,7 +7,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { getPublicKey } from '$lib/webauthn';
 	import { handleDeploy } from '$lib/deploy';
-	import { handleFund } from '$lib/fund';
+
 	import { handleVoteBuild } from '$lib/vote_build';
 	import { handleVoteSend } from '$lib/vote_send';
 	import { getVotes } from '$lib/get_votes';
@@ -109,8 +109,6 @@
 			localStorage.setItem('sp:deployee', deployee);
 
 			console.log(deployee);
-
-			await onFund();
 		} catch (error) {
 			console.error(error);
 			alert(JSON.stringify(error));
@@ -143,11 +141,6 @@
 		} finally {
 			loadingSign = false;
 		}
-	};
-
-	const onFund = async () => {
-		await handleFund(bundlerKey, deployee);
-		await onVotes();
 	};
 
 	const onVotes = async () => {

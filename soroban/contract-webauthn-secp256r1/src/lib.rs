@@ -2,11 +2,10 @@
 use soroban_sdk::{
     auth::{Context, CustomAccountInterface},
     contract, contracterror, contractimpl, contracttype, symbol_short, Bytes, BytesN, Env, Symbol,
-    Vec,
+    Vec, crypto::Hash,
 };
 
 mod base64_url;
-mod secp256r1;
 
 #[contract]
 pub struct Contract;
@@ -55,7 +54,7 @@ impl CustomAccountInterface for Contract {
     #[allow(non_snake_case)]
     fn __check_auth(
         e: Env,
-        signature_payload: BytesN<32>,
+        signature_payload: Hash<32>,
         signature: Signature,
         _auth_contexts: Vec<Context>,
     ) -> Result<(), Error> {
@@ -67,9 +66,10 @@ impl CustomAccountInterface for Contract {
             .ok_or(Error::NotInited)?;
         let mut payload = Bytes::new(&e);
         payload.append(&signature.authenticator_data);
-        payload.append(&e.crypto().sha256(&signature.client_data_json).into());
+        payload.extend_from_array(&e.crypto().sha256(&signature.client_data_json).to_array());
         let payload = e.crypto().sha256(&payload);
-        secp256r1::verify(&pk, &payload, &signature.signature)?;
+
+        e.crypto().secp256r1_verify(&pk, &payload, &signature.signature);
 
         // Parse the client data JSON, extracting the base64 url encoded
         // challenge.

@@ -1,9 +1,9 @@
-import { PUBLIC_horizonUrl } from "$env/static/public";
+import { PUBLIC_rpcUrl, PUBLIC_horizonUrl } from "$env/static/public";
 import { Memo, Operation, SorobanRpc, Transaction, xdr, type Keypair, type MemoType } from "@stellar/stellar-sdk";
 import base64url from "base64url";
 
 export async function handleVoteSend(bundlerKey: Keypair, authTxn: Transaction<Memo<MemoType>, Operation[]>, lastLedger: number, signRes: any) {
-    const rpc = new SorobanRpc.Server(`${PUBLIC_horizonUrl}/soroban/rpc`, { allowHttp: true });
+    const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl, { allowHttp: true });
 
     const signatureRaw = base64url.toBuffer(signRes.response.signature);
     const signature = convertEcdsaSignatureAsnToCompact(signatureRaw);
