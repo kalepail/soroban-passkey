@@ -45,11 +45,12 @@
 	let interval: NodeJS.Timeout;
 	let dots = '';
 	let choice: string | null;
+	let isMobile = true
 
 	onDestroy(() => clearInterval(interval));
 
 	onMount(async () => {
-		setTimeout(() => (step = 1), 500);
+		setTimeout(() => (step = 1), 500);		
 
 		interval = setInterval(() => {
 			if (deployee) clearInterval(interval);
@@ -193,7 +194,8 @@
 </script>
 
 <div
-	class="flex flex-col items-center justify-center min-h-dvh py-safe px-2 select-none overflow-hidden"
+	id="soropass"
+	class="w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {Capacitor.getPlatform() === 'web' ? 'max-h-[800px] max-w-[500px] !py-2' : null}"
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
 	on:swipe={swipeHandler}
 >
@@ -768,7 +770,7 @@
 </div>
 
 <style lang="postcss">
-	:global(html) {
+	:global(#soropass) {
 		color: theme(colors.yellow.500);
 		background-color: theme(colors.violet.800);
 	}
