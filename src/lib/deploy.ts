@@ -1,22 +1,27 @@
 import { PUBLIC_rpcUrl, PUBLIC_accountSecp256r1ContractWasm, PUBLIC_factoryContractId, PUBLIC_horizonUrl, PUBLIC_networkPassphrase } from "$env/static/public";
 import { Keypair, StrKey, xdr, hash, Address, Account, TransactionBuilder, Operation, SorobanRpc } from "@stellar/stellar-sdk"
 
-export async function handleDeploy(bundlerKey: Keypair, argPk: Buffer) {
-    const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl, { allowHttp: true });
-    const bundlerKeyAccount = await rpc.getAccount(bundlerKey.publicKey()).then((res) => new Account(res.accountId(), res.sequenceNumber()))
-
+export async function handleDeploy(bundlerKey: Keypair, contractSalt: Buffer, publicKey?: Buffer) {
+    const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl);
     const deployee = StrKey.encodeContract(hash(xdr.HashIdPreimage.envelopeTypeContractId(
         new xdr.HashIdPreimageContractId({
             networkId: hash(Buffer.from(PUBLIC_networkPassphrase, 'utf-8')),
             contractIdPreimage: xdr.ContractIdPreimage.contractIdPreimageFromAddress(
                 new xdr.ContractIdPreimageFromAddress({
                     address: Address.fromString(PUBLIC_factoryContractId).toScAddress(),
-                    salt: hash(argPk),
+                    salt: contractSalt,
                 })
             )
         })
     ).toXDR()));
 
+    // This is a signup deploy vs a signin deploy. Look up if this contract has been already been deployed, otherwise fail
+    if (!publicKey) {
+        await rpc.getContractData(deployee, xdr.ScVal.scvLedgerKeyContractInstance())
+        return deployee
+    }
+
+    const bundlerKeyAccount = await rpc.getAccount(bundlerKey.publicKey()).then((res) => new Account(res.accountId(), res.sequenceNumber()))
     const simTxn = new TransactionBuilder(bundlerKeyAccount, {
         fee: '100',
         networkPassphrase: PUBLIC_networkPassphrase
@@ -26,7 +31,8 @@ export async function handleDeploy(bundlerKey: Keypair, argPk: Buffer) {
                 contract: PUBLIC_factoryContractId,
                 function: 'deploy',
                 args: [
-                    xdr.ScVal.scvBytes(argPk),
+                    xdr.ScVal.scvBytes(contractSalt),
+                    xdr.ScVal.scvBytes(publicKey),
                     xdr.ScVal.scvBytes(Buffer.from(PUBLIC_accountSecp256r1ContractWasm, 'hex')),
                 ]
             })

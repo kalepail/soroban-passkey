@@ -13,7 +13,6 @@ doctest = false
 
 [dependencies]
 soroban-sdk = {version = "21.0.1-preview.1"}
-p256 = { version = "0.13.2", default-features = false, features = ["ecdsa"] }
 serde = { version = "1", default-features = false, features = ["derive"] }
 serde-json-core = { version = "0.5.1", default-features = false }
 
@@ -21,11 +20,6 @@ serde-json-core = { version = "0.5.1", default-features = false }
 soroban-sdk = {version = "21.0.1-preview.1", features = ["testutils"]}
 stellar-xdr = {version = "21.0.1", default-features = false, features = ["std", "curr"]}
 sha256 = "1.4.0"
-
-# [patch.crates-io.soroban-sdk]
-# version = "21.0.1-preview.1"
-# git = "https://github.com/stellar/rs-soroban-sdk"
-# rev = "1aea75d0ab6ab726f2388261283ab2ec93eacc91"
 
 [profile.release]
 opt-level = "z"

@@ -5,9 +5,8 @@
 	import { PUBLIC_horizonUrl } from '$env/static/public';
 	import { Horizon, Keypair } from '@stellar/stellar-sdk';
 	import { onDestroy, onMount } from 'svelte';
-	import { getPublicKey } from '$lib/webauthn';
+	import { getPublicKeys } from '$lib/webauthn';
 	import { handleDeploy } from '$lib/deploy';
-
 	import { handleVoteBuild } from '$lib/vote_build';
 	import { handleVoteSend } from '$lib/vote_send';
 	import { getVotes } from '$lib/get_votes';
@@ -19,8 +18,6 @@
 	// TODO break up this code into components so it's not so monolithic
 
 	let deployee: any;
-	let registerRes: any;
-	let signRes: any;
 	let bundlerKey: Keypair;
 	let bundlerPubkey: string;
 	let votes = {
@@ -52,7 +49,7 @@
 	onDestroy(() => clearInterval(interval));
 
 	onMount(async () => {
-		setTimeout(() => (step = 1), 500);
+		setTimeout(() => (step = 5), 500);
 
 		interval = setInterval(() => {
 			if (deployee) clearInterval(interval);
@@ -67,7 +64,7 @@
 			bundlerKey = Keypair.random();
 			bundlerPubkey = bundlerKey.publicKey();
 
-			const horizon = new Horizon.Server(PUBLIC_horizonUrl, { allowHttp: true });
+			const horizon = new Horizon.Server(PUBLIC_horizonUrl);
 			await horizon.friendbot(bundlerPubkey).call();
 			localStorage.setItem('sp:bundler', bundlerKey.secret());
 		}
@@ -78,8 +75,8 @@
 		}
 	});
 
-	const onRegister = async () => {
-		if (deployee) {
+	const onRegister = async (type?: 'signin') => {
+		if (!type && deployee) {
 			step++;
 			return;
 		}
@@ -87,28 +84,37 @@
 		try {
 			loadingRegister = true;
 
-			registerRes = await WebAuthn.startRegistration({
-				challenge: base64url('createchallenge'),
-				rp: {
-					id: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined,
-					name: 'Passkey Test'
-				},
-				user: {
-					id: base64url('Soroban Test'),
-					name: 'Soroban Test',
-					displayName: 'Soroban Test'
-				},
-				pubKeyCredParams: [{ alg: -7, type: 'public-key' }]
-			});
+			if (type === 'signin') {
+				const signRes = await WebAuthn.startAuthentication({
+					challenge: base64url('createchallenge'),
+					rpId: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
+				});
 
-			const argPk = await getPublicKey(registerRes);
+				// as-is signin cannot retrieve a public-key so we can only derive the contract address we cannot actually deploy the abstract account
+				const { contractSalt } = await getPublicKeys(signRes);
+				deployee = await handleDeploy(bundlerKey, contractSalt);
+			} else {
+				const registerRes = await WebAuthn.startRegistration({
+					challenge: base64url('createchallenge'),
+					rp: {
+						id: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined,
+						name: 'Passkey Test'
+					},
+					user: {
+						id: base64url('Soroban Test'),
+						name: 'Soroban Test',
+						displayName: 'Soroban Test'
+					},
+					pubKeyCredParams: [{ alg: -7, type: 'public-key' }]
+				});
 
-			deployee = await handleDeploy(bundlerKey, argPk);
-			step++;
-
-			localStorage.setItem('sp:deployee', deployee);
+				const { contractSalt, publicKey } = await getPublicKeys(registerRes);
+				deployee = await handleDeploy(bundlerKey, contractSalt, publicKey!);
+			}
 
 			console.log(deployee);
+			localStorage.setItem('sp:deployee', deployee);
+			step++;
 		} catch (error) {
 			console.error(error);
 			alert(JSON.stringify(error));
@@ -127,7 +133,7 @@
 				choice === 'chicken'
 			);
 
-			signRes = await WebAuthn.startAuthentication({
+			const signRes = await WebAuthn.startAuthentication({
 				challenge: base64url(authHash),
 				rpId: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
 			});
@@ -159,7 +165,7 @@
 			!(
 				step >= 14 ||
 				(step === 5 && !deployee) ||
-				(step === 10 && !choice) ||
+				(step === 10 && !choice && !votes?.total_source_votes) ||
 				(step === 11 && !votes?.total_source_votes)
 			)
 		)
@@ -268,7 +274,7 @@
 
 		{#if step === 5}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2"
+				class="absolute flex flex-col items-center justify-center w-full top-0 -translate-y-1/2"
 				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
@@ -281,7 +287,7 @@
 					class="relative inline-flex items-center border-2 border-yellow-500 rounded-lg p-2 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
-					on:click={onRegister}
+					on:click={() => onRegister()}
 				>
 					<svg
 						viewBox="0 0 15 15"
@@ -355,6 +361,12 @@
 						></path></svg
 					>
 				</button>
+
+				<br />
+
+				<button class="text-sm font-mono uppercase" on:click={() => onRegister('signin')}
+					>Sign In</button
+				>
 			</div>
 		{/if}
 
@@ -400,7 +412,8 @@
 					out:fade={{ duration: 250 }}>
 					<code class="font-mono text-base">{deployee?.substring(0, 28)}<br />{deployee?.substring(28)}</code>
 
-					<a class="flex absolute inset-0" href="https://stellar.expert/explorer/testnet/account/{deployee}">
+					<!-- Remove for now due to latency with block explorers indexing futurenet data -->
+					<!-- <a class="flex absolute inset-0" href="https://futurenet.steexp.com/contract/{deployee}">
 						<svg
 							class="absolute right-4 top-1/2 -translate-y-1/2 -rotate-45 origin-center"
 							viewBox="0 0 15 15"
@@ -409,7 +422,7 @@
 							width="25"
 							height="25"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1" stroke="currentColor"></path></svg
 						>
-					</a>
+					</a> -->
 				</pre>
 				<br />
 				<p class="text-xl" in:fade={{ delay: 300, duration: 250 }} out:fade={{ duration: 250 }}>
@@ -583,14 +596,17 @@
 							style="width: {votes?.all_votes.chicken_percent_no_source}%"
 						></div>
 						<div
-							class="bg-teal-500 h-10"
-							style="width: {votes?.source_votes.chicken_percent}%"
+							class="bg-teal-500 h-10 {votes?.source_votes.chicken ? 'min-w-1' : null}"
+							style="width: {votes?.source_votes.chicken_percent}%; min-width: 1px"
 						></div>
 					</div>
 					<hr class="h-10 border border-violet-800" />
 					<hr class="h-16 border border-yellow-500" />
 					<div class="w-full flex justify-start bg-yellow-500/10 h-10">
-						<div class="bg-teal-500 h-10" style="width: {votes?.source_votes.egg_percent}%"></div>
+						<div
+							class="bg-teal-500 h-10 {votes?.source_votes.egg ? 'min-w-1' : null}"
+							style="width: {votes?.source_votes.egg_percent}%"
+						></div>
 						<div
 							class="bg-yellow-500"
 							style="width: {votes?.all_votes.egg_percent_no_source}%"
@@ -693,9 +709,9 @@
 		{/if}
 	</div>
 
-	<div class="w-full grid grid-rows-1 grid-cols-2 gap-4">
+	<div class="w-full flex items-center justify-center">
 		<button
-			class="flex items-center justify-end relative {step <= 1
+			class="w-full flex items-center justify-end relative {step <= 1
 				? 'invisible pointer-events-none'
 				: null} active:right-[2px]"
 			on:click={() => step--}
@@ -709,9 +725,14 @@
 				height="45"><path d="M1.5 7.5l4-4m-4 4l4 4m-4-4H14" stroke="currentColor"></path></svg
 			>
 		</button>
-
+		<span class="shrink-0 mx-3 tabular-nums {step <= 0 ? 'invisible' : null} font-mono text-xs"
+			>{step} of 14</span
+		>
 		{#if step >= 14}
-			<button class="flex items-center justify-start relative active:top-[2px]" on:click={resetAll}>
+			<button
+				class="w-full flex items-center justify-start relative active:top-[2px]"
+				on:click={resetAll}
+			>
 				<svg
 					class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
 					viewBox="0 0 15 15"
@@ -725,8 +746,8 @@
 			</button>
 		{:else}
 			<button
-				class="flex items-center justify-start relative {(step === 5 && !deployee) ||
-				(step === 10 && !choice) ||
+				class="w-full flex items-center justify-start relative {(step === 5 && !deployee) ||
+				(step === 10 && !choice && !votes?.total_source_votes) ||
 				(step === 11 && !votes?.total_source_votes)
 					? 'invisible pointer-events-none'
 					: null} active:left-[2px]"

@@ -21,7 +21,7 @@ export async function getVotes(bundlerKey: Keypair, accountContractId: string) {
         .setTimeout(0)
         .build();
 
-    const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl, { allowHttp: true });
+    const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl);
 
     const simResp = await rpc.simulateTransaction(transaction)
 
