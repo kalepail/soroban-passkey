@@ -35,6 +35,8 @@ import { hash } from '@stellar/stellar-sdk';
 export async function getPublicKeys(registration: any) {
     const contractSalt = hash(base64url.toBuffer(registration.id))
 
+    console.log(registration);
+
     if (registration.response.attestationObject) {
         const decodedAttestationObj = CBOR.decode(base64url.toBuffer(registration.response.attestationObject));
         const { authData } = decodedAttestationObj;
