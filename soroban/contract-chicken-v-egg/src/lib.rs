@@ -59,7 +59,11 @@ impl Contract {
             .persistent()
             .set(&(VOTES, &source), &source_votes);
 
+        // https://github.com/stellar/stellar-core/blob/master/soroban-settings/pubnet_phase1.json#L297
         env.storage().instance().extend_ttl(3110400, 3110400);
+        env.storage()
+            .persistent()
+            .extend_ttl(&(VOTES, &source), 3110400, 3110400);
 
         (all_votes, source_votes)
     }

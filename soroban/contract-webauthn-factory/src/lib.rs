@@ -13,7 +13,7 @@ impl Contract {
         let () = env.invoke_contract(&address, &symbol_short!("init"), vec![&env, pk.to_val()]);
 
         env.storage().instance().extend_ttl(3110400, 3110400);
-        
+
         address
     }
 }

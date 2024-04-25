@@ -31,8 +31,10 @@ impl Contract {
         if env.storage().instance().has(&STORAGE_KEY_PK) {
             return Err(Error::AlreadyInited);
         }
+
         env.storage().instance().set(&STORAGE_KEY_PK, &pk);
         env.storage().instance().extend_ttl(3110400, 3110400);
+
         Ok(())
     }
 }
@@ -53,25 +55,28 @@ struct ClientDataJson<'a> {
 impl CustomAccountInterface for Contract {
     type Error = Error;
     type Signature = Signature;
+
     #[allow(non_snake_case)]
     fn __check_auth(
-        e: Env,
+        env: Env,
         signature_payload: Hash<32>,
         signature: Signature,
         _auth_contexts: Vec<Context>,
     ) -> Result<(), Error> {
         // Verify that the public key produced the signature.
-        let pk = e
+        let pk = env
             .storage()
             .instance()
             .get(&STORAGE_KEY_PK)
             .ok_or(Error::NotInited)?;
-        let mut payload = Bytes::new(&e);
-        payload.append(&signature.authenticator_data);
-        payload.extend_from_array(&e.crypto().sha256(&signature.client_data_json).to_array());
-        let payload = e.crypto().sha256(&payload);
 
-        e.crypto()
+        let mut payload = Bytes::new(&env);
+
+        payload.append(&signature.authenticator_data);
+        payload.extend_from_array(&env.crypto().sha256(&signature.client_data_json).to_array());
+        let payload = env.crypto().sha256(&payload);
+
+        env.crypto()
             .secp256r1_verify(&pk, &payload, &signature.signature);
 
         // Parse the client data JSON, extracting the base64 url encoded
@@ -90,6 +95,8 @@ impl CustomAccountInterface for Contract {
         if client_data.challenge.as_bytes() != expected_challenge {
             return Err(Error::ClientDataJsonChallengeIncorrect);
         }
+
+        env.storage().instance().extend_ttl(3110400, 3110400);
 
         Ok(())
     }

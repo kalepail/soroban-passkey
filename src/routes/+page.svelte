@@ -45,7 +45,6 @@
 	let interval: NodeJS.Timeout;
 	let dots = '';
 	let choice: string | null;
-	let isMobile = true
 
 	onDestroy(() => clearInterval(interval));
 
@@ -195,7 +194,7 @@
 
 <div
 	id="soropass"
-	class="w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {Capacitor.getPlatform() === 'web' ? 'max-h-[800px] max-w-[500px] !py-2' : null }"
+	class="w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {!Capacitor.isNativePlatform() ? 'max-h-[800px] max-w-[500px] !py-2' : null}"
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
 	on:swipe={swipeHandler}
 >
