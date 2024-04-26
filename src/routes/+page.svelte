@@ -100,7 +100,7 @@
 				const registerRes = await WebAuthn.startRegistration({
 					challenge: base64url('createchallenge'),
 					rp: {
-						id: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined,
+						id: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
 						// name: 'Passkey Test'
 					},
 					user: {
@@ -211,41 +211,47 @@
 >
 	{#if step > 0}
 		<div
-			class="flex w-full items-center origin-left"
-			transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}
+			class="flex w-full items-center justify-between"
 			use:press={{ timeframe: 1000, triggerBeforeFinished: true }}
 			on:press={resetAll}
 		>
-			<div class="rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}">
+			<div
+				class="flex items-center origin-left"
+				transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}
+			>
 				<svg
-					class="stroke-violet-800 {deployee ? null : 'invisible'}"
+					class="stroke-violet-800 rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}"
 					viewBox="0 0 15 15"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
 					width="25"
 					height="25"><path d="M4 7.5L7 10l4-5"></path></svg
 				>
+
+				{#if deployee}
+					<span class="font-mono text-sm ml-2">{truncateAccount(deployee)}</span>
+				{:else}
+					<span class="font-mono text-sm ml-2">{dots}</span>
+				{/if}
 			</div>
 
-			{#if deployee}
-				<span class="font-mono text-sm ml-2">{truncateAccount(deployee)}</span>
-
-				<button class="flex items-center font-mono text-xs ml-auto uppercase" on:click={resetAll}>
-					Restart
-					<svg
-						class="stroke-yellow-500 ml-2"
-						viewBox="0 0 15 15"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-						width="15"
-						height="15"
-						><path d="M7.5 14.5A7 7 0 013.17 2M7.5.5A7 7 0 0111.83 13m-.33-3v3.5H15M0 1.5h3.5V5"
-						></path></svg
-					>
-				</button>
-			{:else}
-				<span class="font-mono text-sm ml-2">{dots}</span>
-			{/if}
+			<button
+				class="flex items-center font-mono text-xs uppercase origin-right {deployee ? null : 'invisible'}"
+				transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}
+				on:click={resetAll}
+			>
+				Restart
+				<svg
+					class="stroke-yellow-500 ml-2"
+					viewBox="0 0 15 15"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					width="15"
+					height="15"
+					><path d="M7.5 14.5A7 7 0 013.17 2M7.5.5A7 7 0 0111.83 13m-.33-3v3.5H15M0 1.5h3.5V5"
+					></path></svg
+				>
+			</button>
 		</div>
 	{/if}
 
