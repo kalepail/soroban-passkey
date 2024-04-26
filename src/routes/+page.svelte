@@ -52,7 +52,7 @@
 	});
 
 	onMount(async () => {
-		setTimeout(() => (step = 14), 500);
+		setTimeout(() => (step = 1), 500);
 
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
