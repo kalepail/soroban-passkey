@@ -11,9 +11,8 @@
 	import { handleVoteSend } from '$lib/vote_send';
 	import { getVotes } from '$lib/get_votes';
 	import { fade, blur, slide, scale } from 'svelte/transition';
-	import { swipe, press } from 'svelte-gestures';
+	import { swipe, press, tap } from 'svelte-gestures';
 	import { Share } from '@capacitor/share';
-	import { text } from '@sveltejs/kit';
 
 	// TODO break up this code into components so it's not so monolithic
 
@@ -164,9 +163,21 @@
 	}
 
 	function swipeHandler(event: CustomEvent) {
-		if (event.detail.direction === 'right' && !(step <= 1)) step--;
-		else if (
-			event.detail.direction === 'left' &&
+		if (event.detail.direction === 'right') goLeft();
+		else if (event.detail.direction === 'left') goRight();
+	}
+	function tapHandler(event: CustomEvent) {
+		if (!['div', 'h1', 'p'].includes(event.detail.target.tagName.toLowerCase())) return;
+		else if (document.querySelector('#soropass')?.clientWidth! / 2 > event.detail.x) goLeft();
+		else goRight();
+	}
+
+	function goLeft() {
+		if (!(step <= 1)) step--;
+	}
+
+	function goRight() {
+		if (
 			!(
 				step >= 14 ||
 				(step === 5 && !deployee) ||
@@ -203,11 +214,13 @@
 
 <div
 	id="soropass"
-	class="w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {!Capacitor.isNativePlatform()
+	class="relative w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {!Capacitor.isNativePlatform()
 		? 'max-h-[800px] max-w-[500px] !py-2'
 		: null}"
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
+	use:tap={{ timeframe: 300 }}
 	on:swipe={swipeHandler}
+	on:tap={tapHandler}
 >
 	{#if step > 0}
 		<div
@@ -220,7 +233,9 @@
 				transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}
 			>
 				<svg
-					class="stroke-violet-800 rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}"
+					class="stroke-violet-800 rounded-full border-2 border-yellow-500 {deployee
+						? 'bg-yellow-500'
+						: null}"
 					viewBox="0 0 15 15"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
@@ -236,7 +251,9 @@
 			</div>
 
 			<button
-				class="flex items-center font-mono text-xs uppercase origin-right {deployee ? null : 'invisible'}"
+				class="flex items-center font-mono text-xs uppercase origin-right {deployee
+					? null
+					: 'invisible'}"
 				transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}
 				on:click={resetAll}
 			>
