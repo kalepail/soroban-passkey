@@ -11,15 +11,14 @@
 	import { handleVoteSend } from '$lib/vote_send';
 	import { getVotes } from '$lib/get_votes';
 	import { fade, blur, slide, scale } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
 	import { swipe, press } from 'svelte-gestures';
 	import { Share } from '@capacitor/share';
+	import { text } from '@sveltejs/kit';
 
 	// TODO break up this code into components so it's not so monolithic
 
 	let deployee: any;
 	let bundlerKey: Keypair;
-	let bundlerPubkey: string;
 	let votes = {
 		all_votes: {
 			chicken: 0,
@@ -42,31 +41,35 @@
 	let loadingSign = false;
 
 	let step = 0;
-	let interval: NodeJS.Timeout;
+	let dotinterval: NodeJS.Timeout;
+	let voteinterval: NodeJS.Timeout;
 	let dots = '';
 	let choice: string | null;
 
-	onDestroy(() => clearInterval(interval));
+	onDestroy(() => {
+		clearInterval(dotinterval);
+		clearInterval(voteinterval);
+	});
 
 	onMount(async () => {
-		setTimeout(() => (step = 1), 500);		
+		setTimeout(() => (step = 14), 500);
 
-		interval = setInterval(() => {
-			if (deployee) clearInterval(interval);
+		dotinterval = setInterval(() => {
+			if (deployee) clearInterval(dotinterval);
 			else if (dots.length === 3) dots = '';
 			else dots += '.';
 		}, 500);
 
+		voteinterval = setInterval(() => onVotes(), 5000);
+
 		if (localStorage.hasOwnProperty('sp:bundler')) {
 			bundlerKey = Keypair.fromSecret(localStorage.getItem('sp:bundler')!);
-			bundlerPubkey = bundlerKey.publicKey();
 		} else {
 			bundlerKey = Keypair.random();
-			bundlerPubkey = bundlerKey.publicKey();
+			localStorage.setItem('sp:bundler', bundlerKey.secret());
 
 			const horizon = new Horizon.Server(PUBLIC_horizonUrl);
-			await horizon.friendbot(bundlerPubkey).call();
-			localStorage.setItem('sp:bundler', bundlerKey.secret());
+			await horizon.friendbot(bundlerKey.publicKey()).call();
 		}
 
 		if (localStorage.hasOwnProperty('sp:deployee')) {
@@ -98,7 +101,7 @@
 					challenge: base64url('createchallenge'),
 					rp: {
 						id: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined,
-						name: 'Passkey Test'
+						// name: 'Passkey Test'
 					},
 					user: {
 						id: base64url('Soroban Test'),
@@ -139,8 +142,8 @@
 			});
 
 			await handleVoteSend(bundlerKey, authTxn, lastLedger, signRes);
-			step++;
 			await onVotes();
+			step++;
 		} catch (error) {
 			console.error(error);
 			alert(JSON.stringify(error));
@@ -150,8 +153,10 @@
 	};
 
 	const onVotes = async () => {
-		votes = await getVotes(bundlerKey, deployee);
-		console.log(votes);
+		if (bundlerKey && deployee) {
+			votes = await getVotes(bundlerKey, deployee);
+			console.log(votes);
+		}
 	};
 
 	function truncateAccount(account: string) {
@@ -172,17 +177,21 @@
 			step++;
 	}
 
-	function pressHandler() {
-		resetAll();
-	}
-
 	async function share() {
-		await Share.share({
-			title: 'Share SoroPass',
-			text: 'Check out this blockchain experience powered by your face or fingers!',
-			url: 'https://passkey.sorobanbyexample.org/',
-			dialogTitle: `${choice === 'chicken'} ? 'Chicken 🐔' : 'Egg 🥚'} people unite!`
-		});
+		const { value } = await Share.canShare();
+
+		if (value) {
+			await Share.share({
+				title: 'Share SoroPass',
+				text: 'Check out this blockchain experience powered by your face or fingers!',
+				url: 'https://passkey.sorobanbyexample.org/',
+				dialogTitle: `${choice === 'chicken'} ? 'Chicken 🐔' : 'Egg 🥚'} people unite!`
+			});
+		} else {
+			window.open(
+				`https://twitter.com/intent/tweet?text=${encodeURIComponent('Check out this blockchain experience powered by your face or fingers!')}&url=${encodeURIComponent('https://passkey.sorobanbyexample.org/')}`
+			);
+		}
 	}
 
 	function resetAll() {
@@ -194,38 +203,57 @@
 
 <div
 	id="soropass"
-	class="w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {!Capacitor.isNativePlatform() ? 'max-h-[800px] max-w-[500px] !py-2' : null}"
+	class="w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {!Capacitor.isNativePlatform()
+		? 'max-h-[800px] max-w-[500px] !py-2'
+		: null}"
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
 	on:swipe={swipeHandler}
 >
-	<div
-		class="flex w-full items-center"
-		use:press={{ timeframe: 1000, triggerBeforeFinished: true }}
-		on:press={pressHandler}
-	>
-		<div class="rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}">
-			<svg
-				class="stroke-violet-800 {deployee ? null : 'invisible'}"
-				viewBox="0 0 15 15"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				width="25"
-				height="25"><path d="M4 7.5L7 10l4-5"></path></svg
-			>
-		</div>
+	{#if step > 0}
+		<div
+			class="flex w-full items-center origin-left"
+			transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}
+			use:press={{ timeframe: 1000, triggerBeforeFinished: true }}
+			on:press={resetAll}
+		>
+			<div class="rounded-full border-2 border-yellow-500 {deployee ? 'bg-yellow-500' : null}">
+				<svg
+					class="stroke-violet-800 {deployee ? null : 'invisible'}"
+					viewBox="0 0 15 15"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					width="25"
+					height="25"><path d="M4 7.5L7 10l4-5"></path></svg
+				>
+			</div>
 
-		{#if deployee}
-			<span class="font-mono text-sm ml-2">{truncateAccount(deployee)}</span>
-		{:else}
-			<span class="font-mono text-sm ml-2">{dots}</span>
-		{/if}
-	</div>
+			{#if deployee}
+				<span class="font-mono text-sm ml-2">{truncateAccount(deployee)}</span>
+
+				<button class="flex items-center font-mono text-xs ml-auto uppercase" on:click={resetAll}>
+					Restart
+					<svg
+						class="stroke-yellow-500 ml-2"
+						viewBox="0 0 15 15"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						width="15"
+						height="15"
+						><path d="M7.5 14.5A7 7 0 013.17 2M7.5.5A7 7 0 0111.83 13m-.33-3v3.5H15M0 1.5h3.5V5"
+						></path></svg
+					>
+				</button>
+			{:else}
+				<span class="font-mono text-sm ml-2">{dots}</span>
+			{/if}
+		</div>
+	{/if}
 
 	<div class="w-full relative text-center text-3xl font-bold my-auto">
 		{#if step === 1}
 			<h1
 				class="absolute w-full top-0 -translate-y-1/2"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				Welcome to a passkey powered blockchain experience
 			</h1>
@@ -234,7 +262,7 @@
 		{#if step === 2}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					Fully non-custodial
@@ -242,7 +270,7 @@
 				<h1 class="" in:fade={{ delay: 500, duration: 250 }} out:fade={{ duration: 250 }}>
 					But also
 				</h1>
-				<h1 class="" in:fade={{ delay: 1500, duration: 250 }} out:fade={{ duration: 250 }}>
+				<h1 class="" in:fade={{ delay: 1250, duration: 250 }} out:fade={{ duration: 250 }}>
 					Entirely convenient
 				</h1>
 			</div>
@@ -251,14 +279,14 @@
 		{#if step === 3}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<p in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }} class="text-xl">
 					You’re just a single tap away from a fully featured future of financial freedom powered by
 					your face or fingers.
 				</p>
 				<br />
-				<h1 in:fade={{ delay: 1500, duration: 250 }} out:fade={{ duration: 250 }} class="">
+				<h1 in:fade={{ delay: 1250, duration: 250 }} out:fade={{ duration: 250 }} class="">
 					F passphrases
 				</h1>
 			</div>
@@ -267,7 +295,7 @@
 		{#if step === 4}
 			<h1
 				class="absolute w-full top-0 -translate-y-1/2"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				Are you ready?
 			</h1>
@@ -276,7 +304,7 @@
 		{#if step === 5}
 			<div
 				class="absolute flex flex-col items-center justify-center w-full top-0 -translate-y-1/2"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					Press the button
@@ -306,8 +334,7 @@
 						transition:slide={{
 							duration: 250,
 							delay: 250,
-							axis: 'x',
-							easing: quintOut
+							axis: 'x'
 						}}
 					>
 						{#if loadingRegister}
@@ -316,8 +343,7 @@
 								transition:slide={{
 									duration: 150,
 									delay: 0,
-									axis: 'x',
-									easing: quintOut
+									axis: 'x'
 								}}
 								xmlns="http://www.w3.org/2000/svg"
 								width="30"
@@ -341,8 +367,7 @@
 								transition:slide={{
 									duration: 150,
 									delay: 0,
-									axis: 'x',
-									easing: quintOut
+									axis: 'x'
 								}}>Register</span
 							>
 						{/if}
@@ -365,9 +390,11 @@
 
 				<br />
 
-				<button class="text-sm font-mono uppercase" on:click={() => onRegister('signin')} in:fade={{ delay: 500, duration: 250 }}
-					out:fade={{ duration: 250 }}
-					>Sign In</button
+				<button
+					class="text-sm font-mono uppercase"
+					on:click={() => onRegister('signin')}
+					in:fade={{ delay: 500, duration: 250 }}
+					out:fade={{ duration: 250 }}>Sign In</button
 				>
 			</div>
 		{/if}
@@ -375,7 +402,7 @@
 		{#if step === 6}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					And just like that you’re in!
@@ -393,7 +420,7 @@
 		{#if step === 7}
 			<h1
 				class="absolute w-full top-0 -translate-y-1/2"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				It took humans awhile to get here, but we did, <br /> you did. Incredible.
 			</h1>
@@ -402,7 +429,7 @@
 		{#if step === 8}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					This is your new passkey powered blockchain account.
@@ -436,7 +463,7 @@
 		{#if step === 9}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<p class="text-xl" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					Let’s demonstrate our cryptographic super powers by settling once and for all an age old
@@ -452,7 +479,7 @@
 		{#if step === 10}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					Make your choice
@@ -488,7 +515,7 @@
 		{#if step === 11}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					An eggcellent choice
@@ -569,7 +596,7 @@
 		{#if step === 12}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					Incredible!
@@ -585,11 +612,15 @@
 				</div>
 				<div
 					class="w-full flex items-center justify-stetch h-10"
-					transition:slide={{
+					in:slide={{
 						duration: 250,
 						delay: 200,
-						axis: 'x',
-						easing: quintOut
+						axis: 'x'
+					}}
+					out:slide={{
+						duration: 250,
+						delay: 0,
+						axis: 'x'
 					}}
 				>
 					<div class="w-full flex justify-end bg-yellow-500/10 h-10">
@@ -599,7 +630,7 @@
 						></div>
 						<div
 							class="bg-teal-500 h-10 {votes?.source_votes.chicken ? 'min-w-1' : null}"
-							style="width: {votes?.source_votes.chicken_percent}%; min-width: 1px"
+							style="width: {votes?.source_votes.chicken_percent}%"
 						></div>
 					</div>
 					<hr class="h-10 border border-violet-800" />
@@ -643,7 +674,7 @@
 		{#if step === 13}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					The future is secure.
@@ -651,13 +682,13 @@
 				<h1 class="" in:fade={{ delay: 750, duration: 250 }} out:fade={{ duration: 250 }}>
 					But it is also simple.
 				</h1>
-				<h1 class="" in:fade={{ delay: 2250, duration: 250 }} out:fade={{ duration: 250 }}>
+				<h1 class="" in:fade={{ delay: 2000, duration: 250 }} out:fade={{ duration: 250 }}>
 					Yay people and their brains.
 				</h1>
-				<h1 class="" in:fade={{ delay: 3500, duration: 250 }} out:fade={{ duration: 250 }}>
+				<h1 class="" in:fade={{ delay: 3250, duration: 250 }} out:fade={{ duration: 250 }}>
 					Yay God in heaven,
 				</h1>
-				<h1 class="" in:fade={{ delay: 4500, duration: 250 }} out:fade={{ duration: 250 }}>
+				<h1 class="" in:fade={{ delay: 4250, duration: 250 }} out:fade={{ duration: 250 }}>
 					who made us this way.
 				</h1>
 			</div>
@@ -666,7 +697,7 @@
 		{#if step === 14}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5, easing: quintOut }}
+				transition:scale={{ duration: 500, delay: 0, opacity: 0, start: 1.5 }}
 			>
 				<h1 class="" in:fade={{ delay: 0, duration: 250 }} out:fade={{ duration: 250 }}>
 					SoroPass
@@ -699,9 +730,7 @@
 					out:fade={{ duration: 250 }}
 					on:click={share}
 				>
-					<span class="font-mono uppercase text-base" transition:blur={{ amount: 10 }}
-						>Share with your friends</span
-					>
+					<span class="font-mono uppercase text-base">Share with your friends</span>
 				</button>
 				<br />
 				<p class="text-xl" in:fade={{ delay: 500, duration: 250 }} out:fade={{ duration: 250 }}>
@@ -711,61 +740,64 @@
 		{/if}
 	</div>
 
-	<div class="w-full flex items-center justify-center">
-		<button
-			class="w-full flex items-center justify-end relative {step <= 1
-				? 'invisible pointer-events-none'
-				: null} active:right-[2px]"
-			on:click={() => step--}
+	{#if step > 0}
+		<div
+			class="w-full flex items-center justify-center origin-bottom"
+			transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}
 		>
-			<svg
-				class="p-2"
-				viewBox="0 0 15 15"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-				width="45"
-				height="45"><path d="M1.5 7.5l4-4m-4 4l4 4m-4-4H14" stroke="currentColor"></path></svg
-			>
-		</button>
-		<span class="shrink-0 mx-3 tabular-nums {step <= 0 ? 'invisible' : null} font-mono text-xs"
-			>{step} of 14</span
-		>
-		{#if step >= 14}
 			<button
-				class="w-full flex items-center justify-start relative active:top-[2px]"
-				on:click={resetAll}
-			>
-				<svg
-					class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
-					viewBox="0 0 15 15"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-					width="45"
-					height="45"
-					><path d="M7.5 14.5A7 7 0 013.17 2M7.5.5A7 7 0 0111.83 13m-.33-3v3.5H15M0 1.5h3.5V5"
-					></path></svg
-				>
-			</button>
-		{:else}
-			<button
-				class="w-full flex items-center justify-start relative {(step === 5 && !deployee) ||
-				(step === 10 && !choice && !votes?.total_source_votes) ||
-				(step === 11 && !votes?.total_source_votes)
+				class="w-full flex items-center justify-end relative {step <= 1
 					? 'invisible pointer-events-none'
-					: null} active:left-[2px]"
-				on:click={() => step++}
+					: null} active:right-[2px]"
+				on:click={() => step--}
 			>
 				<svg
-					class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+					class="p-2"
 					viewBox="0 0 15 15"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
 					width="45"
-					height="45"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
+					height="45"><path d="M1.5 7.5l4-4m-4 4l4 4m-4-4H14" stroke="currentColor"></path></svg
 				>
 			</button>
-		{/if}
-	</div>
+			<span class="shrink-0 mx-3 tabular-nums font-mono text-xs">{step} of 14</span>
+			{#if step >= 14}
+				<button
+					class="w-full flex items-center justify-start relative active:top-[2px]"
+					on:click={resetAll}
+				>
+					<svg
+						class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+						viewBox="0 0 15 15"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						width="45"
+						height="45"
+						><path d="M7.5 14.5A7 7 0 013.17 2M7.5.5A7 7 0 0111.83 13m-.33-3v3.5H15M0 1.5h3.5V5"
+						></path></svg
+					>
+				</button>
+			{:else}
+				<button
+					class="w-full flex items-center justify-start relative {(step === 5 && !deployee) ||
+					(step === 10 && !choice && !votes?.total_source_votes) ||
+					(step === 11 && !votes?.total_source_votes)
+						? 'invisible pointer-events-none'
+						: null} active:left-[2px]"
+					on:click={() => step++}
+				>
+					<svg
+						class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+						viewBox="0 0 15 15"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						width="45"
+						height="45"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
+					>
+				</button>
+			{/if}
+		</div>
+	{/if}
 </div>
 
 <style lang="postcss">
