@@ -145,7 +145,7 @@
 				allowCredentials: localStorage.hasOwnProperty('sp:id')
 					? [
 							{
-								id: localStorage.getItem('sp:id'),
+								id: localStorage.getItem('sp:id')!,
 								type: 'public-key',
 								transports: ['internal', 'hybrid']
 							}

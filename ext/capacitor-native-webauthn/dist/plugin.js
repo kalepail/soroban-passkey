@@ -5,11 +5,7 @@ var capacitorWebAuthn = (function (exports, core) {
         web: () => Promise.resolve().then(function () { return web; }).then(m => new m.WebAuthnWeb()),
     });
 
-    /* [@simplewebauthn/browser@9.0.1] */
-    function utf8StringToBuffer(value) {
-        return new TextEncoder().encode(value);
-    }
-
+    /* [@simplewebauthn/browser@10.0.0] */
     function bufferToBase64URLString(buffer) {
         const bytes = new Uint8Array(buffer);
         let str = '';
@@ -188,18 +184,18 @@ var capacitorWebAuthn = (function (exports, core) {
         return attachment;
     }
 
-    async function startRegistration(creationOptionsJSON) {
+    async function startRegistration(optionsJSON) {
         if (!browserSupportsWebAuthn()) {
             throw new Error('WebAuthn is not supported in this browser');
         }
         const publicKey = {
-            ...creationOptionsJSON,
-            challenge: base64URLStringToBuffer(creationOptionsJSON.challenge),
+            ...optionsJSON,
+            challenge: base64URLStringToBuffer(optionsJSON.challenge),
             user: {
-                ...creationOptionsJSON.user,
-                id: utf8StringToBuffer(creationOptionsJSON.user.id),
+                ...optionsJSON.user,
+                id: base64URLStringToBuffer(optionsJSON.user.id),
             },
-            excludeCredentials: creationOptionsJSON.excludeCredentials?.map(toPublicKeyCredentialDescriptor),
+            excludeCredentials: optionsJSON.excludeCredentials?.map(toPublicKeyCredentialDescriptor),
         };
         const options = { publicKey };
         options.signal = WebAuthnAbortService.createNewAbortSignal();
@@ -268,11 +264,10 @@ var capacitorWebAuthn = (function (exports, core) {
         console.warn(`The browser extension that intercepted this WebAuthn API call incorrectly implemented ${methodName}. You should report this error to them.\n`, cause);
     }
 
-    function bufferToUTF8String(value) {
-        return new TextDecoder('utf-8').decode(value);
-    }
-
     function browserSupportsWebAuthnAutofill() {
+        if (!browserSupportsWebAuthn()) {
+            return new Promise((resolve) => resolve(false));
+        }
         const globalPublicKeyCredential = window
             .PublicKeyCredential;
         if (globalPublicKeyCredential.isConditionalMediationAvailable === undefined) {
@@ -329,17 +324,17 @@ var capacitorWebAuthn = (function (exports, core) {
         return error;
     }
 
-    async function startAuthentication(requestOptionsJSON, useBrowserAutofill = false) {
+    async function startAuthentication(optionsJSON, useBrowserAutofill = false) {
         if (!browserSupportsWebAuthn()) {
             throw new Error('WebAuthn is not supported in this browser');
         }
         let allowCredentials;
-        if (requestOptionsJSON.allowCredentials?.length !== 0) {
-            allowCredentials = requestOptionsJSON.allowCredentials?.map(toPublicKeyCredentialDescriptor);
+        if (optionsJSON.allowCredentials?.length !== 0) {
+            allowCredentials = optionsJSON.allowCredentials?.map(toPublicKeyCredentialDescriptor);
         }
         const publicKey = {
-            ...requestOptionsJSON,
-            challenge: base64URLStringToBuffer(requestOptionsJSON.challenge),
+            ...optionsJSON,
+            challenge: base64URLStringToBuffer(optionsJSON.challenge),
             allowCredentials,
         };
         const options = {};
@@ -347,7 +342,7 @@ var capacitorWebAuthn = (function (exports, core) {
             if (!(await browserSupportsWebAuthnAutofill())) {
                 throw Error('Browser does not support WebAuthn autofill');
             }
-            const eligibleInputs = document.querySelectorAll('input[autocomplete$=\'webauthn\']');
+            const eligibleInputs = document.querySelectorAll("input[autocomplete$='webauthn']");
             if (eligibleInputs.length < 1) {
                 throw Error('No <input> with "webauthn" as the only or last value in its `autocomplete` attribute was detected');
             }
@@ -369,7 +364,7 @@ var capacitorWebAuthn = (function (exports, core) {
         const { id, rawId, response, type } = credential;
         let userHandle = undefined;
         if (response.userHandle) {
-            userHandle = bufferToUTF8String(response.userHandle);
+            userHandle = bufferToBase64URLString(response.userHandle);
         }
         return {
             id,

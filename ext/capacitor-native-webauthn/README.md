@@ -239,7 +239,7 @@ https://w3c.github.io/webauthn/#dictdef-authenticatorassertionresponsejson
 | **`clientDataJSON`**    | <code><a href="#base64urlstring">Base64URLString</a></code> |
 | **`authenticatorData`** | <code><a href="#base64urlstring">Base64URLString</a></code> |
 | **`signature`**         | <code><a href="#base64urlstring">Base64URLString</a></code> |
-| **`userHandle`**        | <code>string</code>                                         |
+| **`userHandle`**        | <code><a href="#base64urlstring">Base64URLString</a></code> |
 
 
 #### PublicKeyCredentialRequestOptionsJSON

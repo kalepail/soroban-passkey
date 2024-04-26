@@ -617,8 +617,10 @@
           "name": "userHandle",
           "tags": [],
           "docs": "",
-          "complexTypes": [],
-          "type": "string | undefined"
+          "complexTypes": [
+            "Base64URLString"
+          ],
+          "type": "Base64URLString"
         }
       ]
     },
