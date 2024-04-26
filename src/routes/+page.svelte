@@ -92,6 +92,8 @@
 					rpId: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
 				});
 
+				localStorage.setItem('sp:id', signRes.id);
+
 				// as-is signin cannot retrieve a public-key so we can only derive the contract address we cannot actually deploy the abstract account
 				const { contractSalt } = await getPublicKeys(signRes);
 				deployee = await handleDeploy(bundlerKey, contractSalt);
@@ -109,6 +111,8 @@
 					},
 					pubKeyCredParams: [{ alg: -7, type: 'public-key' }]
 				});
+
+				localStorage.setItem('sp:id', registerRes.id);
 
 				const { contractSalt, publicKey } = await getPublicKeys(registerRes);
 				deployee = await handleDeploy(bundlerKey, contractSalt, publicKey!);
@@ -137,7 +141,16 @@
 
 			const signRes = await WebAuthn.startAuthentication({
 				challenge: base64url(authHash),
-				rpId: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
+				rpId: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined,
+				allowCredentials: localStorage.hasOwnProperty('sp:id')
+					? [
+							{
+								id: localStorage.getItem('sp:id'),
+								type: 'public-key',
+								transports: ['internal', 'hybrid']
+							}
+						]
+					: undefined
 			});
 
 			await handleVoteSend(bundlerKey, authTxn, lastLedger, signRes);
@@ -206,6 +219,7 @@
 	}
 
 	function resetAll() {
+		localStorage.removeItem('sp:id');
 		localStorage.removeItem('sp:bundler');
 		localStorage.removeItem('sp:deployee');
 		window.location.reload();
