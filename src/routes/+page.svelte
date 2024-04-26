@@ -100,8 +100,8 @@
 				const registerRes = await WebAuthn.startRegistration({
 					challenge: base64url('createchallenge'),
 					rp: {
-						id: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined
-						// name: 'Passkey Test'
+						id: Capacitor.isNativePlatform() ? 'passkey.sorobanbyexample.org' : undefined,
+						name: 'Soroban Test' // not sure why this is required as I don't think the actual spec does anything with this (https://w3c.github.io/webauthn/#dictdef-publickeycredentialrpentity)
 					},
 					user: {
 						id: base64url('Soroban Test'),
