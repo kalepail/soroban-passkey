@@ -411,10 +411,8 @@
 					>
 				</button>
 
-				<br />
-
 				<button
-					class="text-sm font-mono uppercase"
+					class="text-sm font-mono uppercase px-6 py-4 mt-6"
 					on:click={() => onRegister('signin')}
 					in:fade={{ delay: 500, duration: 250 }}
 					out:fade={{ duration: 250 }}>Sign In</button
