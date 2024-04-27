@@ -1,4 +1,4 @@
-require_relative '../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios/scripts/pods_helpers'
+require_relative '../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios/scripts/pods_helpers'
 
 platform :ios, '16.6'
 use_frameworks!
@@ -9,10 +9,12 @@ use_frameworks!
 install! 'cocoapods', :disable_input_output_paths => true
 
 def capacitor_pods
-  pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios'
-  pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios'
-  pod 'CapacitorShare', :path => '../../node_modules/.pnpm/@capacitor+share@5.0.7_@capacitor+core@5.7.5/node_modules/@capacitor/share'
+  pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios'
+  pod 'CapacitorShare', :path => '../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share'
+  pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/status-bar'
   pod 'DarkedgesCapacitorNativeWebauthn', :path => '../../ext/capacitor-native-webauthn'
+  pod 'HugotomaziCapacitorNavigationBar', :path => '../../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@3.0.0_@capacitor+core@6.0.0/node_modules/@hugotomazi/capacitor-navigation-bar'
 end
 
 target 'App' do

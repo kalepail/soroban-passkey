@@ -1,19 +1,25 @@
 PODS:
   - base64url (1.1.0)
-  - Capacitor (5.7.5):
+  - Capacitor (6.0.0):
     - CapacitorCordova
-  - CapacitorCordova (5.7.5)
-  - CapacitorShare (5.0.7):
+  - CapacitorCordova (6.0.0)
+  - CapacitorShare (6.0.0):
+    - Capacitor
+  - CapacitorStatusBar (6.0.0):
     - Capacitor
   - DarkedgesCapacitorNativeWebauthn (0.0.2):
     - base64url (~> 1.0)
     - Capacitor
+  - HugotomaziCapacitorNavigationBar (3.0.0):
+    - Capacitor
 
 DEPENDENCIES:
-  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios`)"
-  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios`)"
-  - "CapacitorShare (from `../../node_modules/.pnpm/@capacitor+share@5.0.7_@capacitor+core@5.7.5/node_modules/@capacitor/share`)"
+  - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios`)"
+  - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios`)"
+  - "CapacitorShare (from `../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share`)"
+  - "CapacitorStatusBar (from `../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/status-bar`)"
   - DarkedgesCapacitorNativeWebauthn (from `../../ext/capacitor-native-webauthn`)
+  - "HugotomaziCapacitorNavigationBar (from `../../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@3.0.0_@capacitor+core@6.0.0/node_modules/@hugotomazi/capacitor-navigation-bar`)"
 
 SPEC REPOS:
   trunk:
@@ -21,21 +27,27 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Capacitor:
-    :path: "../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios"
+    :path: "../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios"
   CapacitorCordova:
-    :path: "../../node_modules/.pnpm/@capacitor+ios@5.7.5_@capacitor+core@5.7.5/node_modules/@capacitor/ios"
+    :path: "../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios"
   CapacitorShare:
-    :path: "../../node_modules/.pnpm/@capacitor+share@5.0.7_@capacitor+core@5.7.5/node_modules/@capacitor/share"
+    :path: "../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share"
+  CapacitorStatusBar:
+    :path: "../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/status-bar"
   DarkedgesCapacitorNativeWebauthn:
     :path: "../../ext/capacitor-native-webauthn"
+  HugotomaziCapacitorNavigationBar:
+    :path: "../../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@3.0.0_@capacitor+core@6.0.0/node_modules/@hugotomazi/capacitor-navigation-bar"
 
 SPEC CHECKSUMS:
   base64url: 92e81bb256f2070359a34fc93a7a7d4b9a9d689f
-  Capacitor: 7d42085cb786b2d3ea9ac8a17ebd7e3305be7b72
-  CapacitorCordova: c946a6052b547e1e185fc46862003f7b9130ead1
-  CapacitorShare: c6a1ebbf0114ff9e863b966cd6052678fa25d480
+  Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
+  CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
+  CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
   DarkedgesCapacitorNativeWebauthn: 5431c460859af16b19d97a54b54cf690f63d1afd
+  HugotomaziCapacitorNavigationBar: 5cad666e36f4292aa4e0b71bb3e15a39ffa9eefc
 
-PODFILE CHECKSUM: 5341ac693d4f94d6e759950c8becfdd543f21805
+PODFILE CHECKSUM: 8a6e7d2124201d4b72a023fff0e074f2e8bf65ec
 
 COCOAPODS: 1.15.2

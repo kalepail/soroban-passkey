@@ -11,12 +11,17 @@ const config: CapacitorConfig = {
   appName: 'SoroPass',
   webDir: 'build',
   server: positionals[0] === 'run' ? {
+    androidScheme: 'https',
+    iosScheme: 'https',
     url: 'http://192.168.1.68:5173'
   } : undefined,
   plugins: {
     SplashScreen: {
       launchAutoHide: false
     },
+    StatusBar: {
+      
+    }
   }
 };
 

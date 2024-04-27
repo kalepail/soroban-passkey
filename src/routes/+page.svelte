@@ -109,6 +109,12 @@
 						name: 'Soroban Test',
 						displayName: 'Soroban Test'
 					},
+					authenticatorSelection: {
+						authenticatorAttachment: 'platform',
+						requireResidentKey: false,
+						residentKey: 'preferred',
+						userVerification: 'preferred'
+					},
 					pubKeyCredParams: [{ alg: -7, type: 'public-key' }]
 				});
 
