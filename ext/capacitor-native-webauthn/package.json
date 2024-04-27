@@ -1,83 +1,83 @@
 {
-    "name": "@darkedges/capacitor-native-webauthn",
-    "version": "0.0.2",
-    "description": "This plugin gives access to the native webauthn / passkey apis for android/ios",
-    "main": "dist/plugin.cjs.js",
-    "module": "dist/esm/index.js",
-    "types": "dist/esm/index.d.ts",
-    "unpkg": "dist/plugin.js",
-    "files": [
-        "android/src/main/",
-        "android/build.gradle",
-        "dist/",
-        "ios/Plugin/",
-        "capacitor-native-webauthn.podspec"
-    ],
-    "author": "DarkEdges",
-    "license": "Apache-2.0",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/darkedges/capacitor-native-webauthn.git"
+  "name": "@darkedges/capacitor-native-webauthn",
+  "version": "0.0.2",
+  "description": "This plugin gives access to the native webauthn / passkey apis for android/ios",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/",
+    "ios/Plugin/",
+    "capacitor-native-webauthn.podspec"
+  ],
+  "author": "DarkEdges",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkedges/capacitor-native-webauthn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/darkedges/capacitor-native-webauthn/issues"
+  },
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native",
+    "passkey",
+    "webauthn"
+  ],
+  "scripts": {
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "npm run build",
+    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "swiftlint": "node-swiftlint",
+    "docgen": "docgen --api WebAuthnPlugin --output-readme README.md --output-json dist/docs.json",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/docgen": "^0.2.2",
+    "@capacitor/ios": "^6.0.0",
+    "@ionic/eslint-config": "^0.3.0",
+    "@ionic/prettier-config": "^4.0.0",
+    "@ionic/swiftlint-config": "^1.1.2",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@simplewebauthn/browser": "^10.0.0",
+    "@simplewebauthn/types": "^10.0.0",
+    "eslint": "^9.1.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-java": "~2.6.0",
+    "rimraf": "^5.0.5",
+    "rollup": "^2.79.1",
+    "swiftlint": "^1.0.2",
+    "typescript": "~5.4.5"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^5.0.0"
+  },
+  "prettier": "@ionic/prettier-config",
+  "swiftlint": "@ionic/swiftlint-config",
+  "eslintConfig": {
+    "extends": "@ionic/eslint-config/recommended"
+  },
+  "capacitor": {
+    "ios": {
+      "src": "ios"
     },
-    "bugs": {
-        "url": "https://github.com/darkedges/capacitor-native-webauthn/issues"
-    },
-    "keywords": [
-        "capacitor",
-        "plugin",
-        "native",
-        "passkey",
-        "webauthn"
-    ],
-    "scripts": {
-        "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-        "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
-        "verify:android": "cd android && ./gradlew clean build test && cd ..",
-        "verify:web": "npm run build",
-        "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
-        "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
-        "eslint": "eslint . --ext ts",
-        "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
-        "swiftlint": "node-swiftlint",
-        "docgen": "docgen --api WebAuthnPlugin --output-readme README.md --output-json dist/docs.json",
-        "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
-        "clean": "rimraf ./dist",
-        "watch": "tsc --watch",
-        "prepublishOnly": "npm run build"
-    },
-    "devDependencies": {
-        "@capacitor/android": "^6.0.0",
-        "@capacitor/core": "^6.0.0",
-        "@capacitor/docgen": "^0.2.2",
-        "@capacitor/ios": "^6.0.0",
-        "@ionic/eslint-config": "^0.3.0",
-        "@ionic/prettier-config": "^4.0.0",
-        "@ionic/swiftlint-config": "^1.1.2",
-        "@rollup/plugin-node-resolve": "^15.2.3",
-        "@simplewebauthn/browser": "^10.0.0",
-        "@simplewebauthn/types": "^10.0.0",
-        "eslint": "^9.1.1",
-        "prettier": "^3.2.5",
-        "prettier-plugin-java": "~2.6.0",
-        "rimraf": "^5.0.5",
-        "rollup": "^2.79.1",
-        "swiftlint": "^1.0.2",
-        "typescript": "~5.4.5"
-    },
-    "peerDependencies": {
-        "@capacitor/core": "^5.0.0"
-    },
-    "prettier": "@ionic/prettier-config",
-    "swiftlint": "@ionic/swiftlint-config",
-    "eslintConfig": {
-        "extends": "@ionic/eslint-config/recommended"
-    },
-    "capacitor": {
-        "ios": {
-            "src": "ios"
-        },
-        "android": {
-            "src": "android"
-        }
+    "android": {
+      "src": "android"
     }
+  }
 }

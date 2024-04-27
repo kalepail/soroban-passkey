@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "org.sorobanbyexample.passkey"
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "org.sorobanbyexample.passkey"
         minSdkVersion rootProject.ext.minSdkVersion
