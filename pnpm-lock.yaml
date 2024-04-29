@@ -35,6 +35,9 @@ importers:
       '@hugotomazi/capacitor-navigation-bar':
         specifier: ^3.0.0
         version: 3.0.0(@capacitor/core@6.0.0)
+      '@simplewebauthn/browser':
+        specifier: ^10.0.0
+        version: 10.0.0
       '@stellar/stellar-sdk':
         specifier: ^11.3.0
         version: 11.3.0
@@ -621,6 +624,12 @@ packages:
     resolution: {integrity: sha512-0QbCkfk6cnnVKWqqlC0cUrrUMDMfu5ffvYMTUHf+qMN2uAb3MKP31LPcwiMXBNsvoFGs/kYdFOsuLmvppCopXA==}
     cpu: [x64]
     os: [win32]
+
+  '@simplewebauthn/browser@10.0.0':
+    resolution: {integrity: sha512-hG0JMZD+LiLUbpQcAjS4d+t4gbprE/dLYop/CkE01ugU/9sKXflxV5s0DRjdz3uNMFecatRfb4ZLG3XvF8m5zg==}
+
+  '@simplewebauthn/types@10.0.0':
+    resolution: {integrity: sha512-SFXke7xkgPRowY2E+8djKbdEznTVnD5R6GO7GPTthpHrokLvNKw8C3lFZypTxLI7KkCfGPfhtqB3d7OVGGa9jQ==}
 
   '@stellar/js-xdr@3.1.1':
     resolution: {integrity: sha512-3gnPjAz78htgqsNEDkEsKHKosV2BF2iZkoHCNxpmZwUxiPsw+2VaXMed8RRMe0rGk3d5GZe7RrSba8zV80J3Ag==}
@@ -3853,6 +3862,12 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.17.1':
     optional: true
+
+  '@simplewebauthn/browser@10.0.0':
+    dependencies:
+      '@simplewebauthn/types': 10.0.0
+
+  '@simplewebauthn/types@10.0.0': {}
 
   '@stellar/js-xdr@3.1.1': {}
 
