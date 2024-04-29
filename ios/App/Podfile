@@ -12,6 +12,7 @@ def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios'
   pod 'CapacitorShare', :path => '../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share'
+  pod 'CapacitorSplashScreen', :path => '../../node_modules/.pnpm/@capacitor+splash-screen@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/splash-screen'
   pod 'CapacitorStatusBar', :path => '../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/status-bar'
   pod 'DarkedgesCapacitorNativeWebauthn', :path => '../../ext/capacitor-native-webauthn'
   pod 'HugotomaziCapacitorNavigationBar', :path => '../../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@3.0.0_@capacitor+core@6.0.0/node_modules/@hugotomazi/capacitor-navigation-bar'

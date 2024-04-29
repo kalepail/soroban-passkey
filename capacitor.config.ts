@@ -14,6 +14,11 @@ const config: CapacitorConfig = {
     cleartext: true,
     url: 'http://192.168.1.68:5173'
   } : undefined,
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: false
+    },
+  }
 };
 
 export default config;

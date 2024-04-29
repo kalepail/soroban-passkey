@@ -47,6 +47,7 @@
     "@capacitor/core": "^6.0.0",
     "@capacitor/ios": "^6.0.0",
     "@capacitor/share": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
     "@capacitor/status-bar": "^6.0.0",
     "@darkedges/capacitor-native-webauthn": "link:ext/capacitor-native-webauthn",
     "@hugotomazi/capacitor-navigation-bar": "^3.0.0",
