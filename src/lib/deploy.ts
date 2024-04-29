@@ -33,7 +33,6 @@ export async function handleDeploy(bundlerKey: Keypair, contractSalt: Buffer, pu
                 args: [
                     xdr.ScVal.scvBytes(contractSalt),
                     xdr.ScVal.scvBytes(publicKey),
-                    xdr.ScVal.scvBytes(Buffer.from(PUBLIC_accountSecp256r1ContractWasm, 'hex')),
                 ]
             })
         )
