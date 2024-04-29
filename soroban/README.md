@@ -15,3 +15,7 @@ Also:
 [Stellar]: https://stellar.org
 [Soroban]: https://soroban.stellar.org
 [Webauthn]: https://www.w3.org/TR/webauthn-2/
+
+---
+
+This is an adaption of Leigh's [original demo](https://github.com/leighmcculloch/soroban-webauthn)
