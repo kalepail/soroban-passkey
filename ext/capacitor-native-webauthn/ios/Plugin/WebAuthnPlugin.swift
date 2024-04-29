@@ -37,13 +37,25 @@ class GetAppleSignInHandler: NSObject, ASAuthorizationControllerDelegate {
         let challengeData = Data(base64urlEncoded: _challenge)!
         let useridData = Data(_userid.utf8)
         
+//        let securityKeyProvider = ASAuthorizationSecurityKeyPublicKeyCredentialProvider(relyingPartyIdentifier: _rp)
+//        let securityKeyRequest = securityKeyProvider.createCredentialRegistrationRequest(
+//            challenge: challengeData,
+//            displayName: _username,
+//            name: _username,
+//            userID: useridData
+//        )
+//        securityKeyRequest.credentialParameters = [ ASAuthorizationPublicKeyCredentialParameters(algorithm: ASCOSEAlgorithmIdentifier.ES256) ]
+        
         let platformProvider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: _rp)
         let platformKeyRequest = platformProvider.createCredentialRegistrationRequest(
             challenge: challengeData,
             name: _username,
             userID: useridData
         )
-        let authController = ASAuthorizationController(authorizationRequests: [platformKeyRequest])
+        let authController = ASAuthorizationController(authorizationRequests: [
+            platformKeyRequest,
+//            securityKeyRequest
+        ])
         authController.delegate = self
         authController.presentationContextProvider = self
         authController.performRequests()

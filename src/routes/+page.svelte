@@ -236,7 +236,7 @@
 	id="soropass"
 	class="relative w-full flex flex-col items-center justify-center h-dvh py-safe px-2 select-none overflow-hidden {!Capacitor.isNativePlatform()
 		? 'max-h-[800px] max-w-[500px] !py-2'
-		: null}"
+		: null} {loadingRegister || loadingSign ? 'pointer-events-none' : null}"
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
 	use:tap={{ timeframe: 300 }}
 	on:swipe={swipeHandler}
@@ -271,7 +271,7 @@
 			</div>
 
 			<button
-				class="flex items-center font-mono text-xs uppercase origin-right {deployee
+				class="flex items-center font-mono text-xs uppercase origin-right py-2 pl-2 {deployee
 					? null
 					: 'invisible'}"
 				transition:scale={{ duration: 500, delay: 250, opacity: 0, start: 0.8 }}

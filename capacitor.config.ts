@@ -18,9 +18,6 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchAutoHide: false
     },
-    StatusBar: {
-      
-    }
   }
 };
 
