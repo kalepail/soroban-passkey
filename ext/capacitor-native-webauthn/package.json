@@ -45,9 +45,6 @@
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {
-    "@simplewebauthn/browser": "^10.0.0"
-  },
   "devDependencies": {
     "@capacitor/android": "^6.0.0",
     "@capacitor/core": "^6.0.0",
@@ -64,7 +61,8 @@
     "rimraf": "^5.0.5",
     "rollup": "^2.79.1",
     "swiftlint": "^1.0.2",
-    "typescript": "~5.4.5"
+    "typescript": "~5.4.5",
+    "@simplewebauthn/browser": "^10.0.0"
   },
   "peerDependencies": {
     "@capacitor/core": "^5.0.0"
