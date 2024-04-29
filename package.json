@@ -12,7 +12,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "deploy": "pnpm run build && npx cap sync ios"
+    "deploy": "pnpm run build && npx cap sync"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",

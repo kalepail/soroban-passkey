@@ -9,7 +9,7 @@ PODS:
     - Capacitor
   - CapacitorStatusBar (6.0.0):
     - Capacitor
-  - DarkedgesCapacitorNativeWebauthn (0.0.2):
+  - DarkedgesCapacitorNativeWebauthn (0.0.3):
     - base64url (~> 1.0)
     - Capacitor
   - HugotomaziCapacitorNavigationBar (3.0.0):
@@ -51,7 +51,7 @@ SPEC CHECKSUMS:
   CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
   CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
   CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
-  DarkedgesCapacitorNativeWebauthn: 5431c460859af16b19d97a54b54cf690f63d1afd
+  DarkedgesCapacitorNativeWebauthn: be45cd0012c91ba72020ba7ca8433d2573839d0f
   HugotomaziCapacitorNavigationBar: 5cad666e36f4292aa4e0b71bb3e15a39ffa9eefc
 
 PODFILE CHECKSUM: 059ea75b2bd8aa351dc9793af98774bd322e6130

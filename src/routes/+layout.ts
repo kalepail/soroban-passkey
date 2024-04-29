@@ -12,4 +12,4 @@ if (Capacitor.isPluginAvailable('NavigationBar'))
     NavigationBar.setColor({ color: '#5b21b6' });
 
 if (Capacitor.isPluginAvailable('SplashScreen'))
-    SplashScreen.hide()
+    SplashScreen.hide();
