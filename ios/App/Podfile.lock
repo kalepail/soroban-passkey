@@ -5,8 +5,6 @@ PODS:
   - CapacitorCordova (6.0.0)
   - CapacitorShare (6.0.0):
     - Capacitor
-  - CapacitorSplashScreen (6.0.0):
-    - Capacitor
   - CapacitorStatusBar (6.0.0):
     - Capacitor
   - DarkedgesCapacitorNativeWebauthn (0.0.3):
@@ -19,7 +17,6 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios`)"
   - "CapacitorShare (from `../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share`)"
-  - "CapacitorSplashScreen (from `../../node_modules/.pnpm/@capacitor+splash-screen@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/status-bar`)"
   - DarkedgesCapacitorNativeWebauthn (from `../../ext/capacitor-native-webauthn`)
   - "HugotomaziCapacitorNavigationBar (from `../../node_modules/.pnpm/@hugotomazi+capacitor-navigation-bar@3.0.0_@capacitor+core@6.0.0/node_modules/@hugotomazi/capacitor-navigation-bar`)"
@@ -35,8 +32,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios"
   CapacitorShare:
     :path: "../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share"
-  CapacitorSplashScreen:
-    :path: "../../node_modules/.pnpm/@capacitor+splash-screen@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/splash-screen"
   CapacitorStatusBar:
     :path: "../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/status-bar"
   DarkedgesCapacitorNativeWebauthn:
@@ -49,11 +44,10 @@ SPEC CHECKSUMS:
   Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
   CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
   CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
-  CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
   CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
   DarkedgesCapacitorNativeWebauthn: be45cd0012c91ba72020ba7ca8433d2573839d0f
   HugotomaziCapacitorNavigationBar: 5cad666e36f4292aa4e0b71bb3e15a39ffa9eefc
 
-PODFILE CHECKSUM: 059ea75b2bd8aa351dc9793af98774bd322e6130
+PODFILE CHECKSUM: 8a6e7d2124201d4b72a023fff0e074f2e8bf65ec
 
 COCOAPODS: 1.15.2
