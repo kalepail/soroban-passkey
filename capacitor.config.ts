@@ -14,13 +14,16 @@ const config: CapacitorConfig = {
     cleartext: true,
     url: 'http://192.168.1.68:5173'
   } : undefined,
+  backgroundColor: '#5b21b6',
   plugins: {
     SplashScreen: {
       launchAutoHide: false,
       launchFadeOutDuration: 0,
-      splashFullScreen: true,
-      splashImmersive: true,
+      splashFullScreen: false,
+      splashImmersive: false,
       useDialog: false,
+      backgroundColor: '#5b21b6',
+      launchShowDuration: 10000
     }
   }
 };

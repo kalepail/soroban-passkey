@@ -17,22 +17,18 @@
         );
 
         if (Capacitor.isPluginAvailable("SplashScreen")) {
-            SplashScreen.hide();
+            await SplashScreen.hide();
         }
 
         if (Capacitor.isPluginAvailable("NavigationBar")) {
-            NavigationBar.setColor({ color: "#5b21b6", darkButtons: false });
-            NavigationBar.setTransparency({ isTransparent: true });
+            await NavigationBar.setTransparency({ isTransparent: true })
+            await NavigationBar.setColor({ color: "#5b21b6", darkButtons: false })
         }
 
         if (Capacitor.isPluginAvailable("StatusBar")) {
-            StatusBar.setBackgroundColor({ color: "#5b21b6" });
-            StatusBar.setStyle({ style: Style.Dark });
-
-            setTimeout(
-                () => StatusBar.setOverlaysWebView({ overlay: true }),
-                100,
-            );
+            await StatusBar.setOverlaysWebView({ overlay: true })
+            await StatusBar.setBackgroundColor({ color: "#5b21b6" })
+            await StatusBar.setStyle({ style: Style.Dark })
         }
     });
 
