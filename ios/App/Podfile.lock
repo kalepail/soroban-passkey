@@ -3,6 +3,8 @@ PODS:
   - Capacitor (6.0.0):
     - CapacitorCordova
   - CapacitorCordova (6.0.0)
+  - CapacitorPluginSafeArea (3.0.1):
+    - Capacitor
   - CapacitorShare (6.0.0):
     - Capacitor
   - CapacitorSplashScreen (6.0.0):
@@ -18,6 +20,7 @@ PODS:
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios`)"
+  - "CapacitorPluginSafeArea (from `../../node_modules/.pnpm/capacitor-plugin-safe-area@3.0.1_@capacitor+core@6.0.0/node_modules/capacitor-plugin-safe-area`)"
   - "CapacitorShare (from `../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share`)"
   - "CapacitorSplashScreen (from `../../node_modules/.pnpm/@capacitor+splash-screen@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/.pnpm/@capacitor+status-bar@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/status-bar`)"
@@ -33,6 +36,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios"
   CapacitorCordova:
     :path: "../../node_modules/.pnpm/@capacitor+ios@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/ios"
+  CapacitorPluginSafeArea:
+    :path: "../../node_modules/.pnpm/capacitor-plugin-safe-area@3.0.1_@capacitor+core@6.0.0/node_modules/capacitor-plugin-safe-area"
   CapacitorShare:
     :path: "../../node_modules/.pnpm/@capacitor+share@6.0.0_@capacitor+core@6.0.0/node_modules/@capacitor/share"
   CapacitorSplashScreen:
@@ -48,12 +53,13 @@ SPEC CHECKSUMS:
   base64url: 92e81bb256f2070359a34fc93a7a7d4b9a9d689f
   Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
   CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorPluginSafeArea: b99681e1d9986ae1c059ca0e1b5e7025916e5e04
   CapacitorShare: a771200d3b924a5d7ad9d9fecbac517e4c0aa74f
   CapacitorSplashScreen: 5431ab8d19c1c6e95777d53bfaa7a36a6c3d94c7
   CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
   DarkedgesCapacitorNativeWebauthn: be45cd0012c91ba72020ba7ca8433d2573839d0f
   HugotomaziCapacitorNavigationBar: 5cad666e36f4292aa4e0b71bb3e15a39ffa9eefc
 
-PODFILE CHECKSUM: 059ea75b2bd8aa351dc9793af98774bd322e6130
+PODFILE CHECKSUM: d8d9d3b467e6fd450aa079b0e9fb58a17e818452
 
 COCOAPODS: 1.15.2

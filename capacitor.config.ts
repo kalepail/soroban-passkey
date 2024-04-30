@@ -16,8 +16,12 @@ const config: CapacitorConfig = {
   } : undefined,
   plugins: {
     SplashScreen: {
-      launchAutoHide: false
-    },
+      launchAutoHide: false,
+      launchFadeOutDuration: 0,
+      splashFullScreen: true,
+      splashImmersive: true,
+      useDialog: false,
+    }
   }
 };
 
