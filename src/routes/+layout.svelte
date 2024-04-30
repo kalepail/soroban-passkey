@@ -3,9 +3,9 @@
     import { onDestroy, onMount } from "svelte";
     import { SafeArea, type SafeAreaInsets } from "capacitor-plugin-safe-area";
     import { Capacitor } from "@capacitor/core";
-    import { SplashScreen } from '@capacitor/splash-screen';
-    import { StatusBar, Style } from '@capacitor/status-bar';
-    import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar'
+    import { SplashScreen } from "@capacitor/splash-screen";
+    import { StatusBar, Style } from "@capacitor/status-bar";
+    import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 
     onDestroy(() => SafeArea.removeAllListeners());
 
@@ -16,21 +16,23 @@
             processInsets(insets),
         );
 
-        if (Capacitor.isPluginAvailable('SplashScreen')) {
+        if (Capacitor.isPluginAvailable("SplashScreen")) {
             SplashScreen.hide();
         }
 
-        if (Capacitor.isPluginAvailable('NavigationBar')) {
-            NavigationBar.setColor({ color: '#5b21b6', darkButtons: false });
+        if (Capacitor.isPluginAvailable("NavigationBar")) {
+            NavigationBar.setColor({ color: "#5b21b6", darkButtons: false });
             NavigationBar.setTransparency({ isTransparent: true });
         }
 
-        if (Capacitor.isPluginAvailable('StatusBar')) {
-            setTimeout(() => {
-                StatusBar.setBackgroundColor({ color: '#5b21b6' });
-                StatusBar.setStyle({ style: Style.Dark });
-                StatusBar.setOverlaysWebView({ overlay: true });
-            }, 200)
+        if (Capacitor.isPluginAvailable("StatusBar")) {
+            StatusBar.setBackgroundColor({ color: "#5b21b6" });
+            StatusBar.setStyle({ style: Style.Dark });
+
+            setTimeout(
+                () => StatusBar.setOverlaysWebView({ overlay: true }),
+                100,
+            );
         }
     });
 
