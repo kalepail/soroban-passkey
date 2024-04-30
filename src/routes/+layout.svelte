@@ -12,7 +12,7 @@
     onMount(async () => {
         processInsets((await SafeArea.getSafeAreaInsets()).insets);
 
-        SafeArea.addListener("safeAreaChanged", ({ insets }) =>
+        await SafeArea.addListener("safeAreaChanged", ({ insets }) =>
             processInsets(insets),
         );
 
