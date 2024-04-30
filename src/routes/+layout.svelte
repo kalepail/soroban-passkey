@@ -7,19 +7,6 @@
     import { StatusBar, Style } from '@capacitor/status-bar';
     import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar'
 
-    if (Capacitor.isPluginAvailable('StatusBar')) {
-        setTimeout(() => {
-            StatusBar.setBackgroundColor({ color: '#5b21b6' });
-            StatusBar.setStyle({ style: Style.Dark });
-            StatusBar.setOverlaysWebView({ overlay: true });
-        }, 200)
-    }
-
-    if (Capacitor.isPluginAvailable('NavigationBar')) {
-        NavigationBar.setColor({ color: '#5b21b6', darkButtons: false });
-        NavigationBar.setTransparency({ isTransparent: true });
-    }
-
     onDestroy(() => SafeArea.removeAllListeners());
 
     onMount(async () => {
@@ -31,6 +18,19 @@
 
         if (Capacitor.isPluginAvailable('SplashScreen')) {
             SplashScreen.hide();
+        }
+
+        if (Capacitor.isPluginAvailable('NavigationBar')) {
+            NavigationBar.setColor({ color: '#5b21b6', darkButtons: false });
+            NavigationBar.setTransparency({ isTransparent: true });
+        }
+
+        if (Capacitor.isPluginAvailable('StatusBar')) {
+            setTimeout(() => {
+                StatusBar.setBackgroundColor({ color: '#5b21b6' });
+                StatusBar.setStyle({ style: Style.Dark });
+                StatusBar.setOverlaysWebView({ overlay: true });
+            }, 200)
         }
     });
 
