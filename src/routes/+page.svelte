@@ -255,6 +255,7 @@
 </script>
 
 <div
+	id="soropass"
 	class="relative w-full flex flex-col items-center justify-center h-dvh px-2 select-none overflow-hidden bg-violet-800 {!Capacitor.isNativePlatform()
 		? 'max-h-[800px] max-w-[500px] py-2'
 		: null} {loadingRegister || loadingSign ? 'pointer-events-none' : null}"
