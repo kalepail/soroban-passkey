@@ -116,7 +116,8 @@
 						displayName: "Soroban Test",
 					},
 					authenticatorSelection: {
-						authenticatorAttachment: "cross-platform",
+						// authenticatorAttachment: "cross-platform", // allows security keys, disabled iCloud and Google
+						authenticatorAttachment: "platform", // allows iCloud and Google, disables security keys
 						requireResidentKey: false,
 						residentKey: "preferred",
 						userVerification: "preferred",
