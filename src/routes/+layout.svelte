@@ -27,7 +27,7 @@
 <div
     class="p-safe flex flex-col items-center justify-center h-dvh text-yellow-500 {Capacitor.isNativePlatform()
         ? 'bg-violet-800'
-        : '!bg-white'}"
+        : 'bg-white'}"
 >
     <slot />
 </div>
