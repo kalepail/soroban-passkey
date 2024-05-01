@@ -116,7 +116,7 @@
 						displayName: "Soroban Test",
 					},
 					authenticatorSelection: {
-						authenticatorAttachment: "platform",
+						authenticatorAttachment: "cross-platform",
 						requireResidentKey: false,
 						residentKey: "preferred",
 						userVerification: "preferred",
