@@ -115,13 +115,13 @@
 						name: "Soroban Test",
 						displayName: "Soroban Test",
 					},
-					authenticatorSelection: {
-						// authenticatorAttachment: "cross-platform", // allows security keys, disabled iCloud and Google
-						authenticatorAttachment: "platform", // allows iCloud and Google, disables security keys
+					authenticatorSelection: Capacitor.getPlatform() === 'android' ? { // TODO only required on Android so maybe remove it for any other platform
+						authenticatorAttachment: "cross-platform", // allows security keys, disabled iCloud and Google
+						// authenticatorAttachment: "platform", // allows iCloud and Google, disables security keys
 						requireResidentKey: false,
 						residentKey: "preferred",
 						userVerification: "preferred",
-					},
+					} : undefined,
 					pubKeyCredParams: [{ alg: -7, type: "public-key" }],
 				});
 
