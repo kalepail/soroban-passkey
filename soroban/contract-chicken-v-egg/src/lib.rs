@@ -15,6 +15,18 @@ pub struct Contract;
 
 #[contractimpl]
 impl Contract {
+    pub fn extend_ttl(env: Env) {
+        let max_ttl = env.storage().max_ttl();
+        let contract_address = env.current_contract_address();
+
+        env.storage().instance().extend_ttl(max_ttl, max_ttl);
+        env.deployer()
+            .extend_ttl(contract_address.clone(), max_ttl, max_ttl);
+        env.deployer()
+            .extend_ttl_for_code(contract_address.clone(), max_ttl, max_ttl);
+        env.deployer()
+            .extend_ttl_for_contract_instance(contract_address.clone(), max_ttl, max_ttl);
+    }
     pub fn vote(env: Env, source: Address, vote: bool) -> (Votes, Votes) {
         source.require_auth();
 
@@ -54,16 +66,17 @@ impl Contract {
             }
         };
 
+        let max_ttl = env.storage().max_ttl();
+
         env.storage().instance().set(&VOTES, &all_votes);
         env.storage()
             .persistent()
             .set(&(VOTES, &source), &source_votes);
 
-        // https://github.com/stellar/stellar-core/blob/master/soroban-settings/pubnet_phase1.json#L297
-        env.storage().instance().extend_ttl(3110400, 3110400);
         env.storage()
             .persistent()
-            .extend_ttl(&(VOTES, &source), 3110400, 3110400);
+            .extend_ttl(&(VOTES, &source), max_ttl, max_ttl);
+        Self::extend_ttl(env);
 
         (all_votes, source_votes)
     }

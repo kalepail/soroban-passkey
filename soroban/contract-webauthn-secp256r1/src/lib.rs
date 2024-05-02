@@ -27,13 +27,26 @@ const STORAGE_KEY_PK: Symbol = symbol_short!("pk");
 
 #[contractimpl]
 impl Contract {
+    pub fn extend_ttl(env: Env) {
+        let max_ttl = env.storage().max_ttl();
+        let contract_address = env.current_contract_address();
+
+        env.storage().instance().extend_ttl(max_ttl, max_ttl);
+        env.deployer()
+            .extend_ttl(contract_address.clone(), max_ttl, max_ttl);
+        env.deployer()
+            .extend_ttl_for_code(contract_address.clone(), max_ttl, max_ttl);
+        env.deployer()
+            .extend_ttl_for_contract_instance(contract_address.clone(), max_ttl, max_ttl);
+    }
     pub fn init(env: Env, pk: BytesN<65>) -> Result<(), Error> {
         if env.storage().instance().has(&STORAGE_KEY_PK) {
             return Err(Error::AlreadyInited);
         }
 
         env.storage().instance().set(&STORAGE_KEY_PK, &pk);
-        env.storage().instance().extend_ttl(3110400, 3110400);
+
+        Self::extend_ttl(env);
 
         Ok(())
     }
@@ -96,7 +109,7 @@ impl CustomAccountInterface for Contract {
             return Err(Error::ClientDataJsonChallengeIncorrect);
         }
 
-        env.storage().instance().extend_ttl(3110400, 3110400);
+        Self::extend_ttl(env);
 
         Ok(())
     }
