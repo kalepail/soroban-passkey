@@ -10,7 +10,6 @@ soroban contract restore --id $PUBLIC_chickenVsEggContractId --network $NETWORK 
 soroban contract restore --id $PUBLIC_factoryContractId --network $NETWORK --source $SOURCE  --durability persistent
 soroban contract restore --wasm-hash $PUBLIC_accountSecp256r1ContractWasm --network $NETWORK --source $SOURCE --durability persistent
 
-
 soroban contract extend --id $PUBLIC_chickenVsEggContractId --network $NETWORK --source $SOURCE --durability persistent --ledgers-to-extend 4294967295
 soroban contract extend --id $PUBLIC_factoryContractId --network $NETWORK --source $SOURCE --durability persistent --ledgers-to-extend 4294967295
 soroban contract extend --wasm-hash $PUBLIC_accountSecp256r1ContractWasm --network $NETWORK --source $SOURCE --durability persistent --ledgers-to-extend 4294967295

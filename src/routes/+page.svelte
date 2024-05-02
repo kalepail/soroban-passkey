@@ -167,7 +167,7 @@
 							{
 								id: localStorage.getItem("sp:id")!,
 								type: "public-key",
-								transports: ["internal", "hybrid"],
+								transports: ['internal', 'hybrid', 'nfc', 'usb', 'smart-card', 'cable', 'ble'],
 							},
 						]
 					: undefined,

@@ -1,4 +1,4 @@
-import { PUBLIC_rpcUrl, PUBLIC_accountSecp256r1ContractWasm, PUBLIC_factoryContractId, PUBLIC_horizonUrl, PUBLIC_networkPassphrase } from "$env/static/public";
+import { PUBLIC_rpcUrl, PUBLIC_factoryContractId, PUBLIC_horizonUrl, PUBLIC_networkPassphrase } from "$env/static/public";
 import { Keypair, StrKey, xdr, hash, Address, Account, TransactionBuilder, Operation, SorobanRpc } from "@stellar/stellar-sdk"
 
 export async function handleDeploy(bundlerKey: Keypair, contractSalt: Buffer, publicKey?: Buffer) {
