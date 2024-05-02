@@ -116,8 +116,8 @@
 						displayName: "Soroban Test",
 					},
 					authenticatorSelection: Capacitor.getPlatform() === 'android' ? { // TODO only required on Android so maybe remove it for any other platform
-						authenticatorAttachment: "platform", // allows security keys, disabled iCloud and Google
-						// authenticatorAttachment: "platform", // allows iCloud and Google, disables security keys
+						authenticatorAttachment: "platform", // allows iCloud and Google, disables security keys
+						// authenticatorAttachment: "cross-platform", // allows security keys, disabled iCloud and Google
 						requireResidentKey: false,
 						residentKey: "preferred",
 						userVerification: "preferred",
