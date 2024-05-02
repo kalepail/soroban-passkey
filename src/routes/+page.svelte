@@ -94,6 +94,9 @@
 					rpId: Capacitor.isNativePlatform()
 						? "passkey.sorobanbyexample.org"
 						: undefined,
+					// allowCredentials
+					// userVerification
+					// extensions
 				});
 
 				localStorage.setItem("sp:id", signRes.id);
@@ -115,13 +118,19 @@
 						name: "Soroban Test",
 						displayName: "Soroban Test",
 					},
-					authenticatorSelection: Capacitor.getPlatform() === 'android' ? { // TODO only required on Android so maybe remove it for any other platform
-						authenticatorAttachment: "platform", // allows iCloud and Google, disables security keys
-						// authenticatorAttachment: "cross-platform", // allows security keys, disabled iCloud and Google
-						requireResidentKey: false,
-						residentKey: "preferred",
-						userVerification: "preferred",
-					} : undefined,
+					authenticatorSelection:
+						// Capacitor.getPlatform() === "android"
+							// ? 
+							{
+									// TODO only required on Android so maybe remove it for any other platform
+									// authenticatorAttachment: "platform", // allows iCloud and Google, disables security keys
+									// authenticatorAttachment: "cross-platform", // allows security keys, disabled iCloud and Google
+									requireResidentKey: false,
+									residentKey: "preferred",
+									userVerification: "preferred",
+								}
+							// : undefined
+							,
 					pubKeyCredParams: [{ alg: -7, type: "public-key" }],
 				});
 
@@ -167,7 +176,15 @@
 							{
 								id: localStorage.getItem("sp:id")!,
 								type: "public-key",
-								transports: ['internal', 'hybrid', 'nfc', 'usb', 'smart-card', 'cable', 'ble'],
+								transports: [
+									"internal",
+									"hybrid",
+									"nfc",
+									"usb",
+									"smart-card",
+									"cable",
+									"ble",
+								],
 							},
 						]
 					: undefined,

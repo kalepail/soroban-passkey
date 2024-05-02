@@ -69,6 +69,32 @@ import { hash } from '@stellar/stellar-sdk';
 //     }
 //   }
 
+// await navigator.credentials.create({
+//     publicKey: {
+//         challenge: new Uint8Array([114,183,154,181,231,33,106,89,94,158,7]),
+//         rp: {
+//             name: "Soroban Test",
+//         },
+//         user: {
+//             id: new Uint8Array([74,138,232,109,169,211,122,203]),
+//             name: "Soroban Test",
+//             displayName: "Soroban Test",
+//         },
+//         authenticatorSelection: {
+//             requireResidentKey: false,
+//             residentKey: "preferred",
+//             userVerification: "preferred",
+//         },
+//         pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+//     }
+// })
+
+// await navigator.credentials.get({
+//     publicKey: {
+//         challenge: new Uint8Array([114,183,154,181,231,33,106,89,94,158,7]),
+//     }
+// })
+
 export async function getPublicKeys(registration: any) {
     const contractSalt = hash(base64url.toBuffer(registration.id))
 
