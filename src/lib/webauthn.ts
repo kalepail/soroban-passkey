@@ -101,17 +101,7 @@ export async function getPublicKeys(registration: any) {
     console.log(JSON.stringify(registration, null, 2));
 
     if (registration.response.attestationObject) {
-        const decodedAttestationObj = CBOR.decode(base64url.toBuffer(registration.response.attestationObject));
-        const { authData } = decodedAttestationObj;
-        const dataView = new DataView(new ArrayBuffer(2));
-        const idLenBytes = authData.slice(53, 55);
-
-        idLenBytes.forEach((value: number, index: number) => dataView.setUint8(index, value));
-
-        const credentialIdLength = dataView.getUint16(0);
-        const publicKeyBytes = authData.slice(55 + credentialIdLength);
-        const publicKeyObject = new Map<string, any>(Object.entries(CBOR.decode(publicKeyBytes)));
-
+        const { publicKeyObject } = getPublicKeyObject(registration.response.attestationObject);
         const publicKey = Buffer.from([
             4, // (0x04 prefix) https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm
             ...publicKeyObject.get('-2')!,
@@ -129,6 +119,65 @@ export async function getPublicKeys(registration: any) {
             contractSalt
         }
     }
+}
+
+function getPublicKeyObject(attestationObject: string) {
+    const { authData } = CBOR.decode(base64url.toBuffer(attestationObject));
+    const authDataUint8Array = new Uint8Array(authData);
+    const authDataView = new DataView(authDataUint8Array.buffer, 0, authDataUint8Array.length);
+
+    let offset = 0;
+
+    // RP ID Hash (32 bytes)
+    const rpIdHash = authData.slice(offset, offset + 32);
+    offset += 32;
+
+    // Flags (1 byte)
+    const flags = authDataView.getUint8(offset);
+    offset += 1;
+
+    // Sign Count (4 bytes, big endian)
+    const signCount = authDataView.getUint32(offset, false);
+    offset += 4;
+
+    // Attested Credential Data, if present
+    if (flags & 0x40) { // Checking the AT flag
+        // AAGUID (16 bytes)
+        const aaguid = authData.slice(offset, offset + 16);
+        offset += 16;
+
+        // Credential ID Length (2 bytes, big endian)
+        const credIdLength = authDataView.getUint16(offset, false);
+        offset += 2;
+
+        // Credential ID (variable length)
+        const credentialId = authData.slice(offset, offset + credIdLength);
+        offset += credIdLength;
+
+        // Credential Public Key - (77 bytes...I hope)
+        const credentialPublicKey = authData.slice(offset, offset + 77);
+        offset += 77;
+
+        // Any leftover bytes. I found some when using a YubiKey
+        const theRest = authData.slice(offset);
+
+        // Decode the credential public key to COSE
+        const publicKeyObject = new Map<string, any>(Object.entries(CBOR.decode(credentialPublicKey)));
+
+        return {
+            rpIdHash,
+            flags,
+            signCount,
+            aaguid,
+            credIdLength,
+            credentialId,
+            credentialPublicKey,
+            theRest,
+            publicKeyObject
+        };
+    }
+
+    throw new Error("Attested credential data not present in the flags.");
 }
 
 export function convertEcdsaSignatureAsnToCompact(sig: Buffer) {
