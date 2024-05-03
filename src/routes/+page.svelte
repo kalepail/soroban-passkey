@@ -115,7 +115,12 @@
 						name: "Soroban Test",
 						displayName: "Soroban Test",
 					},
-					authenticatorSelection: {
+					authenticatorSelection: Capacitor.getPlatform() === "android" ? {
+						authenticatorAttachment:  "platform", // `platform` allows iCloud and Google, disables security keys. `cross-platform` allows security keys, disabled iCloud and Google
+						requireResidentKey: false,
+						residentKey: "preferred", // `discouraged` bugs with error [34000]
+						userVerification: "discouraged",
+					} : {
 						requireResidentKey: false,
 						residentKey: "discouraged",
 						userVerification: "discouraged",
