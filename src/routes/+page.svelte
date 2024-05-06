@@ -109,27 +109,23 @@
 						id: Capacitor.isNativePlatform()
 							? "passkey.sorobanbyexample.org"
 							: undefined,
-						name: "Soroban Test", // not sure why this is required as I don't think the actual spec does anything with this (https://w3c.github.io/webauthn/#dictdef-publickeycredentialrpentity)
+						name: "SoroPass",
 					},
 					user: {
 						id: base64url("Soroban Test"),
 						name: "Soroban Test",
 						displayName: "Soroban Test",
 					},
-					authenticatorSelection:
-						Capacitor.getPlatform() === "android"
-							? {
-									authenticatorAttachment: "platform", // `platform` allows iCloud and Google, disables security keys. `cross-platform` allows security keys, disabled iCloud and Google
-									requireResidentKey: false,
-									residentKey: "preferred", // `discouraged` bugs with error [34000]
-									userVerification: "discouraged",
-								}
-							: {
-									requireResidentKey: false,
-									residentKey: "discouraged",
-									userVerification: "discouraged",
-								},
+					authenticatorSelection: {
+						requireResidentKey: false,
+						residentKey:
+							Capacitor.getPlatform() === "android"
+								? "preferred" // `discouraged` bugs with error [34000] on Android
+								: "discouraged",
+						userVerification: "discouraged",
+					},
 					pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+					attestation: "none",
 				});
 
 				localStorage.setItem("sp:id", registerRes.id);

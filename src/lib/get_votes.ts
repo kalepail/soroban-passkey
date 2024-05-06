@@ -1,4 +1,4 @@
-import { PUBLIC_rpcUrl, PUBLIC_horizonUrl, PUBLIC_chickenVsEggContractId, PUBLIC_networkPassphrase } from "$env/static/public";
+import { PUBLIC_rpcUrl, PUBLIC_chickenVsEggContractId, PUBLIC_networkPassphrase } from "$env/static/public";
 import { SorobanRpc } from "@stellar/stellar-sdk";
 import { Keypair, xdr, Address, Operation, TransactionBuilder, Account, scValToNative } from "@stellar/stellar-sdk";
 

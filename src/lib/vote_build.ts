@@ -1,5 +1,5 @@
 
-import { PUBLIC_rpcUrl, PUBLIC_networkPassphrase, PUBLIC_horizonUrl, PUBLIC_chickenVsEggContractId } from "$env/static/public";
+import { PUBLIC_rpcUrl, PUBLIC_networkPassphrase, PUBLIC_chickenVsEggContractId } from "$env/static/public";
 import { Account, Address, Keypair, Operation, SorobanRpc, TransactionBuilder, hash, xdr } from "@stellar/stellar-sdk";
 
 export async function handleVoteBuild(bundlerKey: Keypair, accountContractId: string, vote: boolean) {
