@@ -933,7 +933,14 @@
 				>
 					But it is also simple.
 				</h1>
+				<br />
 				<h1
+					in:fade={{ delay: 2000, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					Yippee!
+				</h1>
+				<!-- <h1
 					class=""
 					in:fade={{ delay: 2000, duration: 250 }}
 					out:fade={{ duration: 250 }}
@@ -953,7 +960,7 @@
 					out:fade={{ duration: 250 }}
 				>
 					who made us this way.
-				</h1>
+				</h1> -->
 			</div>
 		{/if}
 
