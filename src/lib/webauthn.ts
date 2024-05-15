@@ -91,7 +91,14 @@ import { hash } from '@stellar/stellar-sdk';
 
 // await navigator.credentials.get({
 //     publicKey: {
-//         challenge: new Uint8Array([114,183,154,181,231,33,106,89,94,158,7]),
+//         challenge: new Uint8Array([114, 183, 154, 181, 231, 33, 106, 89, 94, 158, 7]),
+//         allowCredentials: [
+//             {
+//                 id: new Uint8Array([0, 90, 10, 58, 192, 177, 171, 4, 207, 100, 116, 41, 95, 52, 18, 182]),
+//                 type: "public-key",
+//             },
+//         ],
+//         userVerification: "discouraged",
 //     }
 // })
 
