@@ -4,10 +4,10 @@
 
 @font-face {
   font-family: 'Schabo';
-  src: url('fonts/SCHABO.woff2') format('woff2'),
-    url('fonts/SCHABO.woff') format('woff'),
-    url('fonts/SCHABO.ttf') format('truetype'),
-    url('fonts/SCHABO.otf') format('opentype');
+  src: url('/fonts/SCHABO.woff2') format('woff2'),
+    url('/fonts/SCHABO.woff') format('woff'),
+    url('/fonts/SCHABO.ttf') format('truetype'),
+    url('/fonts/SCHABO.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
