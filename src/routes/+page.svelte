@@ -825,7 +825,7 @@
 					}}
 				>
 					<div
-						class="w-full flex justify-end bg-black h-5 rounded-l-full"
+						class="w-full flex justify-end bg-black h-5 rounded-l-full overflow-hidden"
 					>
 						<div
 							class="bg-[#B7ACE8] h-5"
@@ -834,7 +834,7 @@
 					</div>
 					<hr class="h-10 border border-black" />
 					<div
-						class="w-full flex justify-start bg-black h-5 rounded-r-full"
+						class="w-full flex justify-start bg-black h-5 rounded-r-full overflow-hidden"
 					>
 						<div
 							class="bg-[#B7ACE8] h-5"
