@@ -2,14 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'SCHABO';
+  src: url('fonts/SCHABO.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
-    html {
-      height: -webkit-fill-available;
-    }
-    body {
-      height: -webkit-fill-available;
-    }
-    #root {
-      height: -webkit-fill-available;
-    }
+  html {
+    height: -webkit-fill-available;
+    font-family: 'SCHABO';
   }
+
+  body {
+    height: -webkit-fill-available;
+    font-family: 'SCHABO';
+  }
+
+  #root {
+    height: -webkit-fill-available;
+    font-family: 'SCHABO';
+  }
+}

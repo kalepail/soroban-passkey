@@ -5,7 +5,7 @@
         <radialGradient cx="0%" cy="100%" fx="0%" fy="100%" r="141.421356%" id="radialGradient-1">
             <stop stop-color="#2E1065" offset="0%"></stop>
             <stop stop-color="#45198F" offset="57.927229%"></stop>
-            <stop stop-color="#5B21B6" offset="100%"></stop>
+            <stop stop-color="#BFCBD7" offset="100%"></stop>
         </radialGradient>
     </defs>
     <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

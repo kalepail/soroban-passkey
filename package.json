@@ -11,7 +11,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "deploy": "pnpm run build && npx cap sync",
-    "generate": "npx @capacitor/assets generate --assetPath ./static --iconBackgroundColor #5b21b6 --iconBackgroundColorDark #5b21b6 --splashBackgroundColor #5b21b6 --splashBackgroundColorDark #5b21b6 --android --ios"
+    "generate": "npx @capacitor/assets generate --assetPath ./static --iconBackgroundColor #BFCBD7 --iconBackgroundColorDark #BFCBD7 --splashBackgroundColor #BFCBD7 --splashBackgroundColorDark #BFCBD7 --android --ios"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",

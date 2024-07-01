@@ -224,10 +224,10 @@
 	function goRight() {
 		if (
 			!(
-				step >= 14 ||
-				(step === 5 && !deployee) ||
-				(step === 10 && !choice && !votes?.total_source_votes) ||
-				(step === 11 && !votes?.total_source_votes)
+				step >= 11 ||
+				(step === 4 && !deployee) ||
+				(step === 8 && !choice && !votes?.total_source_votes) ||
+				(step === 9 && !votes?.total_source_votes)
 			)
 		)
 			step++;
@@ -238,10 +238,10 @@
 
 		if (value) {
 			await Share.share({
-				title: "Share SoroPass",
+				title: "Share SheFi x Stellar",
 				text: "Check out this blockchain experience powered by your face or fingers!",
 				url: "https://passkey.sorobanbyexample.org/",
-				dialogTitle: `${choice === "chicken"} ? 'Chicken 🐔' : 'Egg 🥚'} people unite!`,
+				dialogTitle: `${choice === "chicken"} ? 'Chocolate 🍫' : 'Waffle 🧇'} people unite!`,
 			});
 		} else {
 			window.open(
@@ -260,7 +260,7 @@
 
 <div
 	id="soropass"
-	class="relative w-full flex flex-col items-center justify-center h-dvh px-2 select-none overflow-hidden bg-violet-800 {!Capacitor.isNativePlatform()
+	class="relative w-full flex flex-col items-center justify-center h-dvh px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:100%_100%] bg-[#BFCBD7] {!Capacitor.isNativePlatform()
 		? 'max-h-[800px] max-w-[500px] py-2'
 		: null} {loadingRegister || loadingSign ? 'pointer-events-none' : null}"
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: "pan-y" }}
@@ -284,8 +284,8 @@
 				}}
 			>
 				<svg
-					class="stroke-violet-800 rounded-full border-2 border-yellow-500 {deployee
-						? 'bg-yellow-500'
+					class="stroke-[#BFCBD7] rounded-full border-2 border-black {deployee
+						? 'bg-black'
 						: null}"
 					viewBox="0 0 15 15"
 					fill="none"
@@ -317,7 +317,7 @@
 			>
 				Restart
 				<svg
-					class="stroke-yellow-500 ml-2"
+					class="stroke-black ml-2"
 					viewBox="0 0 15 15"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
@@ -331,9 +331,11 @@
 		</div>
 	{/if}
 
-	<div class="w-full relative text-center text-3xl font-bold my-auto">
+	<div
+		class="w-full relative text-center text-[60px] uppercase leading-none my-auto"
+	>
 		{#if step === 1}
-			<h1
+			<div
 				class="absolute w-full top-0 -translate-y-1/2"
 				transition:scale={{
 					duration: 500,
@@ -342,8 +344,22 @@
 					start: 1.5,
 				}}
 			>
-				Welcome to a passkey powered blockchain experience
-			</h1>
+				<h1
+					class="mb-8"
+					in:fade={{ delay: 0, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					Welcome to <br /> SheFi <span class="normal-case">x</span> Stellar
+				</h1>
+
+				<p
+					class="font-[Inter] font-light text-base normal-case"
+					in:fade={{ delay: 250, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					And to a passkey powered <br /> blockchain experience.
+				</p>
+			</div>
 		{/if}
 
 		{#if step === 2}
@@ -363,26 +379,20 @@
 				>
 					Fully non-custodial
 				</h1>
+				<br />
 				<h1
 					class=""
 					in:fade={{ delay: 500, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					But also
-				</h1>
-				<h1
-					class=""
-					in:fade={{ delay: 1250, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Entirely convenient
+					But also entirely convenient
 				</h1>
 			</div>
 		{/if}
 
 		{#if step === 3}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
+				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -393,37 +403,23 @@
 				<p
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
-					class="text-xl"
+					class="font-[Inter] font-light text-base normal-case"
 				>
-					You’re just a single tap away from a fully featured future
-					of financial freedom powered by your face or fingers.
+					You’re just a single tap away from a future of financial
+					freedom powered by your face or fingerprints.
 				</p>
 				<br />
 				<h1
-					in:fade={{ delay: 1250, duration: 250 }}
+					in:fade={{ delay: 500, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					class=""
 				>
-					F passphrases
+					Say farewell to pass phrases.
 				</h1>
 			</div>
 		{/if}
 
 		{#if step === 4}
-			<h1
-				class="absolute w-full top-0 -translate-y-1/2"
-				transition:scale={{
-					duration: 500,
-					delay: 0,
-					opacity: 0,
-					start: 1.5,
-				}}
-			>
-				Are you ready?
-			</h1>
-		{/if}
-
-		{#if step === 5}
 			<div
 				class="absolute flex flex-col items-center justify-center w-full top-0 -translate-y-1/2"
 				transition:scale={{
@@ -434,7 +430,7 @@
 				}}
 			>
 				<h1
-					class=""
+					class="mb-8"
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
@@ -444,7 +440,7 @@
 				<br />
 
 				<button
-					class="relative inline-flex items-center border-2 border-yellow-500 rounded-lg p-2 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
+					class="relative inline-flex items-center rounded-xl p-2 bg-black text-white active:top-[2px]"
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					on:click={() => onRegister()}
@@ -457,7 +453,7 @@
 						height="30"
 						><path
 							d="M4 6h1V5H4v1zm6 0h1V5h-1v1zm.1 2.7a3.25 3.25 0 01-5.2 0l-.8.6c1.7 2.267 5.1 2.267 6.8 0l-.8-.6zM1 5V2.5H0V5h1zm1.5-4H5V0H2.5v1zM1 2.5A1.5 1.5 0 012.5 1V0A2.5 2.5 0 000 2.5h1zM0 10v2.5h1V10H0zm2.5 5H5v-1H2.5v1zM0 12.5A2.5 2.5 0 002.5 15v-1A1.5 1.5 0 011 12.5H0zM10 1h2.5V0H10v1zm4 1.5V5h1V2.5h-1zM12.5 1A1.5 1.5 0 0114 2.5h1A2.5 2.5 0 0012.5 0v1zM10 15h2.5v-1H10v1zm5-2.5V10h-1v2.5h1zM12.5 15a2.5 2.5 0 002.5-2.5h-1a1.5 1.5 0 01-1.5 1.5v1z"
-							fill="currentColor"
+							fill="#B7ACE8"
 						></path></svg
 					>
 					<div
@@ -470,7 +466,7 @@
 					>
 						{#if loadingRegister}
 							<svg
-								class="mx-4"
+								class="mx-8"
 								transition:slide={{
 									duration: 150,
 									delay: 0,
@@ -481,7 +477,7 @@
 								height="30"
 								viewBox="0 0 24 24"
 								><path
-									class="fill-yellow-500"
+									class="fill-white"
 									d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z"
 									><animateTransform
 										attributeName="transform"
@@ -494,7 +490,7 @@
 							>
 						{:else}
 							<span
-								class="mx-4 font-mono uppercase text-lg"
+								class="mx-8 font-mono uppercase text-lg"
 								transition:slide={{
 									duration: 150,
 									delay: 0,
@@ -512,7 +508,7 @@
 						height="30"
 						><path
 							d="M12.587 3.513a6.03 6.03 0 01.818 3.745v.75c0 .788.205 1.563.595 2.247M4.483 6.508c0-.795.313-1.557.871-2.119a2.963 2.963 0 012.103-.877c.789 0 1.545.315 2.103.877.558.562.871 1.324.871 2.12v.748c0 1.621.522 3.198 1.487 4.495m-4.46-5.244v1.498A10.542 10.542 0 009.315 14M4.483 9.505A13.559 13.559 0 005.821 14m-3.643-1.498a16.63 16.63 0 01-.669-5.244V6.51a6.028 6.028 0 01.79-3.002 5.97 5.97 0 012.177-2.2 5.914 5.914 0 015.955-.004"
-							stroke="currentColor"
+							stroke="#B7ACE8"
 							stroke-linecap="square"
 							stroke-linejoin="round"
 						></path></svg
@@ -520,7 +516,7 @@
 				</button>
 
 				<button
-					class="text-sm font-mono uppercase px-6 py-4 mt-6"
+					class="text-sm font-mono uppercase px-6 py-4 mt-4 underline"
 					on:click={() => onRegister("signin")}
 					in:fade={{ delay: 500, duration: 250 }}
 					out:fade={{ duration: 250 }}>Sign In</button
@@ -528,9 +524,9 @@
 			</div>
 		{/if}
 
-		{#if step === 6}
+		{#if step === 5}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
+				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -539,17 +535,15 @@
 				}}
 			>
 				<h1
-					class=""
+					class="mb-8"
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					And just like that you’re in!
+					You’re in!
 				</h1>
 
-				<br />
-
 				<p
-					class="text-xl"
+					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
@@ -560,23 +554,9 @@
 			</div>
 		{/if}
 
-		{#if step === 7}
-			<h1
-				class="absolute w-full top-0 -translate-y-1/2"
-				transition:scale={{
-					duration: 500,
-					delay: 0,
-					opacity: 0,
-					start: 1.5,
-				}}
-			>
-				It took humans awhile to get here, but we did, <br /> you did. Incredible.
-			</h1>
-		{/if}
-
-		{#if step === 8}
+		{#if step === 6}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
+				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -589,45 +569,32 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					This is your new passkey powered blockchain account.
+					This is your new passkey powered blockchain account
 				</h1>
 				<br />
 				<pre
-					class="relative flex items-center justify-between border-b-2 border-yellow-500 bg-yellow-500/10 py-2 px-4 select-text"
+					class="relative flex items-center justify-center p-4 select-text bg-black text-[#B7ACE8] rounded mb-6"
 					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}>
-					<code class="font-mono text-base"
+					<code class="font-mono text-sm"
 						>{deployee?.substring(0, 28)}<br />{deployee?.substring(
 							28,
 						)}</code
 					>
-
-					<!-- Remove for now due to latency with block explorers indexing futurenet data -->
-					<!-- <a class="flex absolute inset-0" href="https://futurenet.steexp.com/contract/{deployee}">
-						<svg
-							class="absolute right-4 top-1/2 -translate-y-1/2 -rotate-45 origin-center"
-							viewBox="0 0 15 15"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							width="25"
-							height="25"><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1" stroke="currentColor"></path></svg
-						>
-					</a> -->
 				</pre>
-				<br />
 				<p
-					class="text-xl"
+					class="font-[Inter] font-medium text-lg normal-case"
 					in:fade={{ delay: 300, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					You can sign whatever you want with it. And only you can.
+					You (and only you) can sign whatever you want with it.
 				</p>
 			</div>
 		{/if}
 
-		{#if step === 9}
+		{#if step === 7}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
+				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -636,27 +603,27 @@
 				}}
 			>
 				<p
-					class="text-xl"
+					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Let’s demonstrate our cryptographic super powers by settling
-					once and for all an age old question...
+					Let’s demonstrate our cryptographic superpowers by settling
+					a local issue...
 				</p>
 				<br />
 				<h1
 					class=""
-					in:fade={{ delay: 1000, duration: 250 }}
+					in:fade={{ delay: 500, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Which came first <br /> the chicken 🐔 <br /> or the egg 🥚?
+					Belgian chocolate 🍫 or Belgian waffles 🧇?
 				</h1>
 			</div>
 		{/if}
 
-		{#if step === 10}
+		{#if step === 8}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
+				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -665,21 +632,21 @@
 				}}
 			>
 				<h1
-					class=""
+					class="mb-8"
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					Make your choice
 				</h1>
-				<br />
 				<p
-					class="text-xl"
+					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					Then cryptographically sign it with your passkey powered
 					blockchain account to securely record your vote for eternal,
-					immutable assurance alongside all other participants.
+					immutable occurrence alongside all other SheFi Summit
+					attendees.
 				</p>
 				<br />
 				<div
@@ -688,32 +655,32 @@
 					out:fade={{ duration: 250 }}
 				>
 					<button
-						class="border-2 border-yellow-500 rounded-full p-3 text-[3rem] {choice ===
+						class="border-2 border-black rounded-full p-3 text-[3rem] {choice ===
 						'chicken'
-							? 'bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800'
+							? 'bg-black'
 							: null}"
 						on:click={() =>
 							choice === "chicken"
 								? (choice = null)
-								: (choice = "chicken")}>🐔</button
+								: (choice = "chicken")}>🍫</button
 					>
 					<button
-						class="border-2 border-yellow-500 rounded-full p-3 text-[3rem] {choice ===
+						class="border-2 border-black rounded-full p-3 text-[3rem] {choice ===
 						'egg'
-							? 'bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800'
+							? 'bg-black'
 							: null}"
 						on:click={() =>
 							choice === "egg"
 								? (choice = null)
-								: (choice = "egg")}>🥚</button
+								: (choice = "egg")}>🧇</button
 					>
 				</div>
 			</div>
 		{/if}
 
-		{#if step === 11}
+		{#if step === 9}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
+				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -722,27 +689,25 @@
 				}}
 			>
 				<h1
-					class=""
+					class="mb-8"
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					An eggcellent choice
+					Stellar choice!
 				</h1>
-				<br />
 				<p
-					class="text-xl"
+					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					Now press once more to secure your precious opinion for all
-					time for all people everywhere to settle this debate. No
-					middle men, no trust, no 3rd party services. Just your
-					biometrics put to work by the power of math to solve
-					humanity's most difficult challenges.
+					time. No middle (wo)men, no trust, no 3rd party services.
+					Just your biometrics put to work by the power of math to
+					answer humanity’s most difficult questions.
 				</p>
 				<br />
 				<button
-					class="relative w-full flex items-center justify-between border-2 border-yellow-500 rounded-lg p-2 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
+					class="relative w-full flex items-center justify-between rounded-xl p-2 bg-black text-white active:top-[2px]"
 					in:fade={{ delay: 500, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					on:click={onSign}
@@ -755,7 +720,7 @@
 						height="30"
 						><path
 							d="M4 6h1V5H4v1zm6 0h1V5h-1v1zm.1 2.7a3.25 3.25 0 01-5.2 0l-.8.6c1.7 2.267 5.1 2.267 6.8 0l-.8-.6zM1 5V2.5H0V5h1zm1.5-4H5V0H2.5v1zM1 2.5A1.5 1.5 0 012.5 1V0A2.5 2.5 0 000 2.5h1zM0 10v2.5h1V10H0zm2.5 5H5v-1H2.5v1zM0 12.5A2.5 2.5 0 002.5 15v-1A1.5 1.5 0 011 12.5H0zM10 1h2.5V0H10v1zm4 1.5V5h1V2.5h-1zM12.5 1A1.5 1.5 0 0114 2.5h1A2.5 2.5 0 0012.5 0v1zM10 15h2.5v-1H10v1zm5-2.5V10h-1v2.5h1zM12.5 15a2.5 2.5 0 002.5-2.5h-1a1.5 1.5 0 01-1.5 1.5v1z"
-							fill="currentColor"
+							fill="#B7ACE8"
 						></path></svg
 					>
 					<div
@@ -769,7 +734,7 @@
 								height="30"
 								viewBox="0 0 24 24"
 								><path
-									class="fill-yellow-500"
+									class="fill-white"
 									d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z"
 									><animateTransform
 										attributeName="transform"
@@ -785,7 +750,7 @@
 								class="absolute inset-0 flex items-center justify-center mx-4 font-mono uppercase text-lg"
 								transition:blur={{ amount: 10 }}
 								>Sign for <span class="text-3xl ml-2"
-									>{choice === "chicken" ? "🐔" : "🥚"}</span
+									>{choice === "chicken" ? "🍫" : "🧇"}</span
 								></span
 							>
 						{/if}
@@ -799,7 +764,7 @@
 						height="30"
 						><path
 							d="M12.587 3.513a6.03 6.03 0 01.818 3.745v.75c0 .788.205 1.563.595 2.247M4.483 6.508c0-.795.313-1.557.871-2.119a2.963 2.963 0 012.103-.877c.789 0 1.545.315 2.103.877.558.562.871 1.324.871 2.12v.748c0 1.621.522 3.198 1.487 4.495m-4.46-5.244v1.498A10.542 10.542 0 009.315 14M4.483 9.505A13.559 13.559 0 005.821 14m-3.643-1.498a16.63 16.63 0 01-.669-5.244V6.51a6.028 6.028 0 01.79-3.002 5.97 5.97 0 012.177-2.2 5.914 5.914 0 015.955-.004"
-							stroke="currentColor"
+							stroke="#B7ACE8"
 							stroke-linecap="square"
 							stroke-linejoin="round"
 						></path></svg
@@ -808,7 +773,7 @@
 			</div>
 		{/if}
 
-		{#if step === 12}
+		{#if step === 10}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
@@ -823,22 +788,34 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Incredible!
+					Sweet! Thanks for pudding 🍮 your trust in the Stellar
+					chain.
 				</h1>
+
 				<br />
-				<div
-					class="flex items-center justify-between text-lg mb-2"
+
+				<p
+					class="font-[Inter] font-medium text-lg normal-case"
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					<p>Chicken</p>
-					<p>Egg</p>
-				</div>
+					Incredible!
+				</p>
+
 				<div
-					class="w-full flex items-center justify-stetch h-10"
+					class="flex items-center justify-between mb-1 font-[Inter] text-sm normal-case"
+					in:fade={{ delay: 200, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					<p>Chocolate</p>
+					<p>Waffles</p>
+				</div>
+
+				<div
+					class="w-full flex items-center justify-stetch h-5"
 					in:slide={{
 						duration: 250,
-						delay: 200,
+						delay: 300,
 						axis: "x",
 					}}
 					out:slide={{
@@ -847,41 +824,28 @@
 						axis: "x",
 					}}
 				>
-					<div class="w-full flex justify-end bg-yellow-500/10 h-10">
-						<div
-							class="bg-yellow-500 h-10"
-							style="width: {votes?.all_votes
-								.chicken_percent_no_source}%"
-						></div>
-						<div
-							class="bg-teal-500 h-10 {votes?.source_votes.chicken
-								? 'min-w-1'
-								: null}"
-							style="width: {votes?.source_votes
-								.chicken_percent}%"
-						></div>
-					</div>
-					<hr class="h-10 border border-violet-800" />
-					<hr class="h-16 border border-yellow-500" />
 					<div
-						class="w-full flex justify-start bg-yellow-500/10 h-10"
+						class="w-full flex justify-end bg-black h-5 rounded-l-full"
 					>
 						<div
-							class="bg-teal-500 h-10 {votes?.source_votes.egg
-								? 'min-w-1'
-								: null}"
-							style="width: {votes?.source_votes.egg_percent}%"
+							class="bg-[#B7ACE8] h-5"
+							style="width: {votes?.all_votes.chicken_percent}%"
 						></div>
+					</div>
+					<hr class="h-10 border border-black" />
+					<div
+						class="w-full flex justify-start bg-black h-5 rounded-r-full"
+					>
 						<div
-							class="bg-yellow-500"
-							style="width: {votes?.all_votes
-								.egg_percent_no_source}%"
+							class="bg-[#B7ACE8] h-5"
+							style="width: {votes?.all_votes.egg_percent}%"
 						></div>
 					</div>
 				</div>
+
 				<div
 					class="flex items-center justify-between text-lg mt-2"
-					in:fade={{ delay: 300, duration: 250 }}
+					in:fade={{ delay: 400, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					<span class="text-xs font-mono"
@@ -895,23 +859,12 @@
 						)}%]</span
 					>
 				</div>
-				<br />
-				<div
-					class="flex items-center mt-auto"
-					in:fade={{ delay: 400, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					<span class="w-2 h-2 bg-teal-500 mr-2"></span>
-					<p class="font-mono text-xs text-teal-500">
-						Your vote{votes.total_source_votes > 1 ? "s" : ""}
-					</p>
-				</div>
 			</div>
 		{/if}
 
-		{#if step === 13}
+		{#if step === 11}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
+				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -924,71 +877,16 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					The future is secure.
-				</h1>
-				<h1
-					class=""
-					in:fade={{ delay: 750, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					But it is also simple.
-				</h1>
-				<br />
-				<h1
-					in:fade={{ delay: 2000, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Yippee!
-				</h1>
-				<!-- <h1
-					class=""
-					in:fade={{ delay: 2000, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Yay people and their brains.
-				</h1>
-				<h1
-					class=""
-					in:fade={{ delay: 3250, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Yay God in heaven,
-				</h1>
-				<h1
-					class=""
-					in:fade={{ delay: 4250, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					who made us this way.
-				</h1> -->
-			</div>
-		{/if}
-
-		{#if step === 14}
-			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3 text-left"
-				transition:scale={{
-					duration: 500,
-					delay: 0,
-					opacity: 0,
-					start: 1.5,
-				}}
-			>
-				<h1
-					class=""
-					in:fade={{ delay: 0, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					SoroPass
+					SheFi <span class="normal-case">x</span> Stellar
 				</h1>
 				<br />
 				<p
-					class="text-xl"
+					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					Learn more about the Stellar blockchain which powers this
-					experience: <a
+					experience: <br> <a
 						class="underline"
 						href="https://stellar.org/soroban"
 						>stellar.org/soroban</a
@@ -996,23 +894,11 @@
 				</p>
 				<br />
 				<p
-					class="text-xl"
-					in:fade={{ delay: 200, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Read the code here: <a
-						class="underline"
-						href="https://github.com/kalepail/soroban-passkey"
-						>github.com/kalepail/soroban-passkey</a
-					>
-				</p>
-				<br />
-				<p
-					class="text-xl"
+					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 300, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Join our Discord: <a
+					Join our Discord: <br> <a
 						class="underline"
 						href="https://discord.com/invite/stellardev"
 						>discord.com/stellardev</a
@@ -1020,22 +906,31 @@
 				</p>
 				<br />
 				<button
-					class="relative flex items-center justify-center border-2 border-yellow-500 rounded-full px-6 py-3 bg-yellow-500/10 ring-2 ring-yellow-500/50 ring-offset-4 ring-offset-violet-800 shadow-2xl shadow-yellow-500/50 active:shadow-yellow-500/30 active:top-[2px]"
+					class="relative flex items-center justify-center rounded-full p-1 bg-black text-white active:top-[2px] mx-auto"
 					in:fade={{ delay: 400, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					on:click={share}
 				>
-					<span class="font-mono uppercase text-base"
-						>Share with your friends</span
+					<span class="font-mono uppercase text-base px-4"
+						>Tell The World!</span
+					>
+					<svg
+						class="stroke-black bg-[#B7ACE8] rounded-full p-2"
+						viewBox="0 0 15 15"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						width="45"
+						height="45"
+						><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
 					>
 				</button>
 				<br />
 				<p
-					class="text-xl"
+					class="font-[Inter] font-medium text-lg normal-case italic"
 					in:fade={{ delay: 500, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					{choice === "chicken" ? "Chicken 🐔" : "Egg 🥚"} people unite!
+					Financial Freedom is Feminine.
 				</p>
 			</div>
 		{/if}
@@ -1071,15 +966,15 @@
 				>
 			</button>
 			<span class="shrink-0 mx-3 tabular-nums font-mono text-xs"
-				>{step} of 14</span
+				>{step} of 11</span
 			>
-			{#if step >= 14}
+			{#if step >= 11}
 				<button
 					class="w-full flex items-center justify-start relative active:top-[2px]"
 					on:click={resetAll}
 				>
 					<svg
-						class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+						class="stroke-[#BFCBD7] bg-black rounded-full p-2"
 						viewBox="0 0 15 15"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -1093,16 +988,16 @@
 			{:else}
 				<button
 					class="w-full flex items-center justify-start relative {(step ===
-						5 &&
+						4 &&
 						!deployee) ||
-					(step === 10 && !choice && !votes?.total_source_votes) ||
-					(step === 11 && !votes?.total_source_votes)
+					(step === 8 && !choice && !votes?.total_source_votes) ||
+					(step === 9 && !votes?.total_source_votes)
 						? 'invisible pointer-events-none'
 						: null} active:left-[2px]"
 					on:click={() => step++}
 				>
 					<svg
-						class="stroke-violet-800 bg-yellow-500 rounded-full p-2"
+						class="stroke-[#BFCBD7] bg-black rounded-full p-2"
 						viewBox="0 0 15 15"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"

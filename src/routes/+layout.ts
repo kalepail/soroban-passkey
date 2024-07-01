@@ -14,12 +14,12 @@ import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 
         if (Capacitor.isPluginAvailable("NavigationBar")) {
             await NavigationBar.setTransparency({ isTransparent: true })
-            await NavigationBar.setColor({ color: "#5b21b6", darkButtons: false })
+            await NavigationBar.setColor({ color: "#BFCBD7", darkButtons: false })
         }
 
         if (Capacitor.isPluginAvailable("StatusBar")) {
             await StatusBar.setOverlaysWebView({ overlay: true })
-            await StatusBar.setBackgroundColor({ color: "#5b21b6" })
+            await StatusBar.setBackgroundColor({ color: "#BFCBD7" })
             await StatusBar.setStyle({ style: Style.Dark })
         }
     } catch { }
