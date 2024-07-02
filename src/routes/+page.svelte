@@ -92,7 +92,7 @@
 				const signRes = await WebAuthn.startAuthentication({
 					challenge: base64url("createchallenge"),
 					rpId: Capacitor.isNativePlatform()
-						? "passkey.sorobanbyexample.org"
+						? "stellarxshefi.stellar.org"
 						: undefined,
 					userVerification: "discouraged",
 				});
@@ -107,7 +107,7 @@
 					challenge: base64url("createchallenge"),
 					rp: {
 						id: Capacitor.isNativePlatform()
-							? "passkey.sorobanbyexample.org"
+							? "stellarxshefi.stellar.org"
 							: undefined,
 						name: "SoroPass",
 					},
@@ -163,7 +163,7 @@
 			const signRes = await WebAuthn.startAuthentication({
 				challenge: base64url(authHash),
 				rpId: Capacitor.isNativePlatform()
-					? "passkey.sorobanbyexample.org"
+					? "stellarxshefi.stellar.org"
 					: undefined,
 				allowCredentials: localStorage.hasOwnProperty("sp:id")
 					? [
@@ -239,13 +239,13 @@
 		if (value) {
 			await Share.share({
 				title: "Share SheFi x Stellar",
-				text: "Check out this blockchain experience powered by your face or fingers!",
-				url: "https://passkey.sorobanbyexample.org/",
+				text: "Just completed the Stellar passkey activation at the #SheFiSummit! Here's to advancing blockchain and empowering women in Web3. 💫 💪 @stellarorg @shefiorg",
+				url: "https://stellarxshefi.stellar.org/",
 				dialogTitle: `${choice === "chicken"} ? 'Chocolate 🍫' : 'Waffle 🧇'} people unite!`,
 			});
 		} else {
 			window.open(
-				`https://twitter.com/intent/tweet?text=${encodeURIComponent("Check out this blockchain experience powered by your face or fingers!")}&url=${encodeURIComponent("https://passkey.sorobanbyexample.org/")}`,
+				`https://twitter.com/intent/tweet?text=${encodeURIComponent("Just completed the Stellar passkey activation at the #SheFiSummit! Here's to advancing blockchain and empowering women in Web3. 💫 💪 @stellarorg @shefiorg")}&url=${encodeURIComponent("https://stellarxshefi.stellar.org/")}`,
 			);
 		}
 	}
