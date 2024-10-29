@@ -1,10 +1,10 @@
 # export SOROBAN_RPC_URL=http://67.205.175.159:8000/soroban/rpc
 # export SOROBAN_NETWORK_PASSPHRASE=Standalone Network ; February 2017
-export SOROBAN_RPC_URL=https://rpc-futurenet.stellar.org
-export SOROBAN_NETWORK_PASSPHRASE=Test SDF Future Network ; October 2022
+export SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
+export SOROBAN_NETWORK_PASSPHRASE=Test SDF Network ; September 2015
 export SOROBAN_ACCOUNT=default
-export WEBAUTHN_FACTORY=CCZWIOWKT4WGJQHWZFF7ARCQJFVWRXPOKG4WGY6DOZ72OHZEMKXAEGRO
-export WEBAUTHN_WASM=23d8e1fbdb0bb903815feb7d07b675db98b5376feedab056aab61910d41e80c1
+export WEBAUTHN_FACTORY=CD5QFGMCJ7CAL77GPTJ5MYABV6N3T4D7677S27ZOMC5B76BK4OBHJKKQ
+export WEBAUTHN_WASM=142dce5bf1e46bb925ea72a3b09d58419307a53a2acc347338cb82713ccf5c47
 
 build:
 	@cd contract-chicken-v-egg && soroban contract build --out-dir ../out

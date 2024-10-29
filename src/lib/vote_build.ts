@@ -1,13 +1,11 @@
 
 import { PUBLIC_rpcUrl, PUBLIC_networkPassphrase, PUBLIC_chickenVsEggContractId } from "$env/static/public";
-import { Account, Address, Keypair, Operation, SorobanRpc, TransactionBuilder, hash, xdr } from "@stellar/stellar-sdk";
+import { Account, Address, Operation, SorobanRpc, StrKey, TransactionBuilder, xdr } from "@stellar/stellar-sdk/minimal";
 
-export async function handleVoteBuild(bundlerKey: Keypair, accountContractId: string, vote: boolean) {
+export async function handleVoteBuild(accountContractId: string, vote: boolean) {
     const rpc = new SorobanRpc.Server(PUBLIC_rpcUrl);
-    const lastLedger = await rpc.getLatestLedger().then(({ sequence }) => sequence)
-    const bundlerKeyAccount = await rpc.getAccount(bundlerKey.publicKey()).then((res) => new Account(res.accountId(), res.sequenceNumber()))
-
-    const simTxn = new TransactionBuilder(bundlerKeyAccount, {
+    const source = new Account(StrKey.encodeEd25519PublicKey(Buffer.alloc(32)), '0');
+    const simTxn = new TransactionBuilder(source, {
         fee: '0',
         networkPassphrase: PUBLIC_networkPassphrase
     })
@@ -15,7 +13,7 @@ export async function handleVoteBuild(bundlerKey: Keypair, accountContractId: st
             contract: PUBLIC_chickenVsEggContractId,
             function: 'vote',
             args: [
-                Address.fromString(accountContractId).toScVal(), 
+                Address.fromString(accountContractId).toScVal(),
                 xdr.ScVal.scvBool(vote)
             ]
         }))
@@ -29,22 +27,5 @@ export async function handleVoteBuild(bundlerKey: Keypair, accountContractId: st
         || SorobanRpc.Api.isSimulationRestore(sim)
     ) throw sim
 
-    const authTxn = SorobanRpc.assembleTransaction(simTxn, sim).build()
-    const auth = sim.result?.auth[0]!
-    const authHash = hash(
-        xdr.HashIdPreimage.envelopeTypeSorobanAuthorization(
-            new xdr.HashIdPreimageSorobanAuthorization({
-                networkId: hash(Buffer.from(PUBLIC_networkPassphrase, 'utf-8')),
-                nonce: auth.credentials().address().nonce(),
-                signatureExpirationLedger: lastLedger + 100,
-                invocation: auth.rootInvocation()
-            })
-        ).toXDR()
-    )
-
-    return {
-        authTxn,
-        authHash,
-        lastLedger
-    }
+    return SorobanRpc.assembleTransaction(simTxn, sim).build()
 }

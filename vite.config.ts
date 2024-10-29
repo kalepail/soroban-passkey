@@ -4,9 +4,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
 	server: {
-		fs: {
-			allow: ["./ext/capacitor-native-webauthn"]
-		}
+		
 	},
 	plugins: [
 		nodePolyfills({include: ['buffer', 'stream', 'util']}), 

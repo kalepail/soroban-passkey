@@ -5,17 +5,16 @@ authors = ["Stellar Development Foundation <info@stellar.org>"]
 license = "Apache-2.0"
 edition = "2021"
 publish = false
-rust-version = "1.72"
 
 [lib]
 crate-type = ["cdylib"]
 doctest = false
 
 [dependencies]
-soroban-sdk = {version = "21.0.1-preview.1"}
+soroban-sdk = {version = "21.7.6"}
 
 [dev-dependencies]
-soroban-sdk = {version = "21.0.1-preview.1", features = ["testutils"]}
+soroban-sdk = {version = "21.7.6", features = ["testutils"]}
 
 [profile.release]
 opt-level = "z"
@@ -26,7 +25,3 @@ debug-assertions = false
 panic = "abort"
 codegen-units = 1
 lto = true
-
-[profile.release-with-logs]
-inherits = "release"
-debug-assertions = true

@@ -1,23 +1,24 @@
 <script lang="ts">
-	import { WebAuthn } from "@darkedges/capacitor-native-webauthn";
-	import base64url from "base64url";
-	import { Capacitor } from "@capacitor/core";
-	import { PUBLIC_horizonUrl } from "$env/static/public";
-	import { Horizon, Keypair } from "@stellar/stellar-sdk";
+	import { PUBLIC_rpcUrl, PUBLIC_networkPassphrase, PUBLIC_factoryContractId, PUBLIC_apiUrl, PUBLIC_LAUNCHTUBE_URL, PUBLIC_LAUNCHTUBE_JWT } from "$env/static/public";
 	import { onDestroy, onMount } from "svelte";
-	import { getPublicKeys } from "$lib/webauthn";
-	import { handleDeploy } from "$lib/deploy";
 	import { handleVoteBuild } from "$lib/vote_build";
-	import { handleVoteSend } from "$lib/vote_send";
 	import { getVotes } from "$lib/get_votes";
 	import { fade, blur, slide, scale } from "svelte/transition";
 	import { swipe, press, tap } from "svelte-gestures";
-	import { Share } from "@capacitor/share";
+	import { PasskeyServer, PasskeyKit, PasskeyClient } from 'passkey-kit';
 
-	// TODO break up this code into components so it's not so monolithic
+	const account = new PasskeyKit({
+		rpcUrl: PUBLIC_rpcUrl,
+		networkPassphrase: PUBLIC_networkPassphrase,
+		factoryContractId: PUBLIC_factoryContractId,
+	});
+
+	const server = new PasskeyServer({
+		launchtubeUrl: PUBLIC_LAUNCHTUBE_URL,
+		launchtubeJwt: PUBLIC_LAUNCHTUBE_JWT,
+	})
 
 	let deployee: any;
-	let bundlerKey: Keypair;
 	let votes = {
 		all_votes: {
 			chicken: 0,
@@ -61,20 +62,15 @@
 
 		voteinterval = setInterval(() => onVotes(), 5000);
 
-		if (localStorage.hasOwnProperty("sp:bundler")) {
-			bundlerKey = Keypair.fromSecret(
-				localStorage.getItem("sp:bundler")!,
-			);
-		} else {
-			bundlerKey = Keypair.random();
-			localStorage.setItem("sp:bundler", bundlerKey.secret());
-
-			const horizon = new Horizon.Server(PUBLIC_horizonUrl);
-			await horizon.friendbot(bundlerKey.publicKey()).call();
-		}
-
 		if (localStorage.hasOwnProperty("sp:deployee")) {
 			deployee = localStorage.getItem("sp:deployee");
+
+			account.wallet = new PasskeyClient({
+				contractId: deployee,
+				rpcUrl: PUBLIC_rpcUrl,
+				networkPassphrase: PUBLIC_networkPassphrase,
+			});
+
 			await onVotes();
 		}
 	});
@@ -89,54 +85,19 @@
 			loadingRegister = true;
 
 			if (type === "signin") {
-				const signRes = await WebAuthn.startAuthentication({
-					challenge: base64url("createchallenge"),
-					rpId: Capacitor.isNativePlatform()
-						? "stellarxshefi.stellar.org"
-						: undefined,
-					userVerification: "discouraged",
-				});
+				const { keyId_base64, contractId } = await account.connectWallet();
 
-				localStorage.setItem("sp:id", signRes.id);
+				localStorage.setItem("sp:id", keyId_base64);
 
-				// as-is signin cannot retrieve a public-key so we can only derive the contract address we cannot actually deploy the abstract account
-				const { contractSalt } = await getPublicKeys(signRes);
-				deployee = await handleDeploy(bundlerKey, contractSalt);
+				deployee = contractId;
 			} else {
-				const registerRes = await WebAuthn.startRegistration({
-					challenge: base64url("createchallenge"),
-					rp: {
-						id: Capacitor.isNativePlatform()
-							? "stellarxshefi.stellar.org"
-							: undefined,
-						name: "SoroPass",
-					},
-					user: {
-						id: base64url("Soroban Test"),
-						name: "Soroban Test",
-						displayName: "Soroban Test",
-					},
-					authenticatorSelection: {
-						requireResidentKey: false,
-						residentKey:
-							Capacitor.getPlatform() === "android"
-								? "preferred" // `discouraged` bugs with error [34000] on Android
-								: "discouraged",
-						userVerification: "discouraged",
-					},
-					pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-					attestation: "none",
-				});
+				const { keyId_base64, contractId, built } = await account.createWallet('Soroban Test', 'Soroban Test');
 
-				localStorage.setItem("sp:id", registerRes.id);
+				await server.send(built);
 
-				const { contractSalt, publicKey } =
-					await getPublicKeys(registerRes);
-				deployee = await handleDeploy(
-					bundlerKey,
-					contractSalt,
-					publicKey!,
-				);
+				localStorage.setItem("sp:id", keyId_base64);
+
+				deployee = contractId;
 			}
 
 			console.log(deployee);
@@ -154,29 +115,29 @@
 		try {
 			loadingSign = true;
 
-			let { authTxn, authHash, lastLedger } = await handleVoteBuild(
-				bundlerKey,
+			let authTxn = await handleVoteBuild(
 				deployee,
 				choice === "chicken",
 			);
 
-			const signRes = await WebAuthn.startAuthentication({
-				challenge: base64url(authHash),
-				rpId: Capacitor.isNativePlatform()
-					? "stellarxshefi.stellar.org"
-					: undefined,
-				allowCredentials: localStorage.hasOwnProperty("sp:id")
-					? [
-							{
-								id: localStorage.getItem("sp:id")!,
-								type: "public-key",
-							},
-						]
-					: undefined,
-				userVerification: "discouraged",
-			});
+			const at = await account.sign(authTxn, localStorage.hasOwnProperty("sp:id") ? { keyId: localStorage.getItem("sp:id")! } : undefined);
 
-			await handleVoteSend(bundlerKey, authTxn, lastLedger, signRes);
+			// await fetch(`${PUBLIC_apiUrl}/send`, {
+			// 	method: "POST",
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 	},
+			// 	body: JSON.stringify({
+			// 		xdr: built?.toXDR()
+			// 	}),
+			// })
+			// .then(async (res) => {
+			// 	if (res.ok)
+			// 		return res.json()
+			// 	else
+			// 		throw await res.json()
+			// })
+			await server.send(at);
 			await onVotes();
 			step++;
 		} catch (error) {
@@ -188,8 +149,8 @@
 	};
 
 	const onVotes = async () => {
-		if (bundlerKey && deployee) {
-			votes = await getVotes(bundlerKey, deployee);
+		if (deployee) {
+			votes = await getVotes(deployee);
 			console.log(votes);
 		}
 	};
@@ -233,21 +194,8 @@
 			step++;
 	}
 
-	async function share() {
-		const { value } = await Share.canShare();
-
-		if (value) {
-			await Share.share({
-				title: "Share SheFi x Stellar",
-				text: "Just completed the Stellar passkey activation at the #SheFiSummit! Here's to advancing blockchain and empowering women in Web3. 💫 💪 @stellarorg @shefiorg",
-				url: "https://stellarxshefi.stellar.org/",
-				dialogTitle: `${choice === "chicken"} ? 'Chocolate 🍫' : 'Waffle 🧇'} people unite!`,
-			});
-		} else {
-			window.open(
-				`https://twitter.com/intent/tweet?text=${encodeURIComponent("Just completed the Stellar passkey activation at the #SheFiSummit! Here's to advancing blockchain and empowering women in Web3. 💫 💪 @stellarorg @shefiorg")}&url=${encodeURIComponent("https://stellarxshefi.stellar.org/")}`,
-			);
-		}
+	function share() {
+		return `https://twitter.com/intent/tweet?text=${encodeURIComponent("Just completed the Stellar passkey activation at the #SheFiSummit! Here's to advancing blockchain and empowering women in Web3. 💫 💪 @stellarorg @shefiorg")}&url=${encodeURIComponent("https://stellarxshefi.stellar.org/")}`
 	}
 
 	function resetAll() {
@@ -260,9 +208,7 @@
 
 <div
 	id="soropass"
-	class="relative w-full flex flex-col items-center justify-center h-dvh px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:100%_100%] bg-[#BFCBD7] {!Capacitor.isNativePlatform()
-		? 'max-h-[800px] max-w-[500px] py-2'
-		: null} {loadingRegister || loadingSign ? 'pointer-events-none' : null}"
+	class="relative w-full flex flex-col items-center justify-center h-dvh px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:100%_100%] bg-[#BFCBD7] max-h-[800px] max-w-[500px] py-2 {loadingRegister || loadingSign ? 'pointer-events-none' : null}"
 	use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: "pan-y" }}
 	use:tap={{ timeframe: 300 }}
 	on:swipe={swipeHandler}
@@ -905,11 +851,13 @@
 					>
 				</p>
 				<br />
-				<button
+				<a
 					class="relative flex items-center justify-center rounded-full p-1 bg-black text-white active:top-[2px] mx-auto"
 					in:fade={{ delay: 400, duration: 250 }}
 					out:fade={{ duration: 250 }}
-					on:click={share}
+					href={share()}
+					target="_blank"
+					rel="noopener noreferrer"
 				>
 					<span class="font-mono uppercase text-base px-4"
 						>Tell The World!</span
@@ -923,7 +871,7 @@
 						height="45"
 						><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
 					>
-				</button>
+				</a>
 				<br />
 				<p
 					class="font-[Inter] font-medium text-lg normal-case italic"

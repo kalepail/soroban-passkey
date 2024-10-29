@@ -2,7 +2,6 @@
     import "../app.css";
     import { onDestroy, onMount } from "svelte";
     import { SafeArea, type SafeAreaInsets } from "capacitor-plugin-safe-area";
-    import { Capacitor } from "@capacitor/core";
 
     onDestroy(() => SafeArea.removeAllListeners());
 
@@ -25,9 +24,7 @@
 </script>
 
 <div
-    class="p-safe flex flex-col items-center justify-center h-dvh text-black {Capacitor.isNativePlatform()
-        ? 'bg-[#BFCBD7]'
-        : 'bg-white'}"
+    class="p-safe flex flex-col items-center justify-center h-dvh text-black bg-white"
 >
     <slot />
 </div>
