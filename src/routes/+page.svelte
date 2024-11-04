@@ -128,8 +128,8 @@
 
 			account.wallet = new PasskeyClient({
 				contractId: deployee,
-				rpcUrl: import.meta.env.VITE_rpcUrl,
-				networkPassphrase: import.meta.env.VITE_networkPassphrase,
+				rpcUrl: PUBLIC_rpcUrl,
+				networkPassphrase: PUBLIC_networkPassphrase,
 			});
 
 			console.log(deployee);
