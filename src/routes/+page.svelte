@@ -435,10 +435,11 @@
 				<br />
 
 				<button
-					class="relative inline-flex items-center rounded-xl p-2 bg-[#ffda00] text-black active:top-[2px]"
+					class="relative inline-flex items-center rounded-xl p-2 bg-[#ffda00] text-black active:top-[2px] disabled:bg-[#FFF6BF]"
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					on:click={() => onRegister()}
+					disabled={!code}
 				>
 					<svg
 						viewBox="0 0 15 15"
@@ -509,13 +510,6 @@
 						></path></svg
 					>
 				</button>
-
-				<!-- <button
-					class="text-sm font-mono uppercase px-6 py-4 mt-4 underline"
-					on:click={() => onRegister("signin")}
-					in:fade={{ delay: 500, duration: 250 }}
-					out:fade={{ duration: 250 }}>Sign In</button
-				> -->
 			</div>
 		{/if}
 
