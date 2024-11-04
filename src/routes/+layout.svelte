@@ -24,7 +24,7 @@
 </script>
 
 <div
-    class="p-safe flex flex-col items-center justify-center h-dvh text-black bg-white"
+    class="p-safe flex flex-col items-center justify-center h-dvh text-white bg-white"
 >
     <slot />
 </div>
