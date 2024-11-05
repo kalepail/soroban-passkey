@@ -13,7 +13,7 @@
 	import { swipe, press, tap } from "svelte-gestures";
 	import { PasskeyServer, PasskeyKit, PasskeyClient } from "passkey-kit";
 	import base64url from "base64url";
-    import { page } from "$app/stores";
+	import { page } from "$app/stores";
 
 	// TODO some back stuff and resetting may not make sense given if you use the code you can't use it again
 
@@ -28,35 +28,35 @@
 		launchtubeJwt: PUBLIC_LAUNCHTUBE_JWT,
 	});
 
-	let code = $page.url.searchParams.get('code');
+	let code = $page.url.searchParams.get("code");
 	let charities: [string, string, string, boolean, number][] = [
 		[
 			"GBV5YQGDHRGHXSVKQN25ZMZY5PSAQYZIF6I4IH56M2HCORIUVWBHNTNA",
 			"Center for Reproductive Rights",
 			"The Center for Reproductive Rights uses the power of law to advance reproductive rights as fundamental human rights around the world.",
 			false,
-			0
+			0,
 		],
 		[
 			"GBKPRR5VV3MDIRD7XUB3QZIH2A3BHY7DWADBVZRJKAINAWARZ5YP5M2O",
 			"Asia Pacific Refugee Rights Network",
 			"APRRN aims to advance the rights of refugees and other people in need of protection in the Asia Pacific region.",
 			false,
-			0
+			0,
 		],
 		[
 			"GB7WAIND4YRXM23RKSVPFZ35DABAUAPZYLGSYQFEE7YB5AJC6RKS5JNB",
 			"Lebanese Red Cross Response to War on Lebanon",
 			"The LRC is on the frontlines of the response, responding to escalating attacks and emergencies. Our volunteers and staff are working tirelessly to provide urgent health and disaster response services across the country.",
 			false,
-			0
+			0,
 		],
 		[
 			"GCFLFEQDBIMCZZKCHDYKQO47EDE43EXOMAZ2VZIWEOKYYYOH4562CL3P",
 			"Hoops Sagrado",
 			"Hoops Sagrado is a Washington D.C.-based nonprofit that empowers youth through basketball, education, and community development in Washington D.C. and Guatemala.",
 			false,
-			0
+			0,
 		],
 	];
 	let vote: string | null = null;
@@ -174,7 +174,7 @@
 		if (deployee) {
 			await getVotes(deployee, charities).then((res) => {
 				vote = res.vote;
-				charities = res.charities
+				charities = res.charities;
 
 				if (vote) {
 					choice = [vote, charities.find((c) => c[0] === vote)![1]];
@@ -230,7 +230,7 @@
 	}
 
 	function getWidth(balance: number) {
-		return balance / (7_500 / 4) * 100
+		return (balance / (7_500 / 4)) * 100;
 	}
 
 	function toggleOpenCharity(index: number) {
@@ -561,14 +561,11 @@
 				</h1>
 				<br />
 				<pre
-					class="relative flex items-center justify-center p-4 select-text bg-[#262626] text-[#ffda00] rounded mb-6 border-b-2 border-[#ffda00]"
+					class="relative flex flex-wrap items-center justify-center p-4 select-text bg-[#262626] text-[#ffda00] rounded mb-6 border-b-2 border-[#ffda00]"
 					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}>
-					<code class="font-mono text-sm"
-						>{deployee?.substring(0, 28)}<br />{deployee?.substring(
-							28,
-						)}</code
-					>
+					<code class="font-mono text-sm">{deployee?.substring(0, 28)}</code>
+					<code class="font-mono text-sm">{deployee?.substring(28)}</code>
 				</pre>
 				<p
 					class="font-[Inter] font-medium text-lg normal-case"
@@ -783,12 +780,25 @@
 
 				<div class="text-left">
 					{#each charities as [address, title, desc, selected, balance], i}
-						<div class="font-[Inter] font-normal text-base normal-case mb-5">
+						<div
+							class="font-[Inter] font-normal text-base normal-case mb-5"
+						>
 							<p>{title}</p>
-							<div class="border {choice && address === choice[0] ? 'border-[#FFDA00]' : 'border-[#FFF6BF]'} rounded-full h-7 w-full my-1 relative overflow-hidden">
-								<div class="{choice && address === choice[0] ? 'bg-[#FFDA00]' : 'bg-[#FFF6BF]'} absolute top-0 left-0 bottom-0 max-w-full" style="width: {getWidth(balance)}%;"></div>
+							<div
+								class="border {choice && address === choice[0]
+									? 'border-[#FFDA00]'
+									: 'border-[#FFF6BF]'} rounded-full h-7 w-full my-1 relative overflow-hidden"
+							>
+								<div
+									class="{choice && address === choice[0]
+										? 'bg-[#FFDA00]'
+										: 'bg-[#FFF6BF]'} absolute top-0 left-0 bottom-0 max-w-full"
+									style="width: {getWidth(balance)}%;"
+								></div>
 							</div>
-							<aside class="text-sm">${(balance).toLocaleString()}</aside>
+							<aside class="text-sm">
+								${balance.toLocaleString()}
+							</aside>
 						</div>
 					{/each}
 				</div>

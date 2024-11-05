@@ -15,8 +15,13 @@ export async function getVotes(accountContractId: string, charities: [string, st
     } catch {}
 
     for (const charity of charities) {
-        const balance = await horizon.loadAccount(charity[0]).then((res) => res.balances.find((balance) => balance.asset_type === 'native')?.balance)
-        charity[4] = Number(balance) - 10_000 // TODO temp until we're using USDC
+        const balance = await horizon.loadAccount(charity[0]).then((res) => {
+            const native = res.balances.find((res) => res.asset_type === 'native')?.balance
+            const usdc = res.balances.find((res) => res.asset_type === 'credit_alphanum4' && res.asset_code === 'USDC')?.balance
+
+            return native ? Number(native) - 10_000 : Number(usdc)
+        })
+        charity[4] = balance
     }
 
     return {
