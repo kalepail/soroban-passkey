@@ -859,7 +859,7 @@
 					rel="noopener noreferrer"
 				>
 					<span class="font-mono uppercase text-base px-4"
-						>Post in on X</span
+						>Post it on X</span
 					>
 					<svg
 						class="stroke-white bg-black rounded-full p-2"
