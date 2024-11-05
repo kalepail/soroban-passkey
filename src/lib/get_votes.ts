@@ -16,10 +16,10 @@ export async function getVotes(accountContractId: string, charities: [string, st
 
     for (const charity of charities) {
         const balance = await horizon.loadAccount(charity[0]).then((res) => {
-            const native = res.balances.find((res) => res.asset_type === 'native')?.balance
-            const usdc = res.balances.find((res) => res.asset_type === 'credit_alphanum4' && res.asset_code === 'USDC')?.balance
+            const usdc = res.balances.find((res) => res.asset_type === 'credit_alphanum4' && res.asset_code === 'USDC')?.balance || null
+            const native = res.balances.find((res) => res.asset_type === 'native')?.balance || null
 
-            return native ? Number(native) - 10_000 : Number(usdc)
+            return usdc ? Number(usdc) : native ? Number(native) - 10_000 : 0
         })
         charity[4] = balance
     }

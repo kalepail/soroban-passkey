@@ -770,6 +770,8 @@
 					How easy <br /> was that!?
 				</h1>
 
+				<!-- TODO show blockchain receipt -->
+
 				<p
 					class="font-[Inter] font-light text-xl normal-case my-10"
 					in:fade={{ delay: 100, duration: 250 }}
