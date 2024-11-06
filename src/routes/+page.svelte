@@ -78,7 +78,7 @@
 	});
 
 	onMount(async () => {
-		setTimeout(() => (step = 1), 500);
+		setTimeout(() => (step = dev ? 10 : 1), 500);
 
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
@@ -790,7 +790,7 @@
 						<div
 							class="font-[Inter] font-bold text-sm normal-case mb-5 last:mb-0"
 						>
-							<p>{title}</p>
+							<p class="{choice && address === choice[0] ? 'text-[#FFDA00]' : null}">{title}</p>
 							<div
 								class="border {choice && address === choice[0]
 									? 'border-[#FFDA00]'
