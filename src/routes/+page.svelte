@@ -782,7 +782,7 @@
 				<div class="text-left">
 					{#each charities as [address, title, desc, selected, balance], i}
 						<div
-							class="font-[Inter] font-bold text-sm normal-case mb-5"
+							class="font-[Inter] font-bold text-sm normal-case mb-5 last:mb-0"
 						>
 							<p>{title}</p>
 							<div
