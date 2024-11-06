@@ -14,6 +14,7 @@
 	import { PasskeyServer, PasskeyKit, PasskeyClient } from "passkey-kit";
 	import base64url from "base64url";
 	import { page } from "$app/stores";
+	import { dev } from '$app/environment';
 
 	// TODO some back stuff and resetting may not make sense given if you use the code you can't use it again
 
@@ -77,7 +78,7 @@
 	});
 
 	onMount(async () => {
-		setTimeout(() => (step = 9), 500);
+		setTimeout(() => (step = 1), 500);
 
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
@@ -290,8 +291,8 @@
 				>
 
 				{#if deployee}
-					<span class="font-mono text-sm ml-2"
-						>{truncateAccount(deployee)}</span
+					<a class="font-mono text-sm ml-2 underline" href={`https://stellar.expert/explorer/${dev ? 'testnet' : 'public'}/contract/${deployee}`} target="_blank" rel="noopener noreferrer"
+						>{truncateAccount(deployee)}</a
 					>
 				{:else}
 					<span class="font-mono text-sm ml-2">{dots}</span>
