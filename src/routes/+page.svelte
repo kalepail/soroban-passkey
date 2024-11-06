@@ -54,7 +54,7 @@
 		[
 			"GCFLFEQDBIMCZZKCHDYKQO47EDE43EXOMAZ2VZIWEOKYYYOH4562CL3P",
 			"Hoops Sagrado",
-			"Hoops Sagrado is a Washington D.C.-based nonprofit that empowers youth through basketball, education, and community development in Washington D.C. and Guatemala.",
+			"Hoops Sagrado is a Washington D.C.-based nonprofit that empowers youth through basketball, education, and community development in D.C. and Guatemala.",
 			false,
 			0,
 		],
@@ -77,7 +77,7 @@
 	});
 
 	onMount(async () => {
-		setTimeout(() => (step = 1), 500);
+		setTimeout(() => (step = 9), 500);
 
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
@@ -254,7 +254,7 @@
 
 <div
 	id="soropass"
-	class="relative w-full flex flex-col items-center justify-center h-dvh px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:100%_100%] bg-[#000000] max-h-[800px] max-w-[500px] py-2 {loadingRegister ||
+	class="relative w-full flex flex-col items-center justify-center h-dvh min-h-[663px] max-h-[800px] px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:100%_100%] bg-[#000000] max-w-[500px] py-2 {loadingRegister ||
 	loadingSign
 		? 'pointer-events-none'
 		: null}"
@@ -561,11 +561,10 @@
 				</h1>
 				<br />
 				<pre
-					class="relative flex flex-wrap items-center justify-center p-4 select-text bg-[#262626] text-[#ffda00] rounded mb-6 border-b-2 border-[#ffda00]"
+					class="relative flex items-center justify-center p-4 select-text bg-[#262626] text-[#ffda00] rounded mb-6 border-b-2 border-[#ffda00]"
 					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}>
-					<code class="font-mono text-sm">{deployee?.substring(0, 28)}</code>
-					<code class="font-mono text-sm">{deployee?.substring(28)}</code>
+					<code class="font-mono text-sm max-w-[30ch] break-all text-balance">{deployee}</code>
 				</pre>
 				<p
 					class="font-[Inter] font-medium text-lg normal-case"
@@ -574,7 +573,7 @@
 				>
 					You (and only you) can use this wallet to make a donation to
 					a charity of your choice. We've loaded you up with $10 USDC.
-					Where you send it? That's up to you.
+					Where you send it is up to you.
 				</p>
 			</div>
 		{/if}
@@ -594,7 +593,7 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Select a charity to donate to
+					Select charity
 				</h1>
 
 				<div
@@ -606,7 +605,7 @@
 					{#each charities as [address, title, desc, selected], i}
 						<div class="border-t">
 							<p
-								class="flex justify-between items-center font-[Inter] font-bold text-base normal-case py-5"
+								class="flex justify-between items-center font-[Inter] font-bold text-base normal-case pt-3 pb-4"
 								on:click={() => toggleOpenCharity(i)}
 							>
 								{title}
@@ -617,24 +616,24 @@
 							</p>
 
 							<div
-								class="pb-5"
-								style="display: {selected ? 'block' : 'none'};"
+								class="flex-col items-start pb-5"
+								style="display: {selected ? 'flex' : 'none'};"
 							>
 								<p
-									class="font-[Inter] font-light text-base normal-case"
+									class="font-[Inter] font-light text-base normal-case mb-4"
 								>
 									{desc}
 								</p>
 								<button
-									class="relative inline-flex items-center justify-center rounded-full active:top-[2px] mx-auto"
+									class="relative inline-flex items-center justify-center rounded-full active:top-[2px]"
 									on:click={() => {
 										choice = [address, title];
 										step++;
 									}}
 								>
 									<span
-										class="font-[Inter] normal-case text-sm pr-4"
-										>Donate Here</span
+										class="font-[Inter] normal-case text-sm pr-3"
+										>Donate</span
 									>
 									<svg
 										class="stroke-black bg-[#ffda00] rounded-full p-2"
@@ -773,17 +772,17 @@
 				<!-- TODO show blockchain receipt -->
 
 				<p
-					class="font-[Inter] font-light text-xl normal-case my-10"
+					class="font-[Inter] font-light text-lg normal-case my-5"
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Check out how you’ve made a difference:
+					How you’ve made a difference:
 				</p>
 
 				<div class="text-left">
 					{#each charities as [address, title, desc, selected, balance], i}
 						<div
-							class="font-[Inter] font-normal text-base normal-case mb-5"
+							class="font-[Inter] font-bold text-sm normal-case mb-5"
 						>
 							<p>{title}</p>
 							<div
@@ -798,7 +797,7 @@
 									style="width: {getWidth(balance)}%;"
 								></div>
 							</div>
-							<aside class="text-sm">
+							<aside class="text-sm font-light">
 								${balance.toLocaleString()}
 							</aside>
 						</div>
