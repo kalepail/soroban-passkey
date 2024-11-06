@@ -602,7 +602,6 @@
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					<!-- TODO add animation -->
 					{#each charities as [address, title, desc, selected], i}
 						<div class="border-t">
 							<p
@@ -616,38 +615,44 @@
 								>
 							</p>
 
-							<div
-								class="flex-col items-start pb-5"
-								style="display: {selected ? 'flex' : 'none'};"
-							>
-								<p
-									class="font-[Inter] font-light text-base normal-case mb-4"
-								>
-									{desc}
-								</p>
-								<button
-									class="relative inline-flex items-center justify-center rounded-full active:top-[2px]"
-									on:click={() => {
-										choice = [address, title];
-										step++;
+							{#if selected}
+								<div
+									class="flex flex-col items-start pb-5"
+									transition:slide={{
+										duration: 150,
+										delay: 0,
+										axis: "y",
 									}}
 								>
-									<span
-										class="font-[Inter] normal-case text-sm pr-3"
-										>Donate</span
+									<p
+										class="font-[Inter] font-light text-base normal-case mb-4"
 									>
-									<svg
-										class="stroke-black bg-[#ffda00] rounded-full p-2"
-										viewBox="0 0 15 15"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-										width="35"
-										height="35"
-										><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"
-										></path></svg
+										{desc}
+									</p>
+									<button
+										class="relative inline-flex items-center justify-center rounded-full active:top-[2px]"
+										on:click={() => {
+											choice = [address, title];
+											step++;
+										}}
 									>
-								</button>
-							</div>
+										<span
+											class="font-[Inter] normal-case text-sm pr-3"
+											>Donate</span
+										>
+										<svg
+											class="stroke-black bg-[#ffda00] rounded-full p-2"
+											viewBox="0 0 15 15"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg"
+											width="35"
+											height="35"
+											><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"
+											></path></svg
+										>
+									</button>
+								</div>
+							{/if}
 						</div>
 					{/each}
 				</div>
