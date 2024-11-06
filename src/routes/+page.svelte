@@ -85,7 +85,7 @@
 			else dots += ".";
 		}, 500);
 
-		voteinterval = setInterval(() => onVotes(), 12000);
+		voteinterval = setInterval(() => onVotes(), 30_000);
 
 		if (localStorage.hasOwnProperty("sp:deployee")) {
 			deployee = localStorage.getItem("sp:deployee");
