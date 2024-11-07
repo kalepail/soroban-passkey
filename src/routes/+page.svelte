@@ -14,7 +14,7 @@
 	import { PasskeyServer, PasskeyKit, PasskeyClient } from "passkey-kit";
 	import base64url from "base64url";
 	import { page } from "$app/stores";
-	import { dev } from '$app/environment';
+	import { dev } from "$app/environment";
 
 	// TODO some back stuff and resetting may not make sense given if you use the code you can't use it again
 
@@ -295,8 +295,11 @@
 				>
 
 				{#if deployee}
-					<a class="font-mono text-sm ml-2 underline" href={`https://stellar.expert/explorer/${dev ? 'testnet' : 'public'}/contract/${deployee}`} target="_blank" rel="noopener noreferrer"
-						>{truncateAccount(deployee)}</a
+					<a
+						class="font-mono text-sm ml-2 underline"
+						href={`https://stellar.expert/explorer/${dev ? "testnet" : "public"}/contract/${deployee}`}
+						target="_blank"
+						rel="noopener noreferrer">{truncateAccount(deployee)}</a
 					>
 				{:else}
 					<span class="font-mono text-sm ml-2">{dots}</span>
@@ -357,7 +360,9 @@
 					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-				We're giving you $10 USDC to donate to a charity of your choice, all through the magic of a passkey wallet. Follow along to set up your wallet and do some good today!
+					We're giving you $10 USDC to donate to a charity of your
+					choice, all through the magic of a passkey wallet. Follow
+					along to set up your wallet and do some good today!
 				</p>
 			</div>
 		{/if}
@@ -569,7 +574,9 @@
 					class="relative flex items-center justify-center p-4 select-text bg-[#262626] text-[#ffda00] rounded mb-6 border-b-2 border-[#ffda00]"
 					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}>
-					<code class="font-mono text-sm max-w-[30ch] break-all text-balance">{deployee}</code>
+					<code class="font-mono text-sm max-w-[30ch] break-all text-balance"
+						>{deployee}</code
+					>
 				</pre>
 				<p
 					class="font-[Inter] font-medium text-lg normal-case"
@@ -601,12 +608,14 @@
 					Select charity
 				</h1>
 
-				<div
-					class="text-left"
-				>
+				<div class="text-left">
 					{#each charities as [address, title, desc, selected], i}
-						<div class="border-t last:border-b"
-							in:fade|global={{ delay: (i + 1) * 100, duration: 150 }}
+						<div
+							class="border-t last:border-b"
+							in:fade|global={{
+								delay: (i + 1) * 100,
+								duration: 150,
+							}}
 							out:fade|global={{ duration: 250 }}
 						>
 							<p
@@ -652,7 +661,8 @@
 											xmlns="http://www.w3.org/2000/svg"
 											width="35"
 											height="35"
-											><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"
+											><path
+												d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"
 											></path></svg
 										>
 									</button>
@@ -794,10 +804,19 @@
 					{#each charities as [address, title, _desc, _selected, balance], i}
 						<div
 							class="font-[Inter] font-bold text-sm normal-case mb-5 last:mb-0"
-							in:fade|global={{ delay: (i + 1) * 100, duration: 150 }}
+							in:fade|global={{
+								delay: (i + 1) * 100,
+								duration: 150,
+							}}
 							out:fade|global={{ duration: 250 }}
 						>
-							<p class="{choice && address === choice[0] ? 'text-[#FFDA00]' : null}">{title}</p>
+							<p
+								class={choice && address === choice[0]
+									? "text-[#FFDA00]"
+									: null}
+							>
+								{title}
+							</p>
 							<div
 								class="border {choice && address === choice[0]
 									? 'border-[#FFDA00]'
@@ -836,13 +855,15 @@
 				>
 					You did it!
 				</h1>
-				<br>
+				<br />
 				<p
 					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-				Congratulations, you’ve created a Stellar passkey wallet <br> and donated $10 USDC{ choice ? ` to ${choice[1]}` : '' }!
+					Congratulations, you’ve created a Stellar passkey wallet <br
+					/>
+					and donated $10 USDC{choice ? ` to ${choice[1]}` : ""}!
 				</p>
 				<br />
 				<a
@@ -872,8 +893,8 @@
 					in:fade={{ delay: 300, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Learn more about the Stellar blockchain <br> which powers this
-					experience:
+					Learn more about the Stellar blockchain <br /> which powers
+					this experience:
 					<a class="underline" href="https://stellar.org/soroban"
 						>stellar.org/soroban</a
 					>
