@@ -253,7 +253,7 @@
 		localStorage.removeItem("sp:id");
 		localStorage.removeItem("sp:bundler");
 		localStorage.removeItem("sp:deployee");
-		window.location.reload();
+		window.location.assign(window.location.origin);
 	}
 </script>
 
