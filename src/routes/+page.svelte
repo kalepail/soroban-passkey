@@ -79,7 +79,7 @@
 
 	onMount(async () => {
 		setTimeout(() => (step = dev ? 1 : 1), 500);
-		
+
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
 			else if (dots.length === 3) dots = "";
@@ -842,7 +842,7 @@
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-				Congratulations, you’ve created a Stellar passkey wallet <br> and donated 10 USDC{ choice ? ` to ${choice[1]}` : '' }!
+				Congratulations, you’ve created a Stellar passkey wallet <br> and donated $10 USDC{ choice ? ` to ${choice[1]}` : '' }!
 				</p>
 				<br />
 				<a
