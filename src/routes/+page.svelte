@@ -78,6 +78,8 @@
 	});
 
 	onMount(async () => {
+		charities[Math.floor(Math.random() * charities.length)][3] = true;
+
 		setTimeout(() => (step = dev ? 10 : 1), 500);
 
 		dotinterval = setInterval(() => {
@@ -99,8 +101,6 @@
 
 			await onVotes();
 		}
-
-		charities[Math.floor(Math.random() * charities.length)][3] = true;
 	});
 
 	const onRegister = async (type?: "signin") => {
@@ -197,13 +197,13 @@
 			!["div", "h1", "p"].includes(
 				event.detail.target.tagName.toLowerCase(),
 			) ||
-			event.detail.target.classList.contains("border-b") ||
-			event.detail.target.parentElement.classList.contains("border-b") ||
+			event.detail.target.classList.contains("text-left") ||
+			event.detail.target.parentElement.classList.contains("text-left") ||
 			event.detail.target.parentElement.parentElement.classList.contains(
-				"border-b",
+				"text-left",
 			) ||
 			event.detail.target.parentElement.parentElement.parentElement.classList.contains(
-				"border-b",
+				"text-left",
 			)
 		)
 			return;
@@ -349,11 +349,11 @@
 				</h1>
 
 				<p
-					class="font-[Inter] font-light text-base normal-case"
-					in:fade={{ delay: 250, duration: 250 }}
+					class="font-[Inter] font-light text-base normal-case px-5"
+					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					A passkey powered blockchain experience
+				We're giving you $10 USDC to donate to a charity of your choice, all through the magic of a passkey wallet. Follow along to set up your wallet and do some good today!
 				</p>
 			</div>
 		{/if}
@@ -378,7 +378,7 @@
 				<br />
 				<h1
 					class=""
-					in:fade={{ delay: 500, duration: 250 }}
+					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					But also <br /> entirely <br /> convenient
@@ -406,7 +406,7 @@
 				</p>
 				<br />
 				<h1
-					in:fade={{ delay: 500, duration: 250 }}
+					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					class=""
 				>
@@ -598,12 +598,13 @@
 				</h1>
 
 				<div
-					class="text-left border-b"
-					in:fade={{ delay: 250, duration: 250 }}
-					out:fade={{ duration: 250 }}
+					class="text-left"
 				>
 					{#each charities as [address, title, desc, selected], i}
-						<div class="border-t">
+						<div class="border-t last:border-b"
+							in:fade|global={{ delay: (i + 1) * 100, duration: 150 }}
+							out:fade|global={{ duration: 250 }}
+						>
 							<p
 								class="flex justify-between items-center font-[Inter] font-bold text-base normal-case pt-3 pb-4"
 								on:click={() => toggleOpenCharity(i)}
@@ -685,7 +686,7 @@
 				</p>
 				<p
 					class="font-[Inter] font-light text-base normal-case"
-					in:fade={{ delay: 300, duration: 250 }}
+					in:fade={{ delay: 200, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					Press one more time to secure your donation. All it takes is
@@ -695,7 +696,7 @@
 				<br />
 				<button
 					class="relative w-full flex items-center justify-between rounded-xl p-2 bg-[#ffda00] text-black active:top-[2px]"
-					in:fade={{ delay: 500, duration: 250 }}
+					in:fade={{ delay: 300, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					on:click={onSign}
 				>
@@ -786,9 +787,11 @@
 				</p>
 
 				<div class="text-left">
-					{#each charities as [address, title, desc, selected, balance], i}
+					{#each charities as [address, title, _desc, _selected, balance], i}
 						<div
 							class="font-[Inter] font-bold text-sm normal-case mb-5 last:mb-0"
+							in:fade|global={{ delay: (i + 1) * 100, duration: 150 }}
+							out:fade|global={{ duration: 250 }}
 						>
 							<p class="{choice && address === choice[0] ? 'text-[#FFDA00]' : null}">{title}</p>
 							<div
@@ -814,7 +817,7 @@
 
 		{#if step === 10}
 			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3"
+				class="flex flex-col absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
 					duration: 500,
 					delay: 0,
@@ -829,35 +832,18 @@
 				>
 					You did it!
 				</h1>
-				<br />
+				<br>
 				<p
 					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Learn more about the Stellar blockchain which powers this
-					experience: <br />
-					<a class="underline" href="https://stellar.org/soroban"
-						>stellar.org/soroban</a
-					>
-				</p>
-				<br />
-				<p
-					class="font-[Inter] font-light text-base normal-case"
-					in:fade={{ delay: 300, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Join our Discord: <br />
-					<a
-						class="underline"
-						href="https://discord.com/invite/stellardev"
-						>discord.com/stellardev</a
-					>
+				Congratulations, you’ve created a Stellar passkey wallet <br> and donated 10 USDC{ choice ? ` to ${choice[1]}` : '' }!
 				</p>
 				<br />
 				<a
 					class="relative inline-flex items-center justify-center rounded-full p-1 bg-[#ffda00] text-black active:top-[2px] mx-auto"
-					in:fade={{ delay: 400, duration: 250 }}
+					in:fade={{ delay: 200, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					href={share()}
 					target="_blank"
@@ -876,6 +862,31 @@
 						><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
 					>
 				</a>
+				<br />
+				<p
+					class="font-[Inter] font-light text-base normal-case"
+					in:fade={{ delay: 300, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					Learn more about the Stellar blockchain <br> which powers this
+					experience:
+					<a class="underline" href="https://stellar.org/soroban"
+						>stellar.org/soroban</a
+					>
+				</p>
+				<br />
+				<p
+					class="font-[Inter] font-light text-base normal-case"
+					in:fade={{ delay: 400, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
+					Join our Discord: <br />
+					<a
+						class="underline"
+						href="https://discord.com/invite/stellardev"
+						>discord.com/stellardev</a
+					>
+				</p>
 			</div>
 		{/if}
 	</div>
