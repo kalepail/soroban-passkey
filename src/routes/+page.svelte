@@ -78,10 +78,8 @@
 	});
 
 	onMount(async () => {
-		charities[Math.floor(Math.random() * charities.length)][3] = true;
-
-		setTimeout(() => (step = dev ? 10 : 1), 500);
-
+		setTimeout(() => (step = dev ? 1 : 1), 500);
+		
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
 			else if (dots.length === 3) dots = "";
@@ -100,6 +98,12 @@
 			});
 
 			await onVotes();
+		}
+
+		if (choice) {
+			charities.find(([address]) => address === choice![0])![3] = true;
+		} else {
+			charities[Math.floor(Math.random() * charities.length)][3] = true;
 		}
 	});
 
