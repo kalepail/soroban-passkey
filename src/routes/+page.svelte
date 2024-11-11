@@ -246,7 +246,7 @@
 	}
 
 	function share() {
-		return `https://twitter.com/intent/tweet?text=${encodeURIComponent("Just completed the Stellar passkey activation at Devcon by donating 10 $USDC to charity! Go try the passkey craze for yourself.")}&url=${encodeURIComponent("https://passkey.sorobanbyexample.org/")}`;
+		return `https://twitter.com/intent/tweet?text=${encodeURIComponent("Just completed the @BuildOnStellar passkey activation at Devcon by donating 10 $USDC to charity! Go try the passkey craze for yourself.")}&url=${encodeURIComponent("https://passkey.sorobanbyexample.org/")}`;
 	}
 
 	function resetAll() {
