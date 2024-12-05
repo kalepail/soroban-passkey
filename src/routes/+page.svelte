@@ -235,7 +235,8 @@
 	}
 
 	function getWidth(balance: number) {
-		return (balance / (7_500 / 4)) * 100;
+		// return (balance / (7_500 / 4)) * 100; // OG goal for devcon
+		return (balance / (1000 / 4)) * 100; // new goal for Lindsay's secret activation
 	}
 
 	function toggleOpenCharity(index: number) {
