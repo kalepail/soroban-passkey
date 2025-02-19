@@ -12,7 +12,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
-    "@stellar/stellar-sdk": "^13.0.0-beta.1",
+    "@stellar/stellar-sdk": "=13.0.0-beta.1",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/adapter-static": "^3.0.6",
     "@sveltejs/kit": "^2.7.3",
@@ -24,6 +24,7 @@
     "autoprefixer": "^10.4.20",
     "base64url": "^3.0.1",
     "capacitor-plugin-safe-area": "^3.0.3",
+    "passkey-kit": "=0.10.1",
     "postcss": "^8.4.47",
     "svelte": "^4.2.19",
     "svelte-check": "^3.8.6",
@@ -38,9 +39,6 @@
     "vite-plugin-node-polyfills": "^0.22.0"
   },
   "engines": {
-    "node": "20.x"
-  },
-  "dependencies": {
-    "passkey-kit": "^0.10.1"
+    "node": "22.x"
   }
 }

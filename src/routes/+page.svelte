@@ -13,7 +13,6 @@
 	import { swipe, press, tap } from "svelte-gestures";
 	import { PasskeyServer, PasskeyKit, PasskeyClient } from "passkey-kit";
 	import base64url from "base64url";
-	import { page } from "$app/stores";
 	import { dev } from "$app/environment";
 
 	// TODO some back stuff and resetting may not make sense given if you use the code you can't use it again
@@ -29,33 +28,19 @@
 		launchtubeJwt: PUBLIC_LAUNCHTUBE_JWT,
 	});
 
-	let code = $page.url.searchParams.get("code");
+	let code = 'ETHDEN';
 	let charities: [string, string, string, boolean, number][] = [
 		[
-			"GBV5YQGDHRGHXSVKQN25ZMZY5PSAQYZIF6I4IH56M2HCORIUVWBHNTNA",
-			"Center for Reproductive Rights",
-			"The Center for Reproductive Rights uses the power of law to advance reproductive rights as fundamental human rights around the world.",
+			"GAYWOX5QOJIXT2ICMWNOB7P2QRR2NM7TYR5Q7ZMXG6KXRJQS2TJV7DKX",
+			"Ntalpuk Ning Epang Faum: Ocean Preservation",
+			"Ntalpuk Ning Epang Faum is a youth group dedicated to combating water pollution, managing waste, and conserving their natural resources for the future. Coastal erosion is a growing threat and they raise awareness through educational sessions and outreach programs, mobilizing over 500 community members to take action. By conducting community surveys, they ensure their work reflects the needs and realities of the village, combining education with action to empower locals to protect their environment.",
 			false,
 			0,
 		],
 		[
-			"GBKPRR5VV3MDIRD7XUB3QZIH2A3BHY7DWADBVZRJKAINAWARZ5YP5M2O",
-			"Asia Pacific Refugee Rights Network",
-			"APRRN aims to advance the rights of refugees and other people in need of protection in the Asia Pacific region.",
-			false,
-			0,
-		],
-		[
-			"GB7WAIND4YRXM23RKSVPFZ35DABAUAPZYLGSYQFEE7YB5AJC6RKS5JNB",
-			"Lebanese Red Cross Response to War on Lebanon",
-			"The LRC is on the frontlines of the response, responding to escalating attacks and emergencies. Our volunteers and staff are working tirelessly to provide urgent health and disaster response services across the country.",
-			false,
-			0,
-		],
-		[
-			"GCFLFEQDBIMCZZKCHDYKQO47EDE43EXOMAZ2VZIWEOKYYYOH4562CL3P",
-			"Hoops Sagrado",
-			"Hoops Sagrado is a Washington D.C.-based nonprofit that empowers youth through basketball, education, and community development in D.C. and Guatemala.",
+			"GBWHUGBG276I6DTO6RTKHETCHFNHTNFE6RYVM75PO5RNC4LVIW6KS6RR",
+			"Hong Kong Shark Foundation",
+			"Hong Kong's marine ecosystems are under threat, with shark populations declining rapidly due to overfishing and habitat destruction. The Hong Kong Shark Foundation, a dedicated conservation initiative, is at the forefront of this battle. Through educational programs, community events, and advocacy campaigns in partnership with local and international organizations, they have reached thousands of people.",
 			false,
 			0,
 		],
@@ -149,6 +134,11 @@
 	};
 
 	const onSign = async () => {
+		if (vote) {
+			step++;
+			return;
+		}
+
 		try {
 			loadingSign = true;
 
@@ -181,8 +171,11 @@
 				vote = res.vote;
 				charities = res.charities;
 
+				console.log(vote, charities);
+
 				if (vote) {
 					choice = [vote, charities.find((c) => c[0] === vote)![1]];
+					console.log(choice);
 				}
 			});
 		}
@@ -225,10 +218,10 @@
 	function goRight() {
 		if (
 			!(
-				step >= 10 ||
-				(step === 4 && !deployee) ||
-				(step === 7 && !choice && !vote) ||
-				(step === 8 && !vote)
+				step >= 7 ||
+				(step === 2 && !deployee) ||
+				(step === 4 && !choice && !vote) ||
+				(step === 5 && !vote)
 			)
 		)
 			step++;
@@ -236,7 +229,8 @@
 
 	function getWidth(balance: number) {
 		// return (balance / (7_500 / 4)) * 100; // OG goal for devcon
-		return (balance / (1000 / 4)) * 100; // new goal for Lindsay's secret activation
+		// return (balance / (1000 / 4)) * 100; // new goal for Lindsay's secret activation
+		return (balance / (1000 / 2)) * 100; // (5,000 total but 1,000 projected) goal for ethden
 	}
 
 	function toggleOpenCharity(index: number) {
@@ -247,7 +241,7 @@
 	}
 
 	function share() {
-		return `https://twitter.com/intent/tweet?text=${encodeURIComponent("Just completed the @BuildOnStellar passkey activation at Devcon by donating 10 $USDC to charity! Go try the passkey craze for yourself.")}&url=${encodeURIComponent("https://passkey.sorobanbyexample.org/")}`;
+		return `https://twitter.com/intent/tweet?text=${encodeURIComponent("Just completed the @BuildOnStellar passkey activation at @EthereumDenver by donating 10 $USDC to charity! Go try the passkey craze for yourself.")}&url=${encodeURIComponent("https://passkey.sorobanbyexample.org/")}`;
 	}
 
 	function resetAll() {
@@ -260,7 +254,7 @@
 
 <div
 	id="soropass"
-	class="relative w-full flex flex-col items-center justify-center h-dvh min-h-[663px] max-h-[800px] px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:100%_100%] bg-[#000000] max-w-[500px] py-2 {loadingRegister ||
+	class="relative w-full flex flex-col items-center justify-center h-dvh min-h-[663px] max-h-[800px] px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:1000px] bg-[center_bottom_27rem] bg-no-repeat bg-[#FFDA00] max-w-[500px] py-2 {loadingRegister ||
 	loadingSign
 		? 'pointer-events-none'
 		: null}"
@@ -285,8 +279,8 @@
 				}}
 			>
 				<svg
-					class="stroke-black rounded-full border-2 border-white {deployee
-						? 'bg-white'
+					class="stroke-[#FFDA00] rounded-full border-2 border-black {deployee
+						? 'bg-black'
 						: null}"
 					viewBox="0 0 15 15"
 					fill="none"
@@ -321,7 +315,7 @@
 			>
 				Restart
 				<svg
-					class="stroke-white ml-2"
+					class="stroke-black ml-2"
 					viewBox="0 0 15 15"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
@@ -353,7 +347,7 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Welcome to <br /> Stellar Smart <br /> Wallets
+					Welcome to your <br> Stellar Passkey <br> Wallet!
 				</h1>
 
 				<p
@@ -361,71 +355,14 @@
 					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					We're giving you $10 USDC to donate to a charity of your
-					choice, all through the magic of a passkey wallet. Follow
-					along to set up your wallet and do some good today!
+					A simpler way to use blockchain - <br>
+					with just your face or fingerprint. <br> <br>
+					No complicated passphrases. <br> And fully non-custodial.
 				</p>
 			</div>
 		{/if}
 
 		{#if step === 2}
-			<div
-				class="absolute w-full top-0 -translate-y-1/2"
-				transition:scale={{
-					duration: 500,
-					delay: 0,
-					opacity: 0,
-					start: 1.5,
-				}}
-			>
-				<h1
-					class=""
-					in:fade={{ delay: 0, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Fully <br /> non-custodial
-				</h1>
-				<br />
-				<h1
-					class=""
-					in:fade={{ delay: 250, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					But also <br /> entirely <br /> convenient
-				</h1>
-			</div>
-		{/if}
-
-		{#if step === 3}
-			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3"
-				transition:scale={{
-					duration: 500,
-					delay: 0,
-					opacity: 0,
-					start: 1.5,
-				}}
-			>
-				<p
-					in:fade={{ delay: 0, duration: 250 }}
-					out:fade={{ duration: 250 }}
-					class="font-[Inter] font-light text-base normal-case"
-				>
-					You’re just a single tap away from a future of financial
-					freedom powered by your face or fingerprints.
-				</p>
-				<br />
-				<h1
-					in:fade={{ delay: 250, duration: 250 }}
-					out:fade={{ duration: 250 }}
-					class=""
-				>
-					Say farewell to <br /> pass phrases
-				</h1>
-			</div>
-		{/if}
-
-		{#if step === 4}
 			<div
 				class="absolute flex flex-col items-center justify-center w-full top-0 -translate-y-1/2"
 				transition:scale={{
@@ -440,17 +377,14 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Press <br /> the button
+					Ready?
 				</h1>
 
-				<br />
-
 				<button
-					class="relative inline-flex items-center rounded-xl p-2 bg-[#ffda00] text-black active:top-[2px] disabled:bg-[#FFF6BF]"
+					class="relative inline-flex items-center rounded-xl p-2 bg-[#000000] text-white active:top-[2px]"
 					in:fade={{ delay: 250, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					on:click={() => onRegister()}
-					disabled={!code}
 				>
 					<svg
 						viewBox="0 0 15 15"
@@ -484,7 +418,7 @@
 								height="30"
 								viewBox="0 0 24 24"
 								><path
-									class="fill-black"
+									class="fill-white"
 									d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z"
 									><animateTransform
 										attributeName="transform"
@@ -497,12 +431,12 @@
 							>
 						{:else}
 							<span
-								class="mx-8 font-mono uppercase text-lg"
+								class="mx-8 font-mono uppercase text-lg whitespace-nowrap"
 								transition:slide={{
 									duration: 150,
 									delay: 0,
 									axis: "x",
-								}}>Register</span
+								}}>Try Me</span
 							>
 						{/if}
 					</div>
@@ -524,7 +458,7 @@
 			</div>
 		{/if}
 
-		{#if step === 5}
+		{#if step === 3}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
@@ -538,60 +472,31 @@
 					class="mb-8"
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
-				>
-					You’re in!
+				>					
+					You’re in! <br> Here's your <br> wallet:
 				</h1>
 
-				<p
-					class="font-[Inter] font-light text-base normal-case"
-					in:fade={{ delay: 250, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					Access to the global financial ecosystem is now just a tap
-					away. Now get ready to use your powers for good!
-				</p>
-			</div>
-		{/if}
-
-		{#if step === 6}
-			<div
-				class="absolute w-full top-0 -translate-y-1/2 px-3"
-				transition:scale={{
-					duration: 500,
-					delay: 0,
-					opacity: 0,
-					start: 1.5,
-				}}
-			>
-				<h1
-					class=""
-					in:fade={{ delay: 0, duration: 250 }}
-					out:fade={{ duration: 250 }}
-				>
-					This is your new <br /> passkey powered <br /> blockchain account
-				</h1>
-				<br />
 				<pre
-					class="relative flex items-center justify-center p-4 select-text bg-[#262626] text-[#ffda00] rounded mb-6 border-b-2 border-[#ffda00]"
+					class="relative flex items-center justify-center p-4 select-text bg-black text-white rounded mb-6 border-b-2 border-black"
 					in:fade={{ delay: 150, duration: 250 }}
 					out:fade={{ duration: 250 }}>
 					<code class="font-mono text-sm max-w-[30ch] break-all text-balance"
 						>{deployee}</code
 					>
 				</pre>
+
 				<p
-					class="font-[Inter] font-medium text-lg normal-case"
+					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 300, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					You (and only you) can use this wallet to make a donation to
-					a charity of your choice. We've loaded you up with $10 USDC.
-					Where you send it is up to you.
+					You (and only you) can use this wallet <br> to make a donation to a charity of your choice. <br> <br>
+					We've added 10 USDC to your wallet - <br> ready to use it for good?
 				</p>
 			</div>
 		{/if}
 
-		{#if step === 7}
+		{#if step === 4}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
@@ -606,13 +511,13 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Select charity
+					Choose organization:
 				</h1>
 
 				<div class="text-left">
 					{#each charities as [address, title, desc, selected], i}
 						<div
-							class="border-t last:border-b"
+							class="border-t border-black last:border-b"
 							in:fade|global={{
 								delay: (i + 1) * 100,
 								duration: 150,
@@ -632,7 +537,7 @@
 
 							{#if selected}
 								<div
-									class="flex flex-col items-start pb-5"
+									class="relative flex flex-col items-start pb-5"
 									transition:slide={{
 										duration: 150,
 										delay: 0,
@@ -645,7 +550,7 @@
 										{desc}
 									</p>
 									<button
-										class="relative inline-flex items-center justify-center rounded-full active:top-[2px]"
+										class="button-cancer inline-flex items-center justify-center rounded-full active:top-[2px]"
 										on:click={() => {
 											choice = [address, title];
 											step++;
@@ -656,7 +561,7 @@
 											>Donate</span
 										>
 										<svg
-											class="stroke-black bg-[#ffda00] rounded-full p-2"
+											class="stroke-white bg-[#000000] rounded-full p-2"
 											viewBox="0 0 15 15"
 											fill="none"
 											xmlns="http://www.w3.org/2000/svg"
@@ -675,7 +580,7 @@
 			</div>
 		{/if}
 
-		{#if step === 8}
+		{#if step === 5}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
@@ -693,7 +598,7 @@
 					Stellar choice!
 				</h1>
 				<p
-					class="font-[Inter] font-bold text-xl text-[#ffda00] normal-case mb-5"
+					class="font-[Inter] font-bold text-xl text-[#000000] normal-case mb-5"
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
@@ -704,13 +609,11 @@
 					in:fade={{ delay: 200, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Press one more time to secure your donation. All it takes is
-					your fingerprint, and you've made the world a little
-					brighter. 🌞 ️😎
+					One more quick scan and your donation is on its way.
 				</p>
 				<br />
 				<button
-					class="relative w-full flex items-center justify-between rounded-xl p-2 bg-[#ffda00] text-black active:top-[2px]"
+					class="relative w-full flex items-center justify-between rounded-xl p-2 bg-[#000000] text-white active:top-[2px]"
 					in:fade={{ delay: 300, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					on:click={onSign}
@@ -737,7 +640,7 @@
 								height="30"
 								viewBox="0 0 24 24"
 								><path
-									class="fill-black"
+									class="fill-white"
 									d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z"
 									><animateTransform
 										attributeName="transform"
@@ -751,7 +654,7 @@
 						{:else}
 							<span
 								class="absolute inset-0 flex items-center justify-center mx-4 font-mono uppercase text-lg"
-								transition:blur={{ amount: 10 }}>Sign It</span
+								transition:blur={{ amount: 10 }}>Tap Here</span
 							>
 						{/if}
 					</div>
@@ -773,7 +676,7 @@
 			</div>
 		{/if}
 
-		{#if step === 9}
+		{#if step === 6}
 			<div
 				class="absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
@@ -788,7 +691,7 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					How easy <br /> was that!?
+					Nice work. 
 				</h1>
 
 				<!-- TODO show blockchain receipt -->
@@ -798,7 +701,7 @@
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					How you’ve made a difference:
+					Check out how you’ve made a difference:
 				</p>
 
 				<div class="text-left">
@@ -813,20 +716,20 @@
 						>
 							<p
 								class={choice && address === choice[0]
-									? "text-[#FFDA00]"
+									? "text-[#000000]"
 									: null}
 							>
 								{title}
 							</p>
 							<div
 								class="border {choice && address === choice[0]
-									? 'border-[#FFDA00]'
-									: 'border-[#FFF6BF]'} rounded-full h-7 w-full my-1 relative overflow-hidden"
+									? 'border-[#000000]'
+									: 'border-black/40'} rounded-full h-7 w-full my-1 relative overflow-hidden"
 							>
 								<div
 									class="{choice && address === choice[0]
-										? 'bg-[#FFDA00]'
-										: 'bg-[#FFF6BF]'} absolute top-0 left-0 bottom-0 max-w-full"
+										? 'bg-[#000000]'
+										: 'bg-black/20'} absolute top-0 left-0 bottom-0 max-w-full"
 									style="width: {getWidth(balance)}%;"
 								></div>
 							</div>
@@ -839,7 +742,7 @@
 			</div>
 		{/if}
 
-		{#if step === 10}
+		{#if step === 7}
 			<div
 				class="flex flex-col absolute w-full top-0 -translate-y-1/2 px-3"
 				transition:scale={{
@@ -868,7 +771,7 @@
 				</p>
 				<br />
 				<a
-					class="relative inline-flex items-center justify-center rounded-full p-1 bg-[#ffda00] text-black active:top-[2px] mx-auto"
+					class="relative inline-flex items-center justify-center rounded-full p-1 bg-[#000000] text-white active:top-[2px] mx-auto"
 					in:fade={{ delay: 200, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					href={share()}
@@ -947,15 +850,15 @@
 				>
 			</button>
 			<span class="shrink-0 mx-3 tabular-nums font-mono text-xs"
-				>{step} of 10</span
+				>{step} of 7</span
 			>
-			{#if step >= 10}
+			{#if step >= 7}
 				<button
 					class="w-full flex items-center justify-start relative active:top-[2px]"
 					on:click={resetAll}
 				>
 					<svg
-						class="stroke-black bg-[#ffda00] rounded-full p-2"
+						class="stroke-white bg-[#000000] rounded-full p-2"
 						viewBox="0 0 15 15"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -969,16 +872,16 @@
 			{:else}
 				<button
 					class="w-full flex items-center justify-start relative {(step ===
-						4 &&
+						2 &&
 						!deployee) ||
-					(step === 7 && !choice && !vote) ||
-					(step === 8 && !vote)
+					(step === 4 && !choice && !vote) ||
+					(step === 5 && !vote)
 						? 'invisible pointer-events-none'
 						: null} active:left-[2px]"
 					on:click={() => step++}
 				>
 					<svg
-						class="stroke-black bg-[#ffda00] rounded-full p-2"
+						class="stroke-white bg-[#000000] rounded-full p-2"
 						viewBox="0 0 15 15"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
