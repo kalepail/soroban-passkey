@@ -63,7 +63,7 @@
 	});
 
 	onMount(async () => {
-		setTimeout(() => (step = dev ? 7 : 1), 500);
+		setTimeout(() => (step = dev ? 4 : 1), 500);
 
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
@@ -511,7 +511,8 @@
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Choose organization:
+					<span class="block max-[450px]:hidden">Choose organization:</span>
+					<span class="hidden max-[450px]:block">Choose org:</span>
 				</h1>
 
 				<div class="text-left">
@@ -545,7 +546,7 @@
 									}}
 								>
 									<p
-										class="font-[Inter] font-light text-base normal-case mb-4"
+										class="font-[Inter] font-light text-base max-[450px]:text-sm normal-case mb-4"
 									>
 										{desc}
 									</p>
