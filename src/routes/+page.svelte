@@ -254,7 +254,7 @@
 
 <div
 	id="soropass"
-	class="relative w-full flex flex-col items-center justify-center h-dvh min-h-[663px] max-h-[800px] px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:1000px] bg-[center_bottom_27rem] bg-no-repeat bg-[#FFDA00] max-w-[500px] py-2 {loadingRegister ||
+	class="relative w-full flex flex-col items-center justify-center h-dvh min-h-[663px] max-h-[800px] px-2 select-none overflow-hidden bg-[url('/bg.png')] bg-[length:1000px] bg-[center_-29rem] bg-no-repeat bg-[#FFDA00] max-w-[500px] py-2 {loadingRegister ||
 	loadingSign
 		? 'pointer-events-none'
 		: null}"
