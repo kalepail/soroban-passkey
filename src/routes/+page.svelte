@@ -63,7 +63,7 @@
 	});
 
 	onMount(async () => {
-		setTimeout(() => (step = dev ? 1 : 1), 500);
+		setTimeout(() => (step = dev ? 7 : 1), 500);
 
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
@@ -753,13 +753,12 @@
 				}}
 			>
 				<h1
-					class=""
+					class="mb-10"
 					in:fade={{ delay: 0, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
 					You did it!
 				</h1>
-				<br />
 				<p
 					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 100, duration: 250 }}
@@ -769,9 +768,8 @@
 					/>
 					and donated $10 USDC{choice ? ` to ${choice[1]}` : ""}!
 				</p>
-				<br />
 				<a
-					class="relative inline-flex items-center justify-center rounded-full p-1 bg-[#000000] text-white active:top-[2px] mx-auto"
+					class="relative inline-flex items-center justify-center rounded-full p-1 my-5 bg-[#000000] text-white active:top-[2px] mx-auto"
 					in:fade={{ delay: 200, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					href={share()}
@@ -791,7 +789,6 @@
 						><path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1"></path></svg
 					>
 				</a>
-				<br />
 				<p
 					class="font-[Inter] font-light text-base normal-case"
 					in:fade={{ delay: 300, duration: 250 }}
@@ -803,9 +800,8 @@
 						>stellar.org/soroban</a
 					>
 				</p>
-				<br />
 				<p
-					class="font-[Inter] font-light text-base normal-case"
+					class="font-[Inter] font-light text-base normal-case mt-10"
 					in:fade={{ delay: 400, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
