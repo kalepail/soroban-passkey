@@ -279,9 +279,9 @@
 				}}
 			>
 				<svg
-					class="stroke-black rounded-full border-2 border-black {deployee
+					class="rounded-full border-2 border-black {deployee
 						? 'bg-black stroke-[#FFDA00]'
-						: null}"
+						: 'stroke-black'}"
 					viewBox="0 0 15 15"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
