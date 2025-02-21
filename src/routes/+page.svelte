@@ -63,7 +63,7 @@
 	});
 
 	onMount(async () => {
-		setTimeout(() => (step = dev ? 4 : 1), 500);
+		setTimeout(() => (step = dev ? 1 : 1), 500);
 
 		dotinterval = setInterval(() => {
 			if (deployee) clearInterval(dotinterval);
@@ -765,12 +765,11 @@
 					in:fade={{ delay: 100, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
-					Congratulations, you’ve created a Stellar passkey wallet <br
-					/>
+					Congratulations, you’ve created a Stellar passkey wallet
 					and donated $10 USDC{choice ? ` to ${choice[1]}` : ""}!
 				</p>
 				<a
-					class="relative inline-flex items-center justify-center rounded-full p-1 my-5 bg-[#000000] text-white active:top-[2px] mx-auto"
+					class="relative inline-flex items-center justify-center rounded-full p-1 mt-5 mb-10 bg-[#000000] text-white active:top-[2px] mx-auto"
 					in:fade={{ delay: 200, duration: 250 }}
 					out:fade={{ duration: 250 }}
 					href={share()}
@@ -806,13 +805,26 @@
 					in:fade={{ delay: 400, duration: 250 }}
 					out:fade={{ duration: 250 }}
 				>
+					Learn more about aid funding <br /> with Coala Pay:
+					<a
+						class="underline"
+						href="https://coalapay.org/"
+						>coalapay.org</a
+					>
+				</p>
+
+				<!-- <p
+					class="font-[Inter] font-light text-base normal-case mt-10"
+					in:fade={{ delay: 500, duration: 250 }}
+					out:fade={{ duration: 250 }}
+				>
 					Join our Discord: <br />
 					<a
 						class="underline"
 						href="https://discord.com/invite/stellardev"
 						>discord.com/stellardev</a
 					>
-				</p>
+				</p> -->
 			</div>
 		{/if}
 	</div>
